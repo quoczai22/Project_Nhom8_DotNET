@@ -96,5 +96,26 @@ namespace QuanLyLinhKienMayTinh.Views
             }
             liPassVisible = !liPassVisible;
         }
+        void LiPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if(DataContext is LoginViewModel vm)
+            {
+                vm.LoginPassword = liPassword.Password;
+            }
+        }
+        void SuPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if(DataContext is LoginViewModel vm)
+            {
+                vm.SignUpPassword = suPassword.Password;
+            }
+        }
+        void SuConfirmPassword_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is LoginViewModel vm)
+            {
+                vm.ConfirmPassword = suConfirmPassword.Password;
+            }
+        }
     }
 }

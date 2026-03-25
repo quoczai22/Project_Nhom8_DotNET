@@ -1,14 +1,38 @@
 ﻿<Page x:Class="QuanLyLinhKienMayTinh.Views.LinhKienView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:QuanLyLinhKienMayTinh.Views"
-      mc:Ignorable="d" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="LinhKienView">
 
-    <Grid>
-        
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Danh sách linh kiện"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,15"/>
+
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding DanhSachLinhKienView}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Mã LK" Binding="{Binding MaLk}" Width="100"/>
+                <DataGridTextColumn Header="Tên linh kiện" Binding="{Binding TenLk}" Width="200"/>
+                <DataGridTextColumn Header="Mã loại" Binding="{Binding MaLoai}" Width="100"/>
+                <DataGridTextColumn Header="NSX" Binding="{Binding Nsx}" Width="150"/>
+                <DataGridTextColumn Header="ĐVT" Binding="{Binding Dvt}" Width="100"/>
+                <DataGridTextColumn Header="Bảo hành" Binding="{Binding Tgbh}" Width="100"/>
+                <DataGridTextColumn Header="Ngày SX" Binding="{Binding NgaySx}" Width="120"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Page>

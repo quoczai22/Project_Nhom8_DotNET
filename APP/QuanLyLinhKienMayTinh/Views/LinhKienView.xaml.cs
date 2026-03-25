@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using QuanLyLinhKienMayTinh.ViewModels;
 
 namespace QuanLyLinhKienMayTinh.Views
 {
@@ -23,6 +24,7 @@ namespace QuanLyLinhKienMayTinh.Views
         public LinhKienView()
         {
             InitializeComponent();
+            DataContext = new ViewModels.LinhKienViewModel();
         }
     }
 }

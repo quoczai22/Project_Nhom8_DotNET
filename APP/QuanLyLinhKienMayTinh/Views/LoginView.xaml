@@ -41,7 +41,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="40"/>
                             </Grid.ColumnDefinitions>
-                            <PasswordBox x:Name="suPassword"/>
+                            <PasswordBox x:Name="suPassword" PasswordChanged="SuPassword_PasswordChanged"/>
                             <TextBox x:Name="suPasswordVisible" Visibility="Collapsed"/>
                             <Button Grid.Column="1" Content="🎱" Style="{StaticResource EyeButtonStyle}" Click="ToggleSuPassword_Click"/>
                         </Grid>
@@ -52,7 +52,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="40"/>
                             </Grid.ColumnDefinitions>
-                            <PasswordBox x:Name="suConfirmPassword"/>
+                            <PasswordBox x:Name="suConfirmPassword" PasswordChanged="SuConfirmPassword_PasswordChanged"/>
                             <TextBox x:Name="suConfirmPasswordVisible" Visibility="Collapsed"/>
                             <Button Grid.Column="1" Content="🎱" Style="{StaticResource EyeButtonStyle}" Click="ToggleSuConfirmPassword_Click"/>
                         </Grid>
@@ -76,7 +76,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="40"/>
                             </Grid.ColumnDefinitions>
-                            <PasswordBox x:Name="liPassword"/>
+                            <PasswordBox x:Name="liPassword" PasswordChanged="LiPassword_PasswordChanged"/>
                             <TextBox x:Name="liPasswordVisible" Visibility="Collapsed"/>
                             <Button Grid.Column="1" Content="🎱" Style="{StaticResource EyeButtonStyle}" Click="ToggleLiPassword_Click"/>
                         </Grid>

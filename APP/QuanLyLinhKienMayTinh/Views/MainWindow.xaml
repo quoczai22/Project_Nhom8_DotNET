@@ -49,7 +49,7 @@
                 </StackPanel>
 
                 <Button DockPanel.Dock="Bottom" Style="{StaticResource menuButton}" 
-                        Command="{Binding DangXuatCommand}" 
+                        Command="{Binding LogOutCommand}" 
                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" 
                         Margin="10,0,10,20">
                     <StackPanel Orientation="Horizontal">
@@ -116,7 +116,9 @@
                     <TextBlock Margin="20,0" VerticalAlignment="Center" Foreground="#b0b9c6" 
                                IsHitTestVisible="False" Panel.ZIndex="1" Text="Search here ..."
                                Visibility="{Binding ElementName=txtSearch, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"/>
-                    <TextBox x:Name="txtSearch" Style="{StaticResource textboxSearch}"/>
+                    <TextBox x:Name="txtSearch"
+                     Style="{StaticResource textboxSearch}"
+                     TextChanged="txtSearch_TextChanged"/>  
                     <Icon:PackIconMaterial Kind="Magnify" Width="15" Height="15" VerticalAlignment="Center"
                                            Margin="0,0,15,0" Foreground="#b0b9c6" HorizontalAlignment="Right"/>
                 </Grid>
