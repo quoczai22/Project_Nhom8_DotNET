@@ -1,0 +1,118 @@
+# C++ objects and libs
+*.slo
+*.lo
+*.o
+*.a
+*.la
+*.lai
+*.so
+*.so.*
+*.dll
+*.dylib
+
+# Qt-es
+object_script.*.Release
+object_script.*.Debug
+*_plugin_import.cpp
+/.qmake.cache
+/.qmake.stash
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.moc
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+*.qmlc
+*.jsc
+Makefile*
+*build-*
+*.qm
+*.prl
+
+# Qt unit tests
+target_wrapper.*
+
+# QtCreator
+*.autosave
+
+# QtCreator Qml
+*.qmlproject.user
+*.qmlproject.user.*
+
+# QtCreator CMake
+CMakeLists.txt.user*
+
+# QtCreator 4.8< compilation database
+compile_commands.json
+
+# QtCreator local machine specific files for imported projects
+*creator.user*
+
+*_qmlcache.qrc
+# thêm loại bỏ các file bộ nhớ python 	
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# loại bỏ chạy môi trường trực tiếp
+
+venv/
+env/
+.venv/
+
+# loại bỏ file build
+
+build/
+dist/
+*.egg-info/
+
+# các file khác 
+*.log
+*.tmp
+*.bak
+*.swp
+*~
+
+# =========================
+# OS generated files
+# =========================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# IDE / Editor configs
+# =========================
+.vscode/
+.idea/
+# loại bỏ file visual studio
+.vs/
+# loại bỏ file results
+bin/
+obj/
+# loại bỏ các file khác...
+*.dll
+*.exe
+*.pdb
+*.cache
+*.log
+*.DS_Store
+*.tmp
+#loai bo file .rar
+*.rar
+# =========================
+# SQL Server database files
+# =========================
+*.mdf
+*.ldf
+*.ndf
+*.bak
+
+
+
+
