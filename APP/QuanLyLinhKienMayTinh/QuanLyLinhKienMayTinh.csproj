@@ -16,7 +16,8 @@
 		<PackageReference Include="LiveCharts.Wpf.NetCore3" Version="0.9.8" />
 		<PackageReference Include="MahApps.Metro.IconPacks" Version="6.2.1" />
 		<PackageReference Include="MahApps.Metro.IconPacks.Material" Version="6.2.1" />
-		<PackageReference Include="MaterialDesignThemes" Version="5.3.0" />
+		<PackageReference Include="MaterialDesignColors" Version="5.3.1" />
+		<PackageReference Include="MaterialDesignThemes" Version="5.3.1" />
 		<PackageReference Include="MaterialDesignThemes.MahApps" Version="5.3.0" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.14" />
