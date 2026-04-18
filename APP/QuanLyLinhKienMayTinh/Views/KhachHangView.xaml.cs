@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuanLyLinhKienMayTinh.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,14 +16,12 @@ using System.Windows.Shapes;
 
 namespace QuanLyLinhKienMayTinh.Views
 {
-    /// <summary>
-    /// Interaction logic for KhachHangView.xaml
-    /// </summary>
     public partial class KhachHangView : Page
     {
         public KhachHangView()
         {
             InitializeComponent();
+            DataContext = new KhachHangViewModel();
         }
     }
 }
