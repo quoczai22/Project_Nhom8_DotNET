@@ -69,7 +69,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     {
                         MaLoai = lk.MaLoai,
                         TenLoai = lk.TenLoai,
-                        MoTa = string.Empty
+                        MoTa = lk.MoTa,
                     }).ToList();
 
                 _all = new ObservableCollection<LoaiLkDisplay>(list);
