@@ -187,7 +187,6 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("MaNSX");
-            entity.Property(e => e.NgaySx).HasColumnName("NgaySX");
             entity.Property(e => e.SoLuongTon).HasDefaultValue(0);
             entity.Property(e => e.TenLk)
                 .HasMaxLength(50)
@@ -215,6 +214,7 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .HasMaxLength(3)
                 .IsUnicode(false)
                 .IsFixedLength();
+            entity.Property(e => e.MoTa).HasMaxLength(100);
             entity.Property(e => e.TenLoai).HasMaxLength(40);
         });
 

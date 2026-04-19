@@ -19,7 +19,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         public string Nsx { get; set; }
         public string Dvt { get; set; }
         public byte? Tgbh { get; set; }
-        public DateOnly? NgaySx { get; set; }
+        public DateOnly? NgayNhap { get; set; }
     }
     public class LinhKienViewModel : BaseViewModel, ISearchable
     {
@@ -86,15 +86,16 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 var list = db.LinhKiens
                     .AsNoTracking()
                     .Include(lk => lk.MaLoaiNavigation)
+                    .Include(lk => lk.MaNsxNavigation)
                     .Select(lk => new LinhKienDisplay
                     {
                         MaLk = lk.MaLk,
                         TenLk = lk.TenLk,
                         TenLoai = lk.MaLoaiNavigation.TenLoai,
-                        Nsx = lk.MaNsx,
+                        Nsx = lk.MaNsxNavigation.TenNsx,
                         Dvt = lk.Dvt,
                         Tgbh = lk.Tgbh,
-                        NgaySx = lk.NgaySx
+                        NgayNhap = lk.NgayNhap
                     }).ToList();
 
                 _all = new ObservableCollection<LinhKienDisplay>(list);
@@ -126,7 +127,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 || (item.Nsx?.ToLower().Contains(TimKiem.ToLower()) ?? false)
                 || (item.Dvt?.ToLower().Contains(TimKiem.ToLower()) ?? false)
                 || (item.Tgbh?.ToString().Contains(TimKiem) ?? false)
-                || (item.NgaySx?.ToString().Contains(TimKiem) ?? false);
+                || (item.NgayNhap?.ToString().Contains(TimKiem) ?? false);
 
             // Lọc theo loại
             bool matchLoai = LoaiChon == null

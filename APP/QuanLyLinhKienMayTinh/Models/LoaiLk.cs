@@ -11,5 +11,7 @@ public partial class LoaiLk
 
     public string TenLoai { get; set; }
 
+    public string MoTa { get; set; }
+
     public virtual ICollection<LinhKien> LinhKiens { get; set; } = new List<LinhKien>();
 }

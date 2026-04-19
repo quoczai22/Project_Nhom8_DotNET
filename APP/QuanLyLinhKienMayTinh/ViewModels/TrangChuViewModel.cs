@@ -165,7 +165,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 var hangSX = db.ChiTietHds
                     .Include(ct => ct.MaLkNavigation)
                     .Include(ct => ct.MaHdNavigation)
-                    .GroupBy(ct => ct.MaLkNavigation.MaNsx)
+                    .Include(ct => ct.MaLkNavigation.MaNsxNavigation)
+                    .GroupBy(ct => ct.MaLkNavigation.MaNsxNavigation.TenNsx)
                     .Select(g => new ThongKeBanHang
                     {
                         HangSX = g.Key,

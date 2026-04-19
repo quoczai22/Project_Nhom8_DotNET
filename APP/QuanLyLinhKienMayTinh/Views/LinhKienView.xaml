@@ -217,10 +217,10 @@
                     <DataGridTextColumn Header="Mã LK" Binding="{Binding MaLk}" Width="90"/>
                     <DataGridTextColumn Header="Tên linh kiện" Binding="{Binding TenLk}" Width="*"/>
                     <DataGridTextColumn Header="Loại" Binding="{Binding TenLoai}" Width="130"/>
-                    <DataGridTextColumn Header="NSX" Binding="{Binding Nsx}" Width="130"/>
+                    <DataGridTextColumn Header="Hãng sản xuất" Binding="{Binding Nsx}" Width="130"/>
                     <DataGridTextColumn Header="ĐVT" Binding="{Binding Dvt}" Width="80"/>
                     <DataGridTextColumn Header="Bảo hành" Binding="{Binding Tgbh}" Width="90"/>
-                    <DataGridTextColumn Header="Ngày SX" Binding="{Binding NgaySx, StringFormat=dd/MM/yyyy}" Width="110"/>
+                    <DataGridTextColumn Header="Ngày nhập" Binding="{Binding NgaySx, StringFormat=dd/MM/yyyy}" Width="110"/>
                     <DataGridTemplateColumn Header="Thao tác" Width="110">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

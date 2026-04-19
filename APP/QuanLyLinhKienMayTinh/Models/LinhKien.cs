@@ -11,7 +11,7 @@ public partial class LinhKien
 
     public string TenLk { get; set; }
 
-    public DateOnly? NgaySx { get; set; }
+    public DateOnly? NgayNhap { get; set; }
 
     public byte? Tgbh { get; set; }
 
