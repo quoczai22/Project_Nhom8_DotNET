@@ -48,13 +48,14 @@ CREATE TABLE NhaSanXuat (
 CREATE TABLE LoaiLK (
     MaLoai char(3) NOT NULL,
     TenLoai nvarchar(40),
+    MoTa nvarchar(100), -- Thêm cột Mô tả
     CONSTRAINT PK_LoaiLK PRIMARY KEY (MaLoai)
 );
 
 CREATE TABLE LinhKien (
     MaLK char(6) NOT NULL,
     TenLK nvarchar(50),
-    NgaySX date,
+    NgayNhap date, -- Đổi NgaySX thành NgayNhap
     TGBH tinyint,
     MaLoai char(3) NOT NULL,
     MaNSX char(5) NOT NULL,
@@ -175,12 +176,18 @@ INSERT INTO NhaSanXuat VALUES
 ('NSX07', 'Samsung', 'South Korea'), ('NSX08', 'Gigabyte', 'Taiwan'),
 ('NSX09', 'Keychron', 'China'), ('NSX10', 'H hành', 'Vietnam');
 
+-- Mô tả đã được sửa lại theo "kiểu bình thường"
 INSERT INTO LoaiLK VALUES
-('MOU', N'Chuột máy tính'), ('LAP', N'Máy tính xách tay'),
-('CPU', N'Bộ vi xử lý'), ('PCX', N'Máy tính để bàn'),
-('MAI', N'Bo mạch chủ (Mainboard)'), ('RAM', N'Bộ nhớ trong (RAM)'),
-('HDD', N'Ổ cứng HDD'), ('SSD', N'Ổ cứng SSD'),
-('VGA', N'Card màn hình'), ('KEY', N'Bàn phím cơ');
+('MOU', N'Chuột máy tính', N'Chuột gaming, chuột văn phòng các loại'), 
+('LAP', N'Máy tính xách tay', N'Laptop học tập, làm việc, chơi game'),
+('CPU', N'Bộ vi xử lý', N'Chip máy tính (Intel, AMD...)'), 
+('PCX', N'Máy tính để bàn', N'Thùng máy PC ráp sẵn nguyên bộ'),
+('MAI', N'Bo mạch chủ (Mainboard)', N'Bo mạch chính để cắm linh kiện'), 
+('RAM', N'Bộ nhớ trong (RAM)', N'Thanh RAM cho PC và Laptop'),
+('HDD', N'Ổ cứng HDD', N'Ổ cứng dung lượng cao lưu dữ liệu'), 
+('SSD', N'Ổ cứng SSD', N'Ổ cứng tốc độ cao chạy Win'),
+('VGA', N'Card màn hình', N'Card đồ họa rời chơi game, làm mượt ảnh'), 
+('KEY', N'Bàn phím cơ', N'Bàn phím gõ văn bản, phím cơ gaming');
 
 INSERT INTO LinhKien VALUES
 ('MOU001', N'Chuột quang có dây', '01-01-2023', 12, 'MOU', 'NSX01', N'Cái', 50, 150000),
@@ -366,17 +373,16 @@ GO
 
 --sao lưu và backup khi cần và khi chạy phải comment backup với restore
 
---BACKUP DATABASE QL_LinhKien_PC
---TO DISK = 'C:\SQLData\QL_LinhKien_PC_Full.bak'
+--BACKUP DATABASE QL_LinhKien_PC_NET
+--TO DISK = 'C:\SQLData\QL_LinhKien_PC_NET_Full.bak'
 --WITH FORMAT, NAME = 'Full Backup';
 --GO
 
 --USE master;
 --GO
 
---RESTORE DATABASE QL_LinhKien_PC
---FROM DISK = 'C:\SQLData\QL_LinhKien_PC_Full.bak'
+--RESTORE DATABASE QL_LinhKien_PC_NET
+--FROM DISK = 'C:\SQLData\QL_LinhKien_PC_NET_Full.bak'
 --WITH REPLACE;
 --GO
 
-select * from LinhKien
