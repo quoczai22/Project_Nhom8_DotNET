@@ -98,8 +98,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                         HoTen = nv.TenNv,
                         ChucVu = nv.ChucVu,
                         Sdt = nv.Sdt,
-                        Email = nv.TenDn,
-                        NgayVaoLam = nv.NgaySinh
+                        Email = nv.Email,
+                        NgayVaoLam = nv.NgayVaoLam
                     }).ToList();
 
                 _all = new ObservableCollection<NhanVienDisplay>(list);

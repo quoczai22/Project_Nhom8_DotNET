@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 namespace QuanLyLinhKienMayTinh.Models;
 
-public partial class TaiKhoan
+public partial class PhieuNhap
 {
-    public string TenDn { get; set; }
+    public string MaPn { get; set; }
 
-    public string MatKhau { get; set; }
+    public DateOnly? NgayNhap { get; set; }
 
     public string MaNv { get; set; }
+
+    public virtual ICollection<ChiTietPn> ChiTietPns { get; set; } = new List<ChiTietPn>();
 
     public virtual NhanVien MaNvNavigation { get; set; }
 }

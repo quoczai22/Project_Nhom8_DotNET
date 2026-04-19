@@ -13,7 +13,9 @@ public partial class KhachHang
 
     public string Dchi { get; set; }
 
-    public string Dthoai { get; set; }
+    public string Sdt { get; set; }
+
+    public string Email { get; set; }
 
     public virtual ICollection<HoaDon> HoaDons { get; set; } = new List<HoaDon>();
 }

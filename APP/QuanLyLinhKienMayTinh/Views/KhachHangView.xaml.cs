@@ -21,7 +21,7 @@ namespace QuanLyLinhKienMayTinh.Views
         public KhachHangView()
         {
             InitializeComponent();
-            DataContext = new KhachHangViewModel();
+            DataContext = new ViewModels.KhachHangViewModel();
         }
     }
 }

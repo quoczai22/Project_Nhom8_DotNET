@@ -15,6 +15,8 @@ public partial class QL_LinhKien_PC_Context : DbContext
 
     public virtual DbSet<ChiTietHd> ChiTietHds { get; set; }
 
+    public virtual DbSet<ChiTietPn> ChiTietPns { get; set; }
+
     public virtual DbSet<HoaDon> HoaDons { get; set; }
 
     public virtual DbSet<KhachHang> KhachHangs { get; set; }
@@ -23,7 +25,11 @@ public partial class QL_LinhKien_PC_Context : DbContext
 
     public virtual DbSet<LoaiLk> LoaiLks { get; set; }
 
+    public virtual DbSet<NhaSanXuat> NhaSanXuats { get; set; }
+
     public virtual DbSet<NhanVien> NhanViens { get; set; }
+
+    public virtual DbSet<PhieuNhap> PhieuNhaps { get; set; }
 
     public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
 
@@ -33,7 +39,11 @@ public partial class QL_LinhKien_PC_Context : DbContext
         {
             entity.HasKey(e => new { e.MaHd, e.MaLk }).HasName("PK_CTHD");
 
-            entity.ToTable("ChiTietHD");
+            entity.ToTable("ChiTietHD", tb =>
+                {
+                    tb.HasTrigger("trg_CapNhatTongTien");
+                    tb.HasTrigger("trg_TruTonKhoKhiBan");
+                });
 
             entity.Property(e => e.MaHd)
                 .HasMaxLength(5)
@@ -55,6 +65,34 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .HasForeignKey(d => d.MaLk)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_CTHD_LinhKien");
+        });
+
+        modelBuilder.Entity<ChiTietPn>(entity =>
+        {
+            entity.HasKey(e => new { e.MaPn, e.MaLk }).HasName("PK_CTPN");
+
+            entity.ToTable("ChiTietPN", tb => tb.HasTrigger("trg_CongTonKhoKhiNhap"));
+
+            entity.Property(e => e.MaPn)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("MaPN");
+            entity.Property(e => e.MaLk)
+                .HasMaxLength(6)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("MaLK");
+
+            entity.HasOne(d => d.MaLkNavigation).WithMany(p => p.ChiTietPns)
+                .HasForeignKey(d => d.MaLk)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CTPN_LinhKien");
+
+            entity.HasOne(d => d.MaPnNavigation).WithMany(p => p.ChiTietPns)
+                .HasForeignKey(d => d.MaPn)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CTPN_PhieuNhap");
         });
 
         modelBuilder.Entity<HoaDon>(entity =>
@@ -82,6 +120,9 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .HasColumnName("MaNV");
             entity.Property(e => e.NgayHd).HasColumnName("NgayHD");
             entity.Property(e => e.TongTien).HasDefaultValue(0);
+            entity.Property(e => e.TrangThai)
+                .HasMaxLength(30)
+                .HasDefaultValue("Chưa thanh toán");
 
             entity.HasOne(d => d.MaKhNavigation).WithMany(p => p.HoaDons)
                 .HasForeignKey(d => d.MaKh)
@@ -108,11 +149,14 @@ public partial class QL_LinhKien_PC_Context : DbContext
             entity.Property(e => e.Dchi)
                 .HasMaxLength(50)
                 .HasColumnName("DChi");
-            entity.Property(e => e.Dthoai)
+            entity.Property(e => e.Email)
+                .HasMaxLength(50)
+                .IsUnicode(false);
+            entity.Property(e => e.Sdt)
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .IsFixedLength()
-                .HasColumnName("DThoai");
+                .HasColumnName("SDT");
             entity.Property(e => e.TenKh)
                 .HasMaxLength(30)
                 .HasColumnName("TenKH");
@@ -137,10 +181,14 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .HasMaxLength(3)
                 .IsUnicode(false)
                 .IsFixedLength();
+            entity.Property(e => e.MaNsx)
+                .IsRequired()
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("MaNSX");
             entity.Property(e => e.NgaySx).HasColumnName("NgaySX");
-            entity.Property(e => e.Nsx)
-                .HasMaxLength(40)
-                .HasColumnName("NSX");
+            entity.Property(e => e.SoLuongTon).HasDefaultValue(0);
             entity.Property(e => e.TenLk)
                 .HasMaxLength(50)
                 .HasColumnName("TenLK");
@@ -150,6 +198,11 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .HasForeignKey(d => d.MaLoai)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_LK_LoaiLK");
+
+            entity.HasOne(d => d.MaNsxNavigation).WithMany(p => p.LinhKiens)
+                .HasForeignKey(d => d.MaNsx)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_LK_NhaSanXuat");
         });
 
         modelBuilder.Entity<LoaiLk>(entity =>
@@ -165,13 +218,28 @@ public partial class QL_LinhKien_PC_Context : DbContext
             entity.Property(e => e.TenLoai).HasMaxLength(40);
         });
 
+        modelBuilder.Entity<NhaSanXuat>(entity =>
+        {
+            entity.HasKey(e => e.MaNsx);
+
+            entity.ToTable("NhaSanXuat");
+
+            entity.Property(e => e.MaNsx)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("MaNSX");
+            entity.Property(e => e.QuocGia).HasMaxLength(50);
+            entity.Property(e => e.TenNsx)
+                .HasMaxLength(50)
+                .HasColumnName("TenNSX");
+        });
+
         modelBuilder.Entity<NhanVien>(entity =>
         {
             entity.HasKey(e => e.MaNv);
 
             entity.ToTable("NhanVien");
-
-            entity.HasIndex(e => e.TenDn, "UQ__NhanVien__4CF96558002B0CBA").IsUnique();
 
             entity.Property(e => e.MaNv)
                 .HasMaxLength(6)
@@ -179,41 +247,72 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .IsFixedLength()
                 .HasColumnName("MaNV");
             entity.Property(e => e.ChucVu).HasMaxLength(20);
-            entity.Property(e => e.GioiTinh).HasMaxLength(5);
-            entity.Property(e => e.MatKhau)
-                .IsRequired()
+            entity.Property(e => e.Email)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+            entity.Property(e => e.GioiTinh).HasMaxLength(5);
             entity.Property(e => e.Quyen).HasMaxLength(20);
             entity.Property(e => e.Sdt)
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("SDT");
-            entity.Property(e => e.TenDn)
-                .IsRequired()
-                .HasMaxLength(30)
-                .IsUnicode(false)
-                .HasColumnName("TenDN");
             entity.Property(e => e.TenNv)
                 .HasMaxLength(40)
                 .HasColumnName("TenNV");
         });
 
+        modelBuilder.Entity<PhieuNhap>(entity =>
+        {
+            entity.HasKey(e => e.MaPn);
+
+            entity.ToTable("PhieuNhap");
+
+            entity.Property(e => e.MaPn)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("MaPN");
+            entity.Property(e => e.MaNv)
+                .IsRequired()
+                .HasMaxLength(6)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("MaNV");
+
+            entity.HasOne(d => d.MaNvNavigation).WithMany(p => p.PhieuNhaps)
+                .HasForeignKey(d => d.MaNv)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhieuNhap_NhanVien");
+        });
+
         modelBuilder.Entity<TaiKhoan>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TaiKhoan__3214EC07E2CD1D19");
+            entity.HasKey(e => e.TenDn);
 
             entity.ToTable("TaiKhoan");
 
-            entity.HasIndex(e => e.Tendangnhap, "UQ__TaiKhoan__CE900A1E32E60D80").IsUnique();
+            entity.HasIndex(e => e.MaNv, "UQ_TaiKhoan_MaNV").IsUnique();
 
-            entity.Property(e => e.Matkhau)
+            entity.Property(e => e.TenDn)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("TenDN");
+            entity.Property(e => e.MaNv)
+                .IsRequired()
+                .HasMaxLength(6)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("MaNV");
+            entity.Property(e => e.MatKhau)
+                .IsRequired()
                 .HasMaxLength(50)
-                .HasColumnName("matkhau");
-            entity.Property(e => e.Tendangnhap)
-                .HasMaxLength(50)
-                .HasColumnName("tendangnhap");
+                .IsUnicode(false);
+
+            entity.HasOne(d => d.MaNvNavigation).WithOne(p => p.TaiKhoan)
+                .HasForeignKey<TaiKhoan>(d => d.MaNv)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_TaiKhoan_NhanVien");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -23,6 +23,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ChiTietPN]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[HoaDon]",
          "ObjectType": 0
       },
@@ -40,6 +44,14 @@
       },
       {
          "Name": "[dbo].[NhanVien]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NhaSanXuat]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PhieuNhap]",
          "ObjectType": 0
       },
       {

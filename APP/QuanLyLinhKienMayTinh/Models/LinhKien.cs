@@ -17,11 +17,19 @@ public partial class LinhKien
 
     public string MaLoai { get; set; }
 
-    public string Nsx { get; set; }
+    public string MaNsx { get; set; }
 
     public string Dvt { get; set; }
 
+    public int? SoLuongTon { get; set; }
+
+    public int? DonGiaBan { get; set; }
+
     public virtual ICollection<ChiTietHd> ChiTietHds { get; set; } = new List<ChiTietHd>();
 
+    public virtual ICollection<ChiTietPn> ChiTietPns { get; set; } = new List<ChiTietPn>();
+
     public virtual LoaiLk MaLoaiNavigation { get; set; }
+
+    public virtual NhaSanXuat MaNsxNavigation { get; set; }
 }

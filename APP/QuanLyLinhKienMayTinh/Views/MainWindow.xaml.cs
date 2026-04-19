@@ -23,46 +23,31 @@ namespace QuanLyLinhKienMayTinh
         private void btnDashboard_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new TrangChuView());
-            txtSearch.Clear();
         }
 
         private void btnLinhKien_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new LinhKienView());
-            txtSearch.Clear();
         }
 
         private void btnLoaiLK_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new LoaiLinhKienView());
-            txtSearch.Clear();
         }
 
         private void btnKhachHang_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new KhachHang());
-            txtSearch.Clear();
+            MainFrame.Navigate(new KhachHangView());
         }
 
         private void btnHoaDon_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new HoaDon());
-            txtSearch.Clear();
+            MainFrame.Navigate(new HoaDonView());
         }
 
         private void btnNhanVien_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Navigate(new NhanVien());
-            txtSearch.Clear();
-        }
-
-        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            string word = txtSearch.Text.Trim();
-            if (MainFrame.Content is Page currentPage && currentPage.DataContext is ISearchable searchable)
-            {                 
-                searchable.ApplySearch(word); 
-            }
+            MainFrame.Navigate(new NhanVienView());
         }
     }
 }

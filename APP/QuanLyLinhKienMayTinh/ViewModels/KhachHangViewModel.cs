@@ -22,10 +22,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
     public class KhachHangViewModel : BaseViewModel, ISearchable
     {
-        // ── Backing collection ──────────────────────────────────────────────
         private ObservableCollection<KhachHangDisplay> _all;
 
-        // ── Bound to DataGrid ────────────────────────────────────────────────
         private ICollectionView _danhSachKhachHang;
         public ICollectionView DanhSachKhachHang
         {
@@ -40,7 +38,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _khachHangChon = value; OnPropertyChanged(); }
         }
 
-        // ── Search box ───────────────────────────────────────────────────────
         private string _timKiem = string.Empty;
         public string TimKiem
         {
@@ -48,7 +45,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _timKiem = value; OnPropertyChanged(); DanhSachKhachHang?.Refresh(); }
         }
 
-        // ── Commands ─────────────────────────────────────────────────────────
         public ICommand ThemKhachHangCommand { get; private set; }
         public ICommand SuaKhachHangCommand { get; private set; }
         public ICommand XoaKhachHangCommand { get; private set; }
@@ -59,8 +55,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             TaiDuLieu();
             KhoiTaoCommands();
         }
-
-        // ── Tải dữ liệu ─────────────────────────────────────────────────────
         public void TaiDuLieu()
         {
             try
@@ -71,8 +65,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     {
                         MaKh = kh.MaKh,
                         HoTen = kh.TenKh,
-                        Sdt = kh.Dthoai,
-                        Email = string.Empty,
+                        Sdt = kh.Sdt,
+                        Email = kh.Email,
                         DiaChi = kh.Dchi
                     }).ToList();
 
@@ -87,7 +81,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Filter ───────────────────────────────────────────────────────────
+
         private bool Filter(object obj)
         {
             if (obj is not KhachHangDisplay item) return false;
@@ -100,13 +94,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 || (item.DiaChi?.ToLower().Contains(kw) ?? false);
         }
 
-        // ── ISearchable ──────────────────────────────────────────────────────
+
         public void ApplySearch(string keyword)
         {
             TimKiem = keyword?.Trim() ?? string.Empty;
         }
 
-        // ── Khởi tạo Commands ────────────────────────────────────────────────
         private void KhoiTaoCommands()
         {
             ThemKhachHangCommand = new RelayCommand<object>(
@@ -142,7 +135,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 _ => { TimKiem = string.Empty; TaiDuLieu(); });
         }
 
-        // ── Xóa khách hàng ───────────────────────────────────────────────────
+
         private void ThucHienXoa(KhachHangDisplay kh)
         {
             try

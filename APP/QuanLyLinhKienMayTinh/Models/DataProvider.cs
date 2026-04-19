@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace QuanLyLinhKienMayTinh.Models
 {
@@ -23,8 +24,9 @@ namespace QuanLyLinhKienMayTinh.Models
 
         private DataProvider()
         {
-            var options = new DbContextOptionsBuilder<QL_LinhKien_PC_Context>()
-                .UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=QL_LinhKien_PC;Trusted_Connection=True;")
+           var options= new DbContextOptionsBuilder<QL_LinhKien_PC_Context>()
+                .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True",
+                sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(maxRetryCount:5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null))
                 .Options;
 
             DB = new QL_LinhKien_PC_Context(options);

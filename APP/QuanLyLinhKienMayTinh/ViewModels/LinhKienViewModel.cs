@@ -91,7 +91,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                         MaLk = lk.MaLk,
                         TenLk = lk.TenLk,
                         TenLoai = lk.MaLoaiNavigation.TenLoai,
-                        Nsx = lk.Nsx,
+                        Nsx = lk.MaNsx,
                         Dvt = lk.Dvt,
                         Tgbh = lk.Tgbh,
                         NgaySx = lk.NgaySx

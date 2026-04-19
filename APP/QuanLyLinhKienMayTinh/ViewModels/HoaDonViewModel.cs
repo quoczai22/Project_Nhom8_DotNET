@@ -261,7 +261,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 TrangThai = trangThai,
                 TrangThaiMauNen = mauNen,
                 TrangThaiMauChu = mauChu,
-                SoDienThoai = hd.MaKhNavigation?.Dthoai ?? string.Empty
+                SoDienThoai = hd.MaKhNavigation?.Sdt ?? string.Empty
             };
         }
 

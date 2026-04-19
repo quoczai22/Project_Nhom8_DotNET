@@ -21,7 +21,7 @@ namespace QuanLyLinhKienMayTinh.Views
         public NhanVienView()
         {
             InitializeComponent();
-            DataContext = new NhanVienViewModel();
+            DataContext = new ViewModels.NhanVienViewModel();
         }
     }
 }

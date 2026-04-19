@@ -6,7 +6,7 @@
         xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
         mc:Ignorable="d"
         Title="Quản Lý Linh Kiện Máy Tính"
-        Height="720" Width="1200"
+        Height="800" Width="1300"
         WindowStartupLocation="CenterScreen"
         Background="#f0f2f8">
 
@@ -53,7 +53,7 @@
         </Style>
 
         <!-- Menu Icon Style -->
-        <Style x:Key="menuButtonIcon" TargetType="PackIconMaterialBase">
+        <Style x:Key="menuButtonIcon" TargetType="Icon:PackIconMaterial">
             <Setter Property="Width" Value="18"/>
             <Setter Property="Height" Value="18"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -152,7 +152,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                 To="64" Duration="0:0:0.2"/>
+                                                 To="70" Duration="0:0:0.2"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.ExitActions>
@@ -169,10 +169,11 @@
 
         <!-- ===== SIDEBAR ===== -->
         <Border x:Name="SidebarBorder" Grid.Column="0"
-                Background="#3f51b5" CornerRadius="0,16,16,0"
+                Background="#3f51b5" CornerRadius="0,16,16,0" Width="70"
                 ClipToBounds="True" Panel.ZIndex="10">
             <Border.Style>
                 <Style TargetType="Border" BasedOn="{StaticResource SidebarAnimationStyle}">
+                    <Setter Property="Tag" Value="Close"/>
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsMouseOver, ElementName=btnHoverMenu}" Value="True">
                             <Setter Property="Tag" Value="Open"/>
@@ -187,9 +188,11 @@
             <DockPanel>
                 <!-- Top: Logo + User -->
                 <StackPanel DockPanel.Dock="Top" Margin="0,24,0,20">
-                    <Border Width="44" Height="44" CornerRadius="12" Background="#ffffff22"
+                    <Border Width="44" Height="44" CornerRadius="12" Background="Aqua" 
                             HorizontalAlignment="Center" Margin="0,0,0,14">
-                        <TextBlock Text="🖥️" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock  FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image Source="/Images/avatar.png" Width="24" Height="24"/>
+                        </TextBlock>
                     </Border>
                     <TextBlock Text="{Binding CurrentUsername}" Foreground="White"
                                FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"
@@ -204,14 +207,13 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
                         Margin="8,0,8,16">
                     <StackPanel Orientation="Horizontal">
-                        <Icon:PackIconMaterial Kind="Logout" Style="{StaticResource menuButtonIcon}"
-                                               Foreground="#ef9a9a"/>
+                        <Icon:PackIconMaterial Kind="Logout" Style="{StaticResource menuButtonIcon}" Foreground="#ef9a9a"/>
                         <TextBlock Text="Đăng xuất" VerticalAlignment="Center" Foreground="#ef9a9a"/>
                     </StackPanel>
                 </Button>
 
                 <!-- Separator -->
-                <Rectangle DockPanel.Dock="Bottom" Height="1" Fill="#ffffff18" Margin="16,0,16,8"/>
+                <Rectangle DockPanel.Dock="Bottom" Height="1" Fill="LightGray" Margin="16,0,16,8"/>
 
                 <!-- Menu Items -->
                 <StackPanel Margin="0,4,0,0">
@@ -270,20 +272,6 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-
-                <!-- Hamburger -->
-                <Button x:Name="btnHoverMenu" Grid.Column="0" Style="{StaticResource topButton}" Margin="0,0,12,0">
-                    <Icon:PackIconMaterial Kind="Menu" Width="16" Height="16"/>
-                </Button>
-
-                <!-- Search -->
-                <Grid Grid.Column="1">
-                    <TextBox x:Name="txtSearch" Style="{StaticResource textboxSearch}"
-                             TextChanged="txtSearch_TextChanged"/>
-                    <TextBlock Margin="16,0" VerticalAlignment="Center" Foreground="#b0b9c6"
-                               IsHitTestVisible="False" Panel.ZIndex="1" Text="🔍  Tìm kiếm..."
-                               Visibility="{Binding ElementName=txtSearch, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}"/>
-                </Grid>
 
                 <!-- Spacer -->
                 <Grid Grid.Column="2"/>

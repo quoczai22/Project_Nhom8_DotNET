@@ -17,13 +17,17 @@ public partial class NhanVien
 
     public string Sdt { get; set; }
 
-    public string TenDn { get; set; }
-
-    public string MatKhau { get; set; }
-
     public string ChucVu { get; set; }
 
     public string Quyen { get; set; }
 
+    public string Email { get; set; }
+
+    public DateOnly? NgayVaoLam { get; set; }
+
     public virtual ICollection<HoaDon> HoaDons { get; set; } = new List<HoaDon>();
+
+    public virtual ICollection<PhieuNhap> PhieuNhaps { get; set; } = new List<PhieuNhap>();
+
+    public virtual TaiKhoan TaiKhoan { get; set; }
 }

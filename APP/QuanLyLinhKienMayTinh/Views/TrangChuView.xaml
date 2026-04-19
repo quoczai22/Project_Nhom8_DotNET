@@ -227,24 +227,29 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
+                    <!-- HEADER -->
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
-                        <Border Width="4" CornerRadius="2" Background="#ff9800" Margin="0,2,10,2"/>
+                        <Border Width="4" CornerRadius="2" Background="#4caf50" Margin="0,2,10,2"/>
                         <StackPanel>
-                            <TextBlock Text="Số lượng Linh Kiện theo Hãng" FontSize="14"
-                                       FontWeight="SemiBold" Foreground="#2d3748"/>
-                            <TextBlock Text="Thống kê tồn kho theo nhà sản xuất" FontSize="11" Foreground="#a0aec0"/>
+                            <TextBlock Text="Thống kê bán hàng theo Hãng" FontSize="14"
+                           FontWeight="SemiBold" Foreground="#2d3748"/>
+                            <TextBlock Text="Tổng hợp số lượng và doanh thu theo nhà sản xuất"
+                           FontSize="11" Foreground="#a0aec0"/>
                         </StackPanel>
                     </StackPanel>
 
+                    <!-- TABLE -->
                     <DataGrid Grid.Row="1"
-                              ItemsSource="{Binding DanhSachThongKeBanHang}"
-                              AutoGenerateColumns="False" IsReadOnly="True"
-                              CanUserAddRows="False"
-                              Background="White" BorderThickness="1" BorderBrush="#edf2f7"
-                              HeadersVisibility="Column" GridLinesVisibility="Horizontal"
-                              HorizontalGridLinesBrush="#edf2f7"
-                              RowBackground="White" AlternatingRowBackground="#f9fafb"
-                              FontSize="13">
+                  ItemsSource="{Binding DanhSachThongKeBanHang}"
+                  AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserAddRows="False"
+                  Background="White" BorderThickness="1" BorderBrush="#edf2f7"
+                  HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#edf2f7"
+                  RowBackground="White" AlternatingRowBackground="#f9fafb"
+                  FontSize="13">
+
+                        <!-- Header style -->
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="#3f51b5"/>
@@ -255,17 +260,37 @@
                                 <Setter Property="BorderBrush" Value="#5c6bc0"/>
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
+
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Hãng sản xuất" Binding="{Binding HangSX}" Width="*"/>
-                            <DataGridTextColumn Header="Số lượng" Binding="{Binding SoLuong}" Width="120">
+
+                            <!-- Hãng -->
+                            <DataGridTextColumn Header="Hãng sản xuất"
+                                    Binding="{Binding HangSX}" Width="*"/>
+
+                            <!-- Số lượng bán -->
+                            <DataGridTextColumn Header="SL bán"
+                                    Binding="{Binding SoLuongBan}" Width="100"/>
+
+                            <!-- Doanh thu -->
+                            <DataGridTextColumn Header="Doanh thu (VNĐ)"
+                                Binding="{Binding DoanhThu, StringFormat={}{0:N0}}" Width="150">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="Foreground" Value="#2e7d32"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
-                                        <Setter Property="Foreground" Value="#3f51b5"/>
+                                        <Setter Property="HorizontalAlignment" Value="Right"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
+
+                            <!-- Giá trung bình -->
+                            <DataGridTextColumn Header="Giá TB"
+                                    Binding="{Binding GiaTrungBinh}" Width="120"/>
+
+                            <!-- Số đơn -->
+                            <DataGridTextColumn Header="Số đơn"
+                                    Binding="{Binding SoDonHang}" Width="100"/>
+
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

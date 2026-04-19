@@ -24,7 +24,7 @@ namespace QuanLyLinhKienMayTinh.Views
         public HoaDonView()
         {
             InitializeComponent();
-            DataContext = new HoaDonViewModel();
+            DataContext = new ViewModels.HoaDonViewModel();
         }
     }
 }

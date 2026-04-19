@@ -107,7 +107,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             try
             {
                 var db = DataProvider.Ins.DB;
-                bool hopLe = db.TaiKhoans.Any(t => t.Tendangnhap == LoginUsername && t.Matkhau == LoginPassword);
+                bool hopLe = db.TaiKhoans.Any(t => t.TenDn == LoginUsername && t.MatKhau == LoginPassword);
 
                 if (hopLe)
                 {
@@ -158,7 +158,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 var db = DataProvider.Ins.DB;
 
-                if (db.TaiKhoans.Any(t => t.Tendangnhap == SignUpUsername))
+                if (db.TaiKhoans.Any(t => t.TenDn == SignUpUsername))
                 {
                     MessageBox.Show("Tài khoản đã tồn tại");
                     return;
@@ -166,8 +166,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
                 db.TaiKhoans.Add(new TaiKhoan
                 {
-                    Tendangnhap = SignUpUsername,
-                    Matkhau = SignUpPassword
+                    TenDn = SignUpUsername,
+                    MatKhau = SignUpPassword
                 });
 
                 db.SaveChanges();

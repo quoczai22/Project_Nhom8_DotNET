@@ -47,8 +47,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 OnPropertyChanged();
             }
         }
-        private List<ThongKeHang> _danhSachThongKeHang;
-        public List<ThongKeHang> DanhSachThongKeBanHang 
+        private List<ThongKeBanHang> _danhSachThongKeHang;
+        public List<ThongKeBanHang> DanhSachThongKeBanHang 
         {
             get { return _danhSachThongKeHang; }
             set
@@ -119,8 +119,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             DoanhThu = new SeriesCollection();
             Labels = new List<string>();
             ChucVu = new SeriesCollection();
-            DanhSachThongKeBanHang = new List<ThongKeHang>();
-            ChucVu = new SeriesCollection();
+            DanhSachThongKeBanHang = new List<ThongKeBanHang>();
 
             TaiDuLieu();
             LoadPieChart();
@@ -149,7 +148,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 foreach (var sp in topSanPham)
                 {
                     tenDanhSachLK.Add(sp.TenLk);
-                    giaTriSanPham.Add(Convert.ToDouble(sp.TongBan ?? 0));
+                    giaTriSanPham.Add(Convert.ToDouble(sp.TongBan));
                 }
 
                 Labels = tenDanhSachLK;
@@ -163,14 +162,22 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#337b61ff"))
                 });
 
-                var hangSX = db.LinhKiens
-                    .GroupBy(lk => lk.Nsx)
-                    .Select(g => new ThongKeHang { HangSX = g.Key, SoLuong = g.Count() })
+                var hangSX = db.ChiTietHds
+                    .Include(ct => ct.MaLkNavigation)
+                    .Include(ct => ct.MaHdNavigation)
+                    .GroupBy(ct => ct.MaLkNavigation.MaNsx)
+                    .Select(g => new ThongKeBanHang
+                    {
+                        HangSX = g.Key,
+                        SoLuongBan = (int)g.Sum(x => x.SoLuong),
+                        DoanhThu = (double)g.Sum(x => x.SoLuong * x.DonGia),
+                        GiaTrungBinh = (double)g.Average(x => x.DonGia),
+                        SoDonHang = g.Select(x => x.MaHd).Distinct().Count()
+                    })
                     .ToList();
 
                 DanhSachThongKeBanHang = hangSX;
             }
-
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
