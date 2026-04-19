@@ -1,6 +1,9 @@
 ﻿using QuanLyLinhKienMayTinh.Models;
+using QuanLyLinhKienMayTinh;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Net.NetworkInformation;
 using System.Windows;
 using System.Windows.Input;
 
@@ -107,12 +110,27 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             try
             {
                 var db = DataProvider.Ins.DB;
-                bool hopLe = db.TaiKhoans.Any(t => t.TenDn == LoginUsername && t.MatKhau == LoginPassword);
 
-                if (hopLe)
+                var acc = db.TaiKhoans
+                            .Include(t => t.MaNvNavigation) 
+                            .FirstOrDefault(t => t.TenDn == LoginUsername && t.MatKhau == LoginPassword);
+
+                if (acc != null)
                 {
+                    LuuTrangThai.MaNVDangNhap = acc.MaNv;
+                    LuuTrangThai.QuyenDangNhap = acc.MaNvNavigation.Quyen;
+
+                    if (LuuTrangThai.QuyenDangNhap == "Quản lý toàn bộ")
+                    {
+                        DataProvider.Ins.ChangeToQuanLyConnection();
+                    }
+                    else
+                    {
+                        DataProvider.Ins.ChangeToNhanVienConnection();
+                    }
+
                     MainWindow main = new MainWindow(LoginUsername);
-                    main.Show();
+                    main.Show(); 
 
                     foreach (Window item in Application.Current.Windows)
                     {
@@ -123,7 +141,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                         }
                     }
                 }
-                else 
+                else
                 {
                     MessageBox.Show("Sai tài khoản hoặc mật khẩu");
                 }
