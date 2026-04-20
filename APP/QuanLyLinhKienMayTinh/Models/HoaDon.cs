@@ -18,6 +18,8 @@ public partial class HoaDon
     public int? TongTien { get; set; }
 
     public string TrangThai { get; set; }
+    public string PhuongThucThanhToan { get; set; }
+    public DateOnly? NgayThanhToan { get; set; }
 
     public virtual ICollection<ChiTietHd> ChiTietHds { get; set; } = new List<ChiTietHd>();
 

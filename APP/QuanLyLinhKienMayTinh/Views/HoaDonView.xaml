@@ -173,6 +173,7 @@
                           BorderBrush="#e2e8f0"
                           ItemsSource="{Binding DanhSachTrangThai}"
                           SelectedItem="{Binding TrangThaiChon}"/>
+                
                 <DatePicker Grid.Column="2" Margin="0,0,10,0"
                             SelectedDate="{Binding TuNgay}" FontSize="13"/>
                 <DatePicker Grid.Column="3" Margin="0,0,10,0"
@@ -273,6 +274,12 @@
                                         <TextBlock Text="{Binding HoaDonChon.NgayTao, StringFormat=dd/MM/yyyy HH:mm}"
                                                    HorizontalAlignment="Right" FontSize="12" Foreground="#2d3748"/>
                                     </Grid>
+                                    <Grid Margin="0,0,0,8">
+                                        <TextBlock Text="Thanh toán" FontSize="12" Foreground="#718096"/>
+                                        <TextBlock Text="{Binding HoaDonChon.PhuongThucThanhToan}"
+                                                   HorizontalAlignment="Right" FontSize="12"
+                                                   FontWeight="SemiBold" Foreground="#2d3748"/>
+                                    </Grid>
                                     <Grid>
                                         <TextBlock Text="Trạng thái" FontSize="12" Foreground="#718096"/>
                                         <TextBlock Text="{Binding HoaDonChon.TrangThai}"
@@ -316,13 +323,18 @@
                                     <DataGridTextColumn Header="Tên" Binding="{Binding TenSanPham}" Width="*"/>
                                     <DataGridTextColumn Header="SL" Binding="{Binding SoLuong}" Width="40"/>
                                     <DataGridTextColumn Header="Đơn giá" Binding="{Binding DonGia, StringFormat={}{0:N0}}" Width="80">
+                                    </DataGridTextColumn>
+
+                                    <DataGridTextColumn Header="Hạn bảo hành" Binding="{Binding HanBaoHanhHienThi}" Width="110">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="HorizontalAlignment" Value="Right"/>
-                                                <Setter Property="Padding" Value="0,0,4,0"/>
+                                                <Setter Property="Foreground" Value="#e53e3e"/>
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                                <Setter Property="Padding" Value="8,0,0,0"/>
                                             </Style>
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
+
                                 </DataGrid.Columns>
                             </DataGrid>
 
@@ -417,7 +429,7 @@
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="{Binding SoHoaDonChoXuLy, StringFormat={}{0} hóa đơn}"
                                    FontSize="13" FontWeight="Bold" Foreground="#fb8c00"/>
-                        <TextBlock Text="Chờ xử lý" FontSize="11" Foreground="#718096"/>
+                        <TextBlock Text="Chưa thanh toán" FontSize="11" Foreground="#718096"/>
                     </StackPanel>
                 </StackPanel>
             </UniformGrid>
