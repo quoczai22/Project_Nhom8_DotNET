@@ -7,6 +7,7 @@
       d:DesignHeight="680" d:DesignWidth="1000"
       Title="Hóa Đơn"
       Background="{DynamicResource BackgroundColor}">
+
     <Page.Resources>
         <Style x:Key="PageTitleStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
@@ -18,7 +19,6 @@
             <Setter Property="Foreground" Value="{DynamicResource SubTextColor}"/>
             <Setter Property="Margin" Value="0,4,0,0"/>
         </Style>
-
         <Style x:Key="SearchBoxStyle" TargetType="TextBox">
             <Setter Property="Padding" Value="38,9,12,9"/>
             <Setter Property="FontSize" Value="13"/>
@@ -44,7 +44,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="PrimaryBtnStyle" TargetType="Button">
             <Setter Property="Background" Value="{DynamicResource ButtonColor}"/>
             <Setter Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
@@ -62,14 +61,13 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#303f9f"/>
+                                <Setter Property="Opacity" Value="0.9"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="SuccessBtnStyle" TargetType="Button" BasedOn="{StaticResource PrimaryBtnStyle}">
             <Setter Property="Background" Value="#43a047"/>
             <Setter Property="Foreground" Value="White"/>
@@ -111,7 +109,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#f0f2ff"/>
+                                <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -154,16 +152,9 @@
                 <TextBlock Text="Hóa Đơn" Style="{StaticResource PageTitleStyle}"/>
                 <TextBlock Text="Quản lý danh sách hóa đơn bán hàng" Style="{StaticResource PageSubtitleStyle}"/>
             </StackPanel>
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button Command="{Binding ToggleThemeCommand}"
-                        Style="{DynamicResource ThemeToggleButtonStyle}"
-                        Height="36" Padding="12,0" Margin="0,0,12,0" Width="100"/>
-
-                <Button Content="＋  Tạo hóa đơn mới"
-                        Style="{StaticResource SuccessBtnStyle}" Padding="16,10"
-                        Command="{Binding TaoHoaDonMoiCommand}"/>
-            </StackPanel>
+            <Button HorizontalAlignment="Right" Content="＋  Tạo hóa đơn mới"
+                    Style="{StaticResource SuccessBtnStyle}" Padding="16,10"
+                    Command="{Binding TaoHoaDonMoiCommand}"/>
         </Grid>
 
         <Border Grid.Row="1" Background="{DynamicResource BackgroundColor}" CornerRadius="10" Padding="14,10"
@@ -186,6 +177,7 @@
                           BorderBrush="{DynamicResource BorderColor}" Foreground="{DynamicResource MainTextColor}" Background="Transparent"
                           ItemsSource="{Binding DanhSachTrangThai}"
                           SelectedItem="{Binding TrangThaiChon}"/>
+
                 <DatePicker Grid.Column="2" Margin="0,0,10,0" Foreground="{DynamicResource MainTextColor}" Background="Transparent"
                             SelectedDate="{Binding TuNgay}" FontSize="13"/>
                 <DatePicker Grid.Column="3" Margin="0,0,10,0" Foreground="{DynamicResource MainTextColor}" Background="Transparent"
@@ -281,10 +273,10 @@
                                                    HorizontalAlignment="Right" FontSize="12" Foreground="{DynamicResource MainTextColor}"/>
                                     </Grid>
                                     <Grid Margin="0,0,0,8">
-                                        <TextBlock Text="Thanh toán" FontSize="12" Foreground="#718096"/>
+                                        <TextBlock Text="Thanh toán" FontSize="12" Foreground="{DynamicResource SubTextColor}"/>
                                         <TextBlock Text="{Binding HoaDonChon.PhuongThucThanhToan}"
                                                    HorizontalAlignment="Right" FontSize="12"
-                                                   FontWeight="SemiBold" Foreground="#2d3748"/>
+                                                   FontWeight="SemiBold" Foreground="{DynamicResource MainTextColor}"/>
                                     </Grid>
                                     <Grid>
                                         <TextBlock Text="Trạng thái" FontSize="12" Foreground="{DynamicResource SubTextColor}"/>
@@ -327,8 +319,13 @@
                                     <DataGridTextColumn Header="Tên" Binding="{Binding TenSanPham}" Width="*"/>
                                     <DataGridTextColumn Header="SL" Binding="{Binding SoLuong}" Width="40"/>
                                     <DataGridTextColumn Header="Đơn giá" Binding="{Binding DonGia, StringFormat={}{0:N0}}" Width="80">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="HorizontalAlignment" Value="Right"/>
+                                                <Setter Property="Padding" Value="0,0,4,0"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
-
                                     <DataGridTextColumn Header="Hạn bảo hành" Binding="{Binding HanBaoHanhHienThi}" Width="110">
                                         <DataGridTextColumn.ElementStyle>
                                             <Style TargetType="TextBlock">
@@ -338,7 +335,6 @@
                                             </Style>
                                         </DataGridTextColumn.ElementStyle>
                                     </DataGridTextColumn>
-
                                 </DataGrid.Columns>
                             </DataGrid>
 
@@ -429,7 +425,7 @@
                     <StackPanel VerticalAlignment="Center">
                         <TextBlock Text="{Binding SoHoaDonChoXuLy, StringFormat={}{0} hóa đơn}"
                                    FontSize="13" FontWeight="Bold" Foreground="#fb8c00"/>
-                        <TextBlock Text="Chờ xử lý" FontSize="11" Foreground="{DynamicResource SubTextColor}"/>
+                        <TextBlock Text="Chưa thanh toán" FontSize="11" Foreground="{DynamicResource SubTextColor}"/>
                     </StackPanel>
                 </StackPanel>
             </UniformGrid>
