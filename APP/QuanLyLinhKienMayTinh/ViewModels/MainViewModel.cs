@@ -19,9 +19,11 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         private int soNhanVienGoc = 0;
         private int soLinhKienGoc = 0;
         private int soHoaDonGoc = 0;
+        bool _isDark = false;
 
         public ICommand ThongBaoCommand { get; set; }
         public ICommand LogOutCommand { get; set; }
+        public ICommand ToggleThemeCommand { get; set; }
 
         public MainViewModel(string username)
         {
@@ -30,6 +32,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
             ThongBaoCommand = new RelayCommand<object>((p) => true, (p) => ThongBao());
             LogOutCommand = new RelayCommand<object>((p) => true, (p) => LogOut());
+            ToggleThemeCommand = new RelayCommand<object>((p) => true, (p) => ExecuteToggleTheme(p));
         }
 
         private void LaySoLuongGoc()
@@ -99,6 +102,32 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 LoginView login = new LoginView();
                 login.Show();
                 Application.Current.Windows.OfType<MainWindow>().FirstOrDefault()?.Close();
+            }
+        }
+        private void ExecuteToggleTheme(object obj)
+        {
+
+            _isDark = !_isDark;
+            string themeFile = _isDark ? "../Themes/ThemeDark.xaml" : "../Themes/ThemeLight.xaml";
+
+            try
+            {
+                var newThemeDict = new ResourceDictionary
+                {
+                    Source = new Uri(themeFile, UriKind.RelativeOrAbsolute)
+                };
+
+                var mergedDicts = Application.Current.Resources.MergedDictionaries;
+                var oldThemeDict = mergedDicts.FirstOrDefault(d => d.Source != null && d.Source.OriginalString.Contains("Theme"));
+                mergedDicts.Add(newThemeDict);
+                if (oldThemeDict != null)
+                {
+                    mergedDicts.Remove(oldThemeDict);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi chuyển theme: {ex.Message}");
             }
         }
     }

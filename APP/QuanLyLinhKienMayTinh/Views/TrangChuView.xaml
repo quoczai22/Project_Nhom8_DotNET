@@ -7,15 +7,16 @@
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       mc:Ignorable="d"
       d:DesignHeight="680" d:DesignWidth="1000"
-      Title="Trang Chủ">
-
+      Title="Trang Chủ"
+      Background="{DynamicResource BackgroundColor}">
     <Page.Resources>
-        <!-- Stat Card Style -->
         <Style x:Key="StatCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
             <Setter Property="CornerRadius" Value="14"/>
             <Setter Property="Padding" Value="18,16"/>
             <Setter Property="Margin" Value="6"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect BlurRadius="14" ShadowDepth="0" Opacity="0.07" Color="#000000"/>
@@ -23,12 +24,13 @@
             </Setter>
         </Style>
 
-        <!-- Chart Card Style -->
         <Style x:Key="ChartCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
             <Setter Property="CornerRadius" Value="14"/>
             <Setter Property="Padding" Value="20"/>
             <Setter Property="Margin" Value="6"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Effect">
                 <Setter.Value>
                     <DropShadowEffect BlurRadius="14" ShadowDepth="0" Opacity="0.07" Color="#000000"/>
@@ -39,7 +41,7 @@
         <Style x:Key="SectionTitle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#2d3748"/>
+            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
             <Setter Property="Margin" Value="0,0,0,14"/>
         </Style>
     </Page.Resources>
@@ -53,16 +55,13 @@
                 <RowDefinition Height="220"/>
             </Grid.RowDefinitions>
 
-            <!-- Page Title -->
             <StackPanel Grid.Row="0" Margin="6,0,0,16">
-                <TextBlock Text="Tổng quan hệ thống" FontSize="20" FontWeight="Bold" Foreground="#1a202c"/>
-                <TextBlock Text="Xem nhanh thống kê và dữ liệu hệ thống" FontSize="13" Foreground="#718096" Margin="0,4,0,0"/>
+                <TextBlock Text="Tổng quan hệ thống" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource MainTextColor}"/>
+                <TextBlock Text="Xem nhanh thống kê và dữ liệu hệ thống" FontSize="13" Foreground="{DynamicResource SubTextColor}" Margin="0,4,0,0"/>
             </StackPanel>
 
-            <!-- ===== STAT CARDS ===== -->
             <UniformGrid Grid.Row="1" Columns="5" Margin="0,0,0,4">
 
-                <!-- Nhân viên -->
                 <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -73,17 +72,15 @@
                         <Border Grid.Row="0" Width="40" Height="40" CornerRadius="10"
                                 Background="#e8eaf6" HorizontalAlignment="Left" Margin="0,0,0,12">
                             <Icon:PackIconMaterial Kind="AccountTie" Foreground="#3f51b5"
-                                                   Width="18" Height="18"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                   Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Grid.Row="1" Text="{Binding TongNV}" FontSize="26"
-                                   FontWeight="Bold" Foreground="#1a202c"/>
+                                   FontWeight="Bold" Foreground="{DynamicResource MainTextColor}"/>
                         <TextBlock Grid.Row="2" Text="Nhân Viên" FontSize="12"
-                                   Foreground="#718096" Margin="0,4,0,0"/>
+                                   Foreground="{DynamicResource SubTextColor}" Margin="0,4,0,0"/>
                     </Grid>
                 </Border>
 
-                <!-- Khách hàng -->
                 <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -94,17 +91,15 @@
                         <Border Grid.Row="0" Width="40" Height="40" CornerRadius="10"
                                 Background="#e3f2fd" HorizontalAlignment="Left" Margin="0,0,0,12">
                             <Icon:PackIconMaterial Kind="AccountGroupOutline" Foreground="#2196f3"
-                                                   Width="18" Height="18"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                   Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Grid.Row="1" Text="{Binding TongKH}" FontSize="26"
-                                   FontWeight="Bold" Foreground="#1a202c"/>
+                                   FontWeight="Bold" Foreground="{DynamicResource MainTextColor}"/>
                         <TextBlock Grid.Row="2" Text="Khách Hàng" FontSize="12"
-                                   Foreground="#718096" Margin="0,4,0,0"/>
+                                   Foreground="{DynamicResource SubTextColor}" Margin="0,4,0,0"/>
                     </Grid>
                 </Border>
 
-                <!-- Linh kiện -->
                 <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -115,17 +110,15 @@
                         <Border Grid.Row="0" Width="40" Height="40" CornerRadius="10"
                                 Background="#f3e5f5" HorizontalAlignment="Left" Margin="0,0,0,12">
                             <Icon:PackIconMaterial Kind="Memory" Foreground="#9c27b0"
-                                                   Width="18" Height="18"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                   Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Grid.Row="1" Text="{Binding TongLK}" FontSize="26"
-                                   FontWeight="Bold" Foreground="#1a202c"/>
+                                   FontWeight="Bold" Foreground="{DynamicResource MainTextColor}"/>
                         <TextBlock Grid.Row="2" Text="Linh Kiện" FontSize="12"
-                                   Foreground="#718096" Margin="0,4,0,0"/>
+                                   Foreground="{DynamicResource SubTextColor}" Margin="0,4,0,0"/>
                     </Grid>
                 </Border>
 
-                <!-- Loại linh kiện -->
                 <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -136,17 +129,15 @@
                         <Border Grid.Row="0" Width="40" Height="40" CornerRadius="10"
                                 Background="#fff3e0" HorizontalAlignment="Left" Margin="0,0,0,12">
                             <Icon:PackIconMaterial Kind="TagMultiple" Foreground="#ff9800"
-                                                   Width="18" Height="18"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                   Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Grid.Row="1" Text="{Binding TongLoaiLK}" FontSize="26"
-                                   FontWeight="Bold" Foreground="#1a202c"/>
+                                   FontWeight="Bold" Foreground="{DynamicResource MainTextColor}"/>
                         <TextBlock Grid.Row="2" Text="Loại Linh Kiện" FontSize="12"
-                                   Foreground="#718096" Margin="0,4,0,0"/>
+                                   Foreground="{DynamicResource SubTextColor}" Margin="0,4,0,0"/>
                     </Grid>
                 </Border>
 
-                <!-- Hóa đơn -->
                 <Border Style="{StaticResource StatCardStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -157,25 +148,22 @@
                         <Border Grid.Row="0" Width="40" Height="40" CornerRadius="10"
                                 Background="#e8f5e9" HorizontalAlignment="Left" Margin="0,0,0,12">
                             <Icon:PackIconMaterial Kind="ReceiptOutline" Foreground="#4caf50"
-                                                   Width="18" Height="18"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                   Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <TextBlock Grid.Row="1" Text="{Binding TongHD}" FontSize="26"
-                                   FontWeight="Bold" Foreground="#1a202c"/>
+                                   FontWeight="Bold" Foreground="{DynamicResource MainTextColor}"/>
                         <TextBlock Grid.Row="2" Text="Hóa Đơn" FontSize="12"
-                                   Foreground="#718096" Margin="0,4,0,0"/>
+                                   Foreground="{DynamicResource SubTextColor}" Margin="0,4,0,0"/>
                     </Grid>
                 </Border>
             </UniformGrid>
 
-            <!-- ===== CHARTS ROW ===== -->
             <Grid Grid.Row="2" Height="240" Margin="0,4,0,4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Bar Chart: Doanh thu -->
                 <Border Grid.Column="0" Style="{StaticResource ChartCardStyle}" Margin="6,6,4,6">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -183,22 +171,25 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                            <Border Width="4" CornerRadius="2" Background="#3f51b5" Margin="0,2,10,2"/>
+                            <Border Width="4" CornerRadius="2" Background="{DynamicResource ButtonColor}" Margin="0,2,10,2"/>
                             <StackPanel>
-                                <TextBlock Text="Thống kê Doanh thu" FontSize="14"
-                                           FontWeight="SemiBold" Foreground="#2d3748"/>
-                                <TextBlock Text="Theo linh kiện bán chạy nhất" FontSize="11" Foreground="#a0aec0"/>
+                                <TextBlock Text="Biểu đồ Doanh thu" FontSize="14"
+                                           FontWeight="SemiBold" Foreground="{DynamicResource MainTextColor}"/>
+                                <TextBlock Text="Tổng doanh thu 12 tháng (VNĐ)" FontSize="11" Foreground="{DynamicResource SubTextColor}"/>
                             </StackPanel>
                         </StackPanel>
-                        <lvc:CartesianChart Grid.Row="1" Series="{Binding DoanhThu}">
+
+                        <lvc:CartesianChart Grid.Row="1" Series="{Binding DoanhThu}" Foreground="{DynamicResource MainTextColor}">
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Labels="{Binding Labels}"/>
+                                <lvc:Axis Title="Tháng" Labels="{Binding Labels}" Foreground="{DynamicResource MainTextColor}"/>
                             </lvc:CartesianChart.AxisX>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis Title="Số tiền" LabelFormatter="{Binding Formatter}" Foreground="{DynamicResource MainTextColor}"/>
+                            </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
                     </Grid>
                 </Border>
 
-                <!-- Pie Chart: Chức vụ -->
                 <Border Grid.Column="1" Style="{StaticResource ChartCardStyle}" Margin="4,6,6,6">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -209,17 +200,17 @@
                             <Border Width="4" CornerRadius="2" Background="#9c27b0" Margin="0,2,10,2"/>
                             <StackPanel>
                                 <TextBlock Text="Nhân viên theo chức vụ" FontSize="14"
-                                           FontWeight="SemiBold" Foreground="#2d3748"/>
-                                <TextBlock Text="Phân bổ nhân sự" FontSize="11" Foreground="#a0aec0"/>
+                                           FontWeight="SemiBold" Foreground="{DynamicResource MainTextColor}"/>
+                                <TextBlock Text="Phân bổ nhân sự" FontSize="11" Foreground="{DynamicResource SubTextColor}"/>
                             </StackPanel>
                         </StackPanel>
+
                         <lvc:PieChart Grid.Row="1" Series="{Binding ChucVu}"
-                                      InnerRadius="30" LegendLocation="Bottom"/>
+                                      InnerRadius="30" LegendLocation="Bottom" Foreground="{DynamicResource MainTextColor}"/>
                     </Grid>
                 </Border>
             </Grid>
 
-            <!-- ===== BOTTOM TABLE ===== -->
             <Border Grid.Row="3" Style="{StaticResource ChartCardStyle}" Margin="6">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -227,70 +218,56 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- HEADER -->
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
                         <Border Width="4" CornerRadius="2" Background="#4caf50" Margin="0,2,10,2"/>
                         <StackPanel>
                             <TextBlock Text="Thống kê bán hàng theo Hãng" FontSize="14"
-                           FontWeight="SemiBold" Foreground="#2d3748"/>
+                                       FontWeight="SemiBold" Foreground="{DynamicResource MainTextColor}"/>
                             <TextBlock Text="Tổng hợp số lượng và doanh thu theo nhà sản xuất"
-                           FontSize="11" Foreground="#a0aec0"/>
+                                       FontSize="11" Foreground="{DynamicResource SubTextColor}"/>
                         </StackPanel>
                     </StackPanel>
 
-                    <!-- TABLE -->
                     <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding DanhSachThongKeBanHang}"
-                  AutoGenerateColumns="False" IsReadOnly="True"
-                  CanUserAddRows="False"
-                  Background="White" BorderThickness="1" BorderBrush="#edf2f7"
-                  HeadersVisibility="Column" GridLinesVisibility="Horizontal"
-                  HorizontalGridLinesBrush="#edf2f7"
-                  RowBackground="White" AlternatingRowBackground="#f9fafb"
-                  FontSize="13">
+                              ItemsSource="{Binding DanhSachThongKeBanHang}"
+                              AutoGenerateColumns="False" IsReadOnly="True"
+                              CanUserAddRows="False"
+                              Background="Transparent" BorderThickness="0"
+                              HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                              HorizontalGridLinesBrush="{DynamicResource BorderColor}"
+                              RowBackground="Transparent" AlternatingRowBackground="{DynamicResource SecondaryBgColor}"
+                              Foreground="{DynamicResource MainTextColor}"
+                              FontSize="13">
 
-                        <!-- Header style -->
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="#3f51b5"/>
-                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" Value="{DynamicResource ButtonColor}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
                                 <Setter Property="FontWeight" Value="SemiBold"/>
                                 <Setter Property="Padding" Value="12,8"/>
                                 <Setter Property="BorderThickness" Value="0,0,1,0"/>
-                                <Setter Property="BorderBrush" Value="#5c6bc0"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
 
                         <DataGrid.Columns>
+                            <DataGridTextColumn Header="Hãng sản xuất" Binding="{Binding HangSX}" Width="*"/>
 
-                            <!-- Hãng -->
-                            <DataGridTextColumn Header="Hãng sản xuất"
-                                    Binding="{Binding HangSX}" Width="*"/>
+                            <DataGridTextColumn Header="SL bán" Binding="{Binding SoLuongBan}" Width="100"/>
 
-                            <!-- Số lượng bán -->
-                            <DataGridTextColumn Header="SL bán"
-                                    Binding="{Binding SoLuongBan}" Width="100"/>
-
-                            <!-- Doanh thu -->
-                            <DataGridTextColumn Header="Doanh thu (VNĐ)"
-                                Binding="{Binding DoanhThu, StringFormat={}{0:N0}}" Width="150">
+                            <DataGridTextColumn Header="Doanh thu (VNĐ)" Binding="{Binding DoanhThu, StringFormat={}{0:N0}}" Width="150">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="#2e7d32"/>
+                                        <Setter Property="Foreground" Value="#4caf50"/>
                                         <Setter Property="FontWeight" Value="SemiBold"/>
                                         <Setter Property="HorizontalAlignment" Value="Right"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
 
-                            <!-- Giá trung bình -->
-                            <DataGridTextColumn Header="Giá TB"
-                                    Binding="{Binding GiaTrungBinh}" Width="120"/>
+                            <DataGridTextColumn Header="Giá TB" Binding="{Binding GiaTrungBinh}" Width="120"/>
 
-                            <!-- Số đơn -->
-                            <DataGridTextColumn Header="Số đơn"
-                                    Binding="{Binding SoDonHang}" Width="100"/>
-
+                            <DataGridTextColumn Header="Số đơn" Binding="{Binding SoDonHang}" Width="100"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

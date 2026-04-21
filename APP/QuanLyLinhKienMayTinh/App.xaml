@@ -7,9 +7,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Themes/StyleLogin.xaml"/>
-                <ResourceDictionary Source="Themes/StyleMainWindow.xaml"/>
-                <ResourceDictionary Source="Themes/StyleTrangChu.xaml"/>
+                <ResourceDictionary Source="/Themes/ThemeDark.xaml"/>
+                <ResourceDictionary Source="/Themes/ThemeLight.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

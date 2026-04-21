@@ -5,24 +5,25 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
       d:DesignHeight="680" d:DesignWidth="1000"
-      Title="Loại Linh Kiện">
-
+      Title="Loại Linh Kiện"
+      Background="{DynamicResource BackgroundColor}">
     <Page.Resources>
         <Style x:Key="PageTitleStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#1a202c"/>
+            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
         </Style>
         <Style x:Key="PageSubtitleStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Foreground" Value="#718096"/>
+            <Setter Property="Foreground" Value="{DynamicResource SubTextColor}"/>
             <Setter Property="Margin" Value="0,4,0,0"/>
         </Style>
         <Style x:Key="SearchBoxStyle" TargetType="TextBox">
             <Setter Property="Padding" Value="38,9,12,9"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#e2e8f0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -35,7 +36,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsFocused" Value="True">
-                                <Setter Property="BorderBrush" Value="#3f51b5"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource ButtonColor}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -43,8 +44,8 @@
             </Setter>
         </Style>
         <Style x:Key="PrimaryBtnStyle" TargetType="Button">
-            <Setter Property="Background" Value="#3f51b5"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource ButtonColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Padding" Value="16,9"/>
@@ -59,7 +60,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#303f9f"/>
+                                <Setter Property="Opacity" Value="0.9"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -68,6 +69,7 @@
         </Style>
         <Style x:Key="SuccessBtnStyle" TargetType="Button" BasedOn="{StaticResource PrimaryBtnStyle}">
             <Setter Property="Background" Value="#43a047"/>
+            <Setter Property="Foreground" Value="White"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="#2e7d32"/>
@@ -88,7 +90,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#f0f2ff"/>
+                                <Setter Property="Background" Value="{DynamicResource SecondaryBgColor}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -96,22 +98,23 @@
             </Setter>
         </Style>
         <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#3f51b5"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource ButtonColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Padding" Value="12,10"/>
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
-            <Setter Property="BorderBrush" Value="#5c6bc0"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
         </Style>
         <Style TargetType="DataGridRow">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="#e8eaf6"/>
+                    <Setter Property="Background" Value="{DynamicResource SecondaryBgColor}"/>
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#f5f7ff"/>
+                    <Setter Property="Background" Value="{DynamicResource SecondaryBgColor}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -124,7 +127,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Header -->
         <Grid Grid.Row="0" Margin="0,0,0,16">
             <StackPanel>
                 <TextBlock Text="Loại Linh Kiện" Style="{StaticResource PageTitleStyle}"/>
@@ -135,9 +137,8 @@
                     Command="{Binding ThemLoaiCommand}"/>
         </Grid>
 
-        <!-- Toolbar -->
-        <Border Grid.Row="1" Background="White" CornerRadius="10" Padding="14,10"
-                BorderBrush="#e2e8f0" BorderThickness="1" Margin="0,0,0,12">
+        <Border Grid.Row="1" Background="{DynamicResource BackgroundColor}" CornerRadius="10" Padding="14,10"
+                BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" Margin="0,0,0,12">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -147,7 +148,7 @@
                     <TextBox Style="{StaticResource SearchBoxStyle}"
                              Text="{Binding TimKiem, UpdateSourceTrigger=PropertyChanged}"/>
                     <TextBlock Text="🔍" VerticalAlignment="Center" Margin="12,0,0,0"
-                               IsHitTestVisible="False" Foreground="#a0aec0"/>
+                               IsHitTestVisible="False" Foreground="{DynamicResource SubTextColor}"/>
                 </Grid>
                 <Button Grid.Column="1" Content="↺  Làm mới"
                         Style="{StaticResource PrimaryBtnStyle}"
@@ -155,18 +156,17 @@
             </Grid>
         </Border>
 
-        <!-- DataGrid -->
-        <Border Grid.Row="2" Background="White" CornerRadius="10"
-                BorderBrush="#e2e8f0" BorderThickness="1" ClipToBounds="True">
+        <Border Grid.Row="2" Background="{DynamicResource BackgroundColor}" CornerRadius="10"
+                BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" ClipToBounds="True">
             <DataGrid ItemsSource="{Binding DanhSachLoaiLinhKien}"
                       SelectedItem="{Binding LoaiChon}"
                       AutoGenerateColumns="False"
                       IsReadOnly="True" CanUserAddRows="False"
                       HeadersVisibility="Column"
                       GridLinesVisibility="Horizontal"
-                      HorizontalGridLinesBrush="#edf2f7"
-                      RowBackground="White" AlternatingRowBackground="#f9fafb"
-                      FontSize="13" BorderThickness="0" SelectionMode="Single">
+                      HorizontalGridLinesBrush="{DynamicResource BorderColor}"
+                      RowBackground="{DynamicResource BackgroundColor2}" AlternatingRowBackground="{DynamicResource BackgroundColor}"
+                      FontSize="13" BorderThickness="0" SelectionMode="Single" Margin="3">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Mã loại" Binding="{Binding MaLoai}" Width="120"/>
                     <DataGridTextColumn Header="Tên loại linh kiện" Binding="{Binding TenLoai}" Width="*"/>
@@ -177,13 +177,11 @@
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Button Content="✏️" Style="{StaticResource IconBtnStyle}"
                                             ToolTip="Chỉnh sửa" Margin="2"
-                                            Command="{Binding DataContext.SuaLoaiCommand,
-                                                      RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Command="{Binding DataContext.SuaLoaiCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}"/>
                                     <Button Content="🗑️" Style="{StaticResource IconBtnStyle}"
                                             ToolTip="Xóa" Margin="2"
-                                            Command="{Binding DataContext.XoaLoaiCommand,
-                                                      RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            Command="{Binding DataContext.XoaLoaiCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                             CommandParameter="{Binding}"/>
                                 </StackPanel>
                             </DataTemplate>

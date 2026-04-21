@@ -269,13 +269,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
             if (trangThai == "Đã thanh toán")
             {
-                mauNen = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e8f5e9")); 
+                mauNen = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e8f5e9"));
                 mauChu = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2e7d32"));
             }
             else
             {
                 // Dành cho "Chưa thanh toán" hoặc các trạng thái khác
-                mauNen = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#fff3e0")); 
+                mauNen = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#fff3e0"));
                 mauChu = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e65100"));
             }
 

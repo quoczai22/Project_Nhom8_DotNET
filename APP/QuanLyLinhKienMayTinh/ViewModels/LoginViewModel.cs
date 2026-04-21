@@ -66,7 +66,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             get => _message;
             set { _message = value; OnPropertyChanged(); }
         }
+         bool _isDark = false;
 
+        public ICommand ToggleThemeCommand { get; }
         public ICommand ShowLoginCommand { get; set; }
         public ICommand ShowSignUpCommand { get; set; }
         public ICommand LoginCommand { get; set; }
@@ -74,6 +76,10 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
         public LoginViewModel()
         {
+            ToggleThemeCommand = new RelayCommand<object>((p) => true, (p) =>
+            {
+                ExecuteToggleTheme(p);
+            });
             ShowSignUpCommand = new RelayCommand<object>((p) => true, (p) =>
             {
                 LoginVisibility = Visibility.Collapsed;
@@ -201,6 +207,32 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+        private void ExecuteToggleTheme(object obj)
+        {
+            
+            _isDark = !_isDark;
+            string themeFile = _isDark ? "../Themes/ThemeDark.xaml" : "../Themes/ThemeLight.xaml";
+
+            try
+            {
+                var newThemeDict = new ResourceDictionary
+                {
+                    Source = new Uri(themeFile, UriKind.RelativeOrAbsolute)
+                };
+
+                var mergedDicts = Application.Current.Resources.MergedDictionaries;
+                var oldThemeDict = mergedDicts.FirstOrDefault(d =>d.Source != null && d.Source.OriginalString.Contains("Theme"));
+                mergedDicts.Add(newThemeDict);
+                if (oldThemeDict != null)
+                {
+                    mergedDicts.Remove(oldThemeDict);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi chuyển theme: {ex.Message}");
             }
         }
     }
