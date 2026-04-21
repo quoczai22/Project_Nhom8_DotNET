@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -37,6 +38,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public Func<double, string> Formatter { get; set; }
+
         private SeriesCollection _chuVu;
         public SeriesCollection ChucVu
         {
@@ -134,33 +138,46 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 TongLK = db.LinhKiens.Count();
                 TongLoaiLK = db.LoaiLks.Count();
                 TongHD = db.HoaDons.Count();
+                int namHienTai = DateTime.Now.Year;
 
-                var topSanPham = db.ChiTietHds
-                    .GroupBy(ct => ct.MaLkNavigation.TenLk)
-                    .Select(g => new { TenLk = g.Key, TongBan = g.Sum(ct => ct.SoLuong) })
-                    .OrderByDescending(x => x.TongBan)
-                    .Take(5)
+                // 1. Khởi tạo dữ liệu
+                var giaTriDoanhThu = new ChartValues<double>();
+                var danhSachThang = new List<string>();
+
+                // 2. Lấy toàn bộ hóa đơn trong năm hiện tại về Memory (để tối ưu truy vấn)
+                var hoaDonsTrongNam = db.HoaDons
+                    .Where(hd => hd.NgayHd.HasValue && hd.NgayHd.Value.Year == namHienTai)
+                    .Select(hd => new { hd.NgayHd.Value.Month, hd.TongTien })
                     .ToList();
 
-                var giaTriSanPham = new ChartValues<double>();
-                var tenDanhSachLK = new List<string>();
-
-                foreach (var sp in topSanPham)
+                // 3. Xử lý dữ liệu cho 12 tháng bằng LINQ to Object
+                for (int i = 1; i <= 12; i++)
                 {
-                    tenDanhSachLK.Add(sp.TenLk);
-                    giaTriSanPham.Add(Convert.ToDouble(sp.TongBan));
+                    // Tính tổng tiền của tháng i (ORM xử lý lọc từ danh sách đã lấy)
+                    var tongDoanhThuThang = hoaDonsTrongNam
+                        .Where(hd => hd.Month == i)
+                        .Sum(hd => (double?)hd.TongTien) ?? 0;
+
+                    giaTriDoanhThu.Add(tongDoanhThuThang);
+                    danhSachThang.Add($"T{i}");
                 }
 
-                Labels = tenDanhSachLK;
+                // 4. Cập nhật UI
+                Labels = danhSachThang;
+                Formatter = value => value.ToString("N0") + " đ";
 
-                DoanhThu.Add(new LineSeries
+                DoanhThu = new SeriesCollection
+    {
+                new LineSeries
                 {
-                    Title = "Đã bán (Cái/Bộ)",
-                    Values = giaTriSanPham,
-                    AreaLimit = 0,
-                    Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#7b61ff")),
-                    Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#337b61ff"))
-                });
+                    Title = $"Doanh thu {namHienTai}",
+                    Values = giaTriDoanhThu,
+                    PointGeometry = DefaultGeometries.Circle,
+                    PointGeometrySize = 10,
+                    Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3f51b5")),
+                    Fill = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#153f51b5"))
+                }
+            };
 
                 var hangSX = db.ChiTietHds
                     .Include(ct => ct.MaLkNavigation)

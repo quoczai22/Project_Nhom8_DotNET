@@ -8,15 +8,13 @@
         Title="Quản Lý Linh Kiện Máy Tính"
         Height="800" Width="1300"
         WindowStartupLocation="CenterScreen"
-        Background="#f0f2f8">
-
+        Background="{DynamicResource BackgroundColor}">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
-        <!-- Sidebar Menu Button -->
         <Style x:Key="menuButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#c5cae9"/>
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -34,7 +32,6 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="bdr" Property="Background" Value="#ffffff18"/>
-                                <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="bdr" Property="Background" Value="#ffffff28"/>
@@ -45,14 +42,11 @@
             </Setter>
         </Style>
 
-        <!-- Active Menu Button -->
         <Style x:Key="menuButtonActive" TargetType="Button" BasedOn="{StaticResource menuButton}">
             <Setter Property="Background" Value="#ffffff22"/>
-            <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
-        <!-- Menu Icon Style -->
         <Style x:Key="menuButtonIcon" TargetType="Icon:PackIconMaterial">
             <Setter Property="Width" Value="18"/>
             <Setter Property="Height" Value="18"/>
@@ -60,10 +54,9 @@
             <Setter Property="Margin" Value="0,0,12,0"/>
         </Style>
 
-        <!-- Top Action Button -->
         <Style x:Key="topButton" TargetType="Button">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="#4a5568"/>
+            <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Width" Value="36"/>
@@ -71,8 +64,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="8"
-                                Padding="6">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="6">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.08"/>
                             </Border.Effect>
@@ -80,7 +72,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#f0f2ff"/>
+                                <Setter Property="Background" Value="{DynamicResource SecondaryBgColor}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -88,18 +80,16 @@
             </Setter>
         </Style>
 
-        <!-- Search Box -->
         <Style x:Key="textboxSearch" TargetType="TextBox">
             <Setter Property="Padding" Value="40,10,40,10"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Foreground" Value="#2d3748"/>
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
+            <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="10"
-                                Padding="{TemplateBinding Padding}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="8" ShadowDepth="0" Opacity="0.08"/>
                             </Border.Effect>
@@ -110,32 +100,6 @@
             </Setter>
         </Style>
 
-        <!-- Dashboard Card -->
-        <Style x:Key="DashboardCardStyle" TargetType="Border">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="14"/>
-            <Setter Property="Padding" Value="20"/>
-            <Setter Property="Margin" Value="8"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="16" ShadowDepth="0" Opacity="0.07" Color="#000000"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="CardTitleStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Foreground" Value="#4a5568"/>
-        </Style>
-
-        <Style x:Key="CardValueStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="30"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#1a202c"/>
-        </Style>
-
-        <!-- Sidebar Animation -->
         <Style x:Key="SidebarAnimationStyle" TargetType="Border">
             <Setter Property="Width" Value="64"/>
             <Style.Triggers>
@@ -143,16 +107,14 @@
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                 To="220" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Width" To="220" Duration="0:0:0.2"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
                     <Trigger.ExitActions>
                         <BeginStoryboard>
                             <Storyboard>
-                                <DoubleAnimation Storyboard.TargetProperty="Width"
-                                                 To="70" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Width" To="70" Duration="0:0:0.2"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.ExitActions>
@@ -167,9 +129,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- ===== SIDEBAR ===== -->
         <Border x:Name="SidebarBorder" Grid.Column="0"
-                Background="#3f51b5" CornerRadius="0,16,16,0" Width="70"
+                Background="{DynamicResource WindowBgColor}" CornerRadius="0,16,16,0" Width="70"
                 ClipToBounds="True" Panel.ZIndex="10">
             <Border.Style>
                 <Style TargetType="Border" BasedOn="{StaticResource SidebarAnimationStyle}">
@@ -186,22 +147,20 @@
             </Border.Style>
 
             <DockPanel>
-                <!-- Top: Logo + User -->
                 <StackPanel DockPanel.Dock="Top" Margin="0,24,0,20">
                     <Border Width="44" Height="44" CornerRadius="12" Background="Aqua" 
                             HorizontalAlignment="Center" Margin="0,0,0,14">
-                        <TextBlock  FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Image Source="/Images/avatar.png" Width="24" Height="24"/>
+                        <TextBlock FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image Source="/Images/avatar.png" Width="24" Height="24"/>
                         </TextBlock>
                     </Border>
                     <TextBlock Text="{Binding CurrentUsername}" Foreground="White"
                                FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"
                                TextTrimming="CharacterEllipsis" Margin="8,0"/>
-                    <TextBlock Text="Quản trị viên" Foreground="#9fa8da"
+                    <TextBlock Text="Quản trị viên" Foreground="White" Opacity="0.7"
                                FontSize="11" HorizontalAlignment="Center"/>
                 </StackPanel>
 
-                <!-- Bottom: Logout -->
                 <Button DockPanel.Dock="Bottom" Style="{StaticResource menuButton}"
                         Command="{Binding LogOutCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
@@ -212,10 +171,8 @@
                     </StackPanel>
                 </Button>
 
-                <!-- Separator -->
-                <Rectangle DockPanel.Dock="Bottom" Height="1" Fill="LightGray" Margin="16,0,16,8"/>
+                <Rectangle DockPanel.Dock="Bottom" Height="1" Fill="{DynamicResource BackgroundColor2}" Margin="16,0,16,8"/>
 
-                <!-- Menu Items -->
                 <StackPanel Margin="0,4,0,0">
                     <Button Style="{StaticResource menuButton}" Click="btnDashboard_Click">
                         <StackPanel Orientation="Horizontal">
@@ -257,14 +214,12 @@
             </DockPanel>
         </Border>
 
-        <!-- ===== MAIN CONTENT ===== -->
         <Grid Grid.Column="1" Margin="24,16,24,16">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Bar -->
             <Grid Grid.Row="0" Margin="0,0,0,16">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -273,28 +228,35 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Spacer -->
                 <Grid Grid.Column="2"/>
 
-                <!-- Right Actions -->
                 <StackPanel Grid.Column="3" Orientation="Horizontal">
+
+                    <Button Style="{StaticResource topButton}" Margin="0,0,8,0" 
+            Command="{Binding ToggleThemeCommand}" 
+            ToolTip="Đổi giao diện Sáng/Tối">
+                        <Icon:PackIconMaterial Kind="ThemeLightDark" Width="16" Height="16"/>
+                    </Button>
+
                     <Button Style="{StaticResource topButton}" Margin="0,0,8,0" Command="{Binding ThongBaoCommand}">
                         <Icon:PackIconMaterial Kind="BellOutline" Width="16" Height="16"/>
                     </Button>
-                    <Border Width="36" Height="36" CornerRadius="10" Background="#3f51b5">
+
+                    <Border Width="36" Height="36" CornerRadius="10" Background="{DynamicResource ButtonColor}">
                         <TextBlock Text="{Binding CurrentUsername[0]}" FontSize="14" FontWeight="Bold"
-                                   Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                   Foreground="{DynamicResource ButtonTextColor}" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                 </StackPanel>
             </Grid>
 
-            <!-- Content Frame -->
-            <Border Grid.Row="1" Background="White" CornerRadius="16" ClipToBounds="True">
+            <Border Grid.Row="1" Background="{DynamicResource BackgroundColor}" CornerRadius="16" ClipToBounds="True">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.07" Color="#000000"/>
                 </Border.Effect>
                 <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
             </Border>
+            
         </Grid>
     </Grid>
 </Window>
