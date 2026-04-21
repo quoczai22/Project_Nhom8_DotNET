@@ -139,34 +139,6 @@ CREATE TABLE TaiKhoan (
 );
 GO
 
---tạo trigger
-CREATE TRIGGER trg_CapNhatTongTien ON ChiTietHD
-AFTER INSERT, UPDATE, DELETE AS
-BEGIN
-    UPDATE HoaDon
-    SET TongTien = ISNULL((SELECT SUM(SoLuong * DonGia) FROM ChiTietHD WHERE ChiTietHD.MaHD = HoaDon.MaHD), 0)
-    WHERE MaHD IN (SELECT MaHD FROM inserted UNION SELECT MaHD FROM deleted);
-END;
-GO
-
-CREATE TRIGGER trg_TruTonKhoKhiBan ON ChiTietHD
-AFTER INSERT AS
-BEGIN
-    UPDATE LinhKien
-    SET SoLuongTon = SoLuongTon - i.SoLuong
-    FROM LinhKien lk JOIN inserted i ON lk.MaLK = i.MaLK;
-END;
-GO
-
-CREATE TRIGGER trg_CongTonKhoKhiNhap ON ChiTietPN
-AFTER INSERT AS
-BEGIN
-    UPDATE LinhKien
-    SET SoLuongTon = SoLuongTon + i.SoLuongNhap
-    FROM LinhKien lk JOIN inserted i ON lk.MaLK = i.MaLK;
-END;
-GO
-
 --thêm dữ liệu
 
 INSERT INTO NhaSanXuat VALUES
@@ -370,21 +342,6 @@ GRANT INSERT ON ChiTietHD TO NhanVienBanHangUser;
 DENY UPDATE, DELETE ON NhanVien TO NhanVienBanHangUser;
 GO
 
---sao lưu và backup khi cần và khi chạy phải comment backup với restore
-
---BACKUP DATABASE QL_LinhKien_PC_NET
---TO DISK = 'C:\SQLData\QL_LinhKien_PC_NET_Full.bak'
---WITH FORMAT, NAME = 'Full Backup';
---GO
-
---USE master;
---GO
-
---RESTORE DATABASE QL_LinhKien_PC_NET
---FROM DISK = 'C:\SQLData\QL_LinhKien_PC_NET_Full.bak'
---WITH REPLACE;
---GO
-
 INSERT INTO HoaDon (MaHD, NgayHD, MaKH, MaNV, TrangThai) VALUES
 ('HD011', '10-01-2026', 'KH001', 'NV002', N'Chưa thanh toán'),
 ('HD012', '15-02-2026', 'KH002', 'NV003', N'Đã thanh toán'),
@@ -418,9 +375,35 @@ GO
 UPDATE HoaDon
 SET PhuongThucThanhToan = N'Tiền mặt'
 WHERE PhuongThucThanhToan IS NULL;
+GO
 
 UPDATE HoaDon
 SET NgayThanhToan = NgayHD
 WHERE TrangThai = N'Đã thanh toán' AND NgayThanhToan IS NULL;
+GO
 
-select * from HoaDon
+CREATE INDEX IX_KhachHang_TenKH ON KhachHang(TenKH);
+CREATE INDEX IX_KhachHang_SDT ON KhachHang(SDT);
+CREATE INDEX IX_LinhKien_TenLK ON LinhKien(TenLK);
+GO
+
+ALTER TABLE NhanVien ADD DaNghiViec bit DEFAULT 0 NOT NULL;
+
+ALTER TABLE LinhKien ADD NgungKinhDoanh bit DEFAULT 0 NOT NULL;
+GO
+
+--sao lưu và backup khi cần và khi chạy phải comment backup với restore
+
+--BACKUP DATABASE QL_LinhKien_PC_NET
+--TO DISK = 'C:\SQLData\QL_LinhKien_PC_NET_Full.bak'
+--WITH FORMAT, NAME = 'Full Backup';
+--GO
+
+--USE master;
+--GO
+
+--RESTORE DATABASE QL_LinhKien_PC_NET
+--FROM DISK = 'C:\SQLData\QL_LinhKien_PC_NET_Full.bak'
+--WITH REPLACE;
+--GO
+

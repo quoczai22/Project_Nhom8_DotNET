@@ -141,6 +141,9 @@ public partial class QL_LinhKien_PC_Context : DbContext
 
             entity.ToTable("KhachHang");
 
+            entity.HasIndex(e => e.TenKh, "IX_KhachHang_TenKH");
+            entity.HasIndex(e => e.Sdt, "IX_KhachHang_SDT");
+
             entity.Property(e => e.MaKh)
                 .HasMaxLength(6)
                 .IsUnicode(false)
@@ -167,6 +170,8 @@ public partial class QL_LinhKien_PC_Context : DbContext
             entity.HasKey(e => e.MaLk);
 
             entity.ToTable("LinhKien");
+
+            entity.HasIndex(e => e.TenLk, "IX_LinhKien_TenLK");
 
             entity.Property(e => e.MaLk)
                 .HasMaxLength(6)

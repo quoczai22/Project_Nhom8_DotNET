@@ -24,7 +24,7 @@ public partial class LinhKien
     public int? SoLuongTon { get; set; }
 
     public int? DonGiaBan { get; set; }
-
+    public bool NgungKinhDoanh { get; set; }
     public virtual ICollection<ChiTietHd> ChiTietHds { get; set; } = new List<ChiTietHd>();
 
     public virtual ICollection<ChiTietPn> ChiTietPns { get; set; } = new List<ChiTietPn>();

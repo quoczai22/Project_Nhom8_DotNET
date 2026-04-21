@@ -24,6 +24,7 @@ public partial class NhanVien
     public string Email { get; set; }
 
     public DateOnly? NgayVaoLam { get; set; }
+    public bool DaNghiViec { get; set; }
 
     public virtual ICollection<HoaDon> HoaDons { get; set; } = new List<HoaDon>();
 

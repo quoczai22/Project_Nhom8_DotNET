@@ -388,6 +388,42 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 _ => LocHoaDon());
         }
 
+        // ── Tạo hóa đơn mới (Có dùng Transaction để bảo vệ tồn kho) ─────────────
+        public void LuuHoaDonAnToan(HoaDon hdMoi, List<ChiTietHd> danhSachMonHang)
+        {
+            var db = DataProvider.Ins.DB;
+            using (var giaoDich = db.Database.BeginTransaction()) //câu lệnh gọi để vào transaction mặc định của WPF
+            {
+                try
+                {
+                    db.HoaDons.Add(hdMoi);
+
+                    foreach (var mon in danhSachMonHang)
+                    {
+                        var kho = db.LinhKiens.Find(mon.MaLk);
+                        if (kho.SoLuongTon < mon.SoLuong)
+                        {
+                            throw new Exception($"Linh kiện '{kho.TenLk}' không đủ hàng!");
+                        }
+
+                        kho.SoLuongTon -= mon.SoLuong; 
+                        db.ChiTietHds.Add(mon);
+                    }
+
+                    db.SaveChanges();
+                    giaoDich.Commit(); 
+
+                    TaiDuLieu(); 
+                    MessageBox.Show("Thanh toán thành công! Đã cập nhật kho.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    giaoDich.Rollback(); 
+                    MessageBox.Show("Lỗi thanh toán: " + ex.Message, "Báo lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
         // ── Xóa hóa đơn ─────────────────────────────────────────────────────
         private void ThucHienXoa(HoaDonDisplay hd)
         {
@@ -397,25 +433,46 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 var entity = db.HoaDons
                     .Include(h => h.ChiTietHds)
                     .FirstOrDefault(h => h.MaHd == hd.MaHoaDon);
+
                 if (entity == null) return;
 
-                // Xóa chi tiết trước, sau đó xóa hóa đơn
-                db.ChiTietHds.RemoveRange(entity.ChiTietHds);
-                db.HoaDons.Remove(entity);
-                db.SaveChanges();
+                using (var giaoDich = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var chiTiet in entity.ChiTietHds)
+                        {
+                            var linhKien = db.LinhKiens.Find(chiTiet.MaLk);
+                            if (linhKien != null)
+                            {
+                                linhKien.SoLuongTon += chiTiet.SoLuong; // Cộng lại kho
+                            }
+                        }
 
-                _all.Remove(hd);
-                DanhSachHoaDon.Remove(hd);
-                HoaDonChon = null;
-                CapNhatThongKe(DanhSachHoaDon);
+                        db.ChiTietHds.RemoveRange(entity.ChiTietHds);
+                        db.HoaDons.Remove(entity);
 
-                MessageBox.Show("Xóa hóa đơn thành công!",
-                    "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                        db.SaveChanges();
+                        giaoDich.Commit();
+
+                        _all.Remove(hd);
+                        DanhSachHoaDon.Remove(hd);
+                        HoaDonChon = null;
+                        CapNhatThongKe(DanhSachHoaDon);
+
+                        MessageBox.Show("Xóa hóa đơn thành công! Đã hoàn trả hàng vào kho.",
+                            "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        giaoDich.Rollback();
+                        throw new Exception("Quá trình xóa thất bại: " + ex.Message);
+                    }
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi xóa hóa đơn: " + ex.Message,
-                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Lỗi: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

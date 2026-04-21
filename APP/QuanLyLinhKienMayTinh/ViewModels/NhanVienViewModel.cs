@@ -91,16 +91,17 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 var db = DataProvider.Ins.DB;
 
                 var list = db.NhanViens
-                    .AsNoTracking()
-                    .Select(nv => new NhanVienDisplay
-                    {
-                        MaNv = nv.MaNv,
-                        HoTen = nv.TenNv,
-                        ChucVu = nv.ChucVu,
-                        Sdt = nv.Sdt,
-                        Email = nv.Email,
-                        NgayVaoLam = nv.NgayVaoLam
-                    }).ToList();
+                .AsNoTracking()
+                .Where(x => x.DaNghiViec == false)
+                .Select(nv => new NhanVienDisplay
+                {
+                    MaNv = nv.MaNv,
+                    HoTen = nv.TenNv,
+                    ChucVu = nv.ChucVu,
+                    Sdt = nv.Sdt,
+                    Email = nv.Email,
+                    NgayVaoLam = nv.NgayVaoLam
+                }).ToList();
 
                 _all = new ObservableCollection<NhanVienDisplay>(list);
                 DanhSachNhanVien = CollectionViewSource.GetDefaultView(_all);
@@ -202,7 +203,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 var entity = db.NhanViens.Find(nv.MaNv);
                 if (entity == null) return;
 
-                db.NhanViens.Remove(entity);
+                entity.DaNghiViec = true;
                 db.SaveChanges();
                 _all.Remove(nv);
 

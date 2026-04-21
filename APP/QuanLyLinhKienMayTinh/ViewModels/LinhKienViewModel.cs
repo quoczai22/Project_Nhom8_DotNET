@@ -85,6 +85,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 // Load với navigation property để lấy TenLoai
                 var list = db.LinhKiens
                     .AsNoTracking()
+                    .Where(lk => lk.NgungKinhDoanh == false)
                     .Include(lk => lk.MaLoaiNavigation)
                     .Include(lk => lk.MaNsxNavigation)
                     .Select(lk => new LinhKienDisplay
@@ -193,7 +194,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 var entity = db.LinhKiens.Find(lk.MaLk);
                 if (entity == null) return;
 
-                db.LinhKiens.Remove(entity);
+                entity.NgungKinhDoanh = true;
                 db.SaveChanges();
                 _all.Remove(lk);
 
