@@ -13,7 +13,7 @@ public partial class HoaDon
 
     public string MaKh { get; set; }
 
-    public string MaNv { get; set; }
+    public string MaNv { get; set; }    
 
     public int? TongTien { get; set; }
 

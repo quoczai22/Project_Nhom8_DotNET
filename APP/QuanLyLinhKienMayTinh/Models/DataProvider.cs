@@ -50,5 +50,5 @@ namespace QuanLyLinhKienMayTinh.Models
 
             DB = new QL_LinhKien_PC_Context(options);
         }
-    }
+    }   
 }
