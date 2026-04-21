@@ -23,6 +23,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         public Brush TrangThaiMauNen { get; set; }
         public Brush TrangThaiMauChu { get; set; }
         public string SoDienThoai { get; set; }
+        public string PhuongThucThanhToan { get; set; }
     }
 
     // Display class cho chi tiết sản phẩm (DataGrid trong panel phải)
@@ -31,6 +32,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         public string TenSanPham { get; set; }
         public byte? SoLuong { get; set; }
         public int? DonGia { get; set; }
+        public string HanBaoHanhHienThi { get; set; }
     }
 
     public class HoaDonViewModel : BaseViewModel, ISearchable
@@ -106,6 +108,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             get => _trangThaiChon;
             set { _trangThaiChon = value; OnPropertyChanged(); }
         }
+        private ObservableCollection<string> _danhSachPhuongThuc;
+        public ObservableCollection<string> DanhSachPhuongThuc
+        {
+            get => _danhSachPhuongThuc;
+            set { _danhSachPhuongThuc = value; OnPropertyChanged(); }
+        }
 
         private DateTime? _tuNgay;
         public DateTime? TuNgay
@@ -161,10 +169,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             DanhSachTrangThai = new ObservableCollection<string>
             {
-                "-- Tất cả --", "Đã thanh toán", "Chờ xử lý"
+                "-- Tất cả --", "Đã thanh toán", "Chưa thanh toán"
             };
             TrangThaiChon = "-- Tất cả --";
-
+            DanhSachPhuongThuc = new ObservableCollection<string>
+            {
+                "Tiền mặt", "Chuyển khoản", "Thẻ"
+            };
             TaiDuLieu();
             KhoiTaoCommands();
         }
@@ -210,16 +221,36 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 var db = DataProvider.Ins.DB;
                 var chiTiet = db.ChiTietHds
-                    .AsNoTracking()
-                    .Include(ct => ct.MaLkNavigation)
-                    .Where(ct => ct.MaHd == maHoaDon)
-                    .Select(ct => new ChiTietSanPhamDisplay
+                .AsNoTracking()
+                .Include(ct => ct.MaLkNavigation)
+                .Include(ct => ct.MaHdNavigation)
+                .Where(ct => ct.MaHd == maHoaDon)
+                .ToList()
+                .Select(ct => {
+                    DateTime? ngayMua = null;
+                    int thoiGianBH = 0;
+                    string chuoiHanBaoHanh = "Không có";
+                    if (ct.MaHdNavigation != null && ct.MaHdNavigation.NgayHd != null)
                     {
-                        TenSanPham = ct.MaLkNavigation.TenLk,
+                        ngayMua = ct.MaHdNavigation.NgayHd.Value.ToDateTime(TimeOnly.MinValue);
+                    }
+                    if (ct.MaLkNavigation != null && ct.MaLkNavigation.Tgbh != null)
+                    {
+                        thoiGianBH = ct.MaLkNavigation.Tgbh.Value;
+                    }
+                    if (ngayMua != null)
+                    {
+                        DateTime ngayHetHan = ngayMua.Value.AddMonths(thoiGianBH);
+                        chuoiHanBaoHanh = ngayHetHan.ToString("dd/MM/yyyy");
+                    }
+                    return new ChiTietSanPhamDisplay
+                    {
+                        TenSanPham = (ct.MaLkNavigation != null) ? ct.MaLkNavigation.TenLk : "Linh kiện ẩn",
                         SoLuong = ct.SoLuong,
-                        DonGia = ct.DonGia
-                    }).ToList();
-
+                        DonGia = ct.DonGia,
+                        HanBaoHanhHienThi = chuoiHanBaoHanh
+                    };
+                }).ToList();
                 ChiTietSanPham = new ObservableCollection<ChiTietSanPhamDisplay>(chiTiet);
             }
             catch (Exception ex)
@@ -232,19 +263,22 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // ── Map entity → display ─────────────────────────────────────────────
         private static HoaDonDisplay MapToDisplay(HoaDon hd)
         {
-            // Xác định trạng thái: có tổng tiền > 0 → đã thanh toán
-            bool daThanhToan = (hd.TongTien ?? 0) > 0;
-            string trangThai = daThanhToan ? "Đã thanh toán" : "Chờ xử lý";
+            string trangThai = hd.TrangThai ?? "Chưa thanh toán";
 
-            var mauNen = daThanhToan
-                ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e8f5e9"))
-                : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#fff3e0"));
+            Brush mauNen, mauChu;
 
-            var mauChu = daThanhToan
-                ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2e7d32"))
-                : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e65100"));
+            if (trangThai == "Đã thanh toán")
+            {
+                mauNen = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e8f5e9")); 
+                mauChu = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2e7d32"));
+            }
+            else
+            {
+                // Dành cho "Chưa thanh toán" hoặc các trạng thái khác
+                mauNen = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#fff3e0")); 
+                mauChu = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#e65100"));
+            }
 
-            // Convert DateOnly? → DateTime?
             DateTime? ngayTao = hd.NgayHd.HasValue
                 ? hd.NgayHd.Value.ToDateTime(TimeOnly.MinValue)
                 : (DateTime?)null;
@@ -256,12 +290,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 TenNhanVien = hd.MaNvNavigation?.TenNv ?? hd.MaNv,
                 NgayTao = ngayTao,
                 TongTien = hd.TongTien,
-                TamTinh = hd.TongTien,   // chưa có chiết khấu riêng
+                TamTinh = hd.TongTien,
                 GiamGia = 0,
                 TrangThai = trangThai,
                 TrangThaiMauNen = mauNen,
                 TrangThaiMauChu = mauChu,
-                SoDienThoai = hd.MaKhNavigation?.Sdt ?? string.Empty
+                SoDienThoai = hd.MaKhNavigation?.Sdt ?? string.Empty,
+                PhuongThucThanhToan = hd.PhuongThucThanhToan ?? "Tiền mặt"
             };
         }
 
@@ -303,7 +338,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             TongSoHoaDon = list.Count;
             TongDoanhThu = list.Sum(hd => (long)(hd.TongTien ?? 0));
             SoHoaDonDaThanhToan = list.Count(hd => hd.TrangThai == "Đã thanh toán");
-            SoHoaDonChoXuLy = list.Count(hd => hd.TrangThai == "Chờ xử lý");
+            SoHoaDonChoXuLy = list.Count(hd => hd.TrangThai == "Chưa thanh toán");
         }
 
         // ── ISearchable ──────────────────────────────────────────────────────

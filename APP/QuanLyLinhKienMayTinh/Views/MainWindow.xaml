@@ -157,7 +157,7 @@
                     <TextBlock Text="{Binding CurrentUsername}" Foreground="White"
                                FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"
                                TextTrimming="CharacterEllipsis" Margin="8,0"/>
-                    <TextBlock Text="Quản trị viên" Foreground="White" Opacity="0.7"
+                    <TextBlock Text="Quản trị viên" Foreground="#9fa8da"
                                FontSize="11" HorizontalAlignment="Center"/>
                 </StackPanel>
 

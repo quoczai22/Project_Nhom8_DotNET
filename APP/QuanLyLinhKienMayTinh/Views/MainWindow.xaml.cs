@@ -17,6 +17,7 @@ namespace QuanLyLinhKienMayTinh
         {
             InitializeComponent();
             this.DataContext = new MainViewModel(username);
+            txtQuyen.Text = LuuTrangThai.QuyenDangNhap;
             MainFrame.Navigate(new TrangChuView());
         }
 
