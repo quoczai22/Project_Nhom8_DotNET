@@ -257,6 +257,14 @@ INSERT INTO TaiKhoan (TenDN, MatKhau, MaNV) VALUES
 ('huyendtn', '123456', 'NV009'), ('anvv', '123456', 'NV010');
 GO
 
+UPDATE HoaDon
+SET TongTien = ISNULL((
+    SELECT SUM(SoLuong * DonGia)
+    FROM ChiTietHD cthd
+    WHERE cthd.MaHD = HoaDon.MaHD
+), 0);
+GO
+
 --tạo hàm và thủ tục
 
 CREATE FUNCTION fn_DoanhThuTheoThang (@Thang INT, @Nam INT)
@@ -407,3 +415,4 @@ GO
 --WITH REPLACE;
 --GO
 
+select * from HoaDon
