@@ -135,10 +135,10 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 var db = DataProvider.Ins.DB;
                 TongNV = db.NhanViens.Count();
                 TongKH = db.KhachHangs.Count();
-                TongLK = db.LinhKiens.Count();
+                TongLK = db.LinhKiens.Sum(lk => lk.SoLuongTon ?? 0);
                 TongLoaiLK = db.LoaiLks.Count();
                 TongHD = db.HoaDons.Count();
-                int namHienTai = DateTime.Now.Year;
+                var year = Enumerable.Range(2023,4).ToList();
 
                 // 1. Khởi tạo dữ liệu
                 var giaTriDoanhThu = new ChartValues<double>();
@@ -146,20 +146,25 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
                 // 2. Lấy toàn bộ hóa đơn trong năm hiện tại về Memory (để tối ưu truy vấn)
                 var hoaDonsTrongNam = db.HoaDons
-                    .Where(hd => hd.NgayHd.HasValue && hd.NgayHd.Value.Year == namHienTai)
-                    .Select(hd => new { hd.NgayHd.Value.Month, hd.TongTien })
+                    .Where(hd => hd.NgayHd.HasValue && year.Contains(hd.NgayHd.Value.Year))
+                    .Select(hd => new
+                    {
+                        Month = hd.NgayHd.Value.Month,
+                        Year=hd.NgayHd.Value.Year,
+                        TongTien = hd.TongTien ?? 0
+                    })
                     .ToList();
 
-                // 3. Xử lý dữ liệu cho 12 tháng bằng LINQ to Object
-                for (int i = 1; i <= 12; i++)
+                foreach (var y in year)
                 {
-                    // Tính tổng tiền của tháng i (ORM xử lý lọc từ danh sách đã lấy)
-                    var tongDoanhThuThang = hoaDonsTrongNam
-                        .Where(hd => hd.Month == i)
-                        .Sum(hd => (double?)hd.TongTien) ?? 0;
-
-                    giaTriDoanhThu.Add(tongDoanhThuThang);
-                    danhSachThang.Add($"T{i}");
+                    for (int m = 1; m <= 12; m+=4)
+                    {
+                        var doanhThuThang = hoaDonsTrongNam
+                            .Where(hd => hd.Month == m && hd.Year == y)
+                            .Sum(hd => hd.TongTien);
+                        giaTriDoanhThu.Add(doanhThuThang);
+                        danhSachThang.Add($"Tháng {m}/{y}");
+                    }
                 }
 
                 // 4. Cập nhật UI
@@ -170,7 +175,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
     {
                 new LineSeries
                 {
-                    Title = $"Doanh thu {namHienTai}",
+                    Title = $"Doanh thu từ năm 2023 đến 2026 ",
                     Values = giaTriDoanhThu,
                     PointGeometry = DefaultGeometries.Circle,
                     PointGeometrySize = 10,
@@ -187,9 +192,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     .Select(g => new ThongKeBanHang
                     {
                         HangSX = g.Key,
-                        SoLuongBan = (int)g.Sum(x => x.SoLuong),
-                        DoanhThu = (double)g.Sum(x => x.SoLuong * x.DonGia),
-                        GiaTrungBinh = (double)g.Average(x => x.DonGia),
+                        SoLuongBan = (int)(g.Sum(x => x.SoLuong) ?? 0),
+                        DoanhThu = (double)(g.Sum(x => x.SoLuong * x.DonGia) ?? 0),
+                        GiaTrungBinh = (double)(g.Average(x => x.DonGia) ?? 0),
                         SoDonHang = g.Select(x => x.MaHd).Distinct().Count()
                     })
                     .ToList();

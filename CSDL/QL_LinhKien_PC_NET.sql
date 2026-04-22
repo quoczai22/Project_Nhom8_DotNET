@@ -257,6 +257,32 @@ INSERT INTO TaiKhoan (TenDN, MatKhau, MaNV) VALUES
 ('huyendtn', '123456', 'NV009'), ('anvv', '123456', 'NV010');
 GO
 
+INSERT INTO HoaDon (MaHD, NgayHD, MaKH, MaNV, TrangThai) VALUES
+('HD011', '10-01-2026', 'KH001', 'NV002', N'Chưa thanh toán'),
+('HD012', '15-02-2026', 'KH002', 'NV003', N'Đã thanh toán'),
+('HD013', '20-03-2026', 'KH003', 'NV004', N'Chưa thanh toán'),
+('HD014', '05-04-2026', 'KH004', 'NV005', N'Đã thanh toán'),
+('HD015', '12-04-2026', 'KH005', 'NV002', N'Chưa thanh toán'),
+('HD016', '20-05-2025', 'KH006', 'NV003', N'Đã thanh toán'),
+('HD017', '11-08-2025', 'KH007', 'NV004', N'Chưa thanh toán'),
+('HD018', '25-12-2025', 'KH008', 'NV005', N'Đã thanh toán'),
+('HD019', '14-03-2024', 'KH009', 'NV006', N'Chưa thanh toán'),
+('HD020', '30-10-2024', 'KH010', 'NV007', N'Đã thanh toán');
+GO
+
+INSERT INTO ChiTietHD (MaHD, MaLK, SoLuong, DonGia) VALUES
+('HD011', 'MOU001', 2, 150000),
+('HD012', 'RAM002', 1, 1200000),
+('HD013', 'CPU003', 1, 9500000),
+('HD014', 'VGA002', 1, 8500000),
+('HD015', 'LAP001', 1, 16500000),
+('HD016', 'SSD002', 1, 2100000),
+('HD017', 'KEY003', 2, 1850000),
+('HD018', 'PCX002', 1, 6500000),
+('HD019', 'MOU003', 3, 250000),
+('HD020', 'RAM004', 1, 4800000);
+GO
+
 UPDATE HoaDon
 SET TongTien = ISNULL((
     SELECT SUM(SoLuong * DonGia)
@@ -348,32 +374,6 @@ GRANT SELECT ON SCHEMA::dbo TO NhanVienBanHangUser;
 GRANT INSERT ON HoaDon TO NhanVienBanHangUser;
 GRANT INSERT ON ChiTietHD TO NhanVienBanHangUser;
 DENY UPDATE, DELETE ON NhanVien TO NhanVienBanHangUser;
-GO
-
-INSERT INTO HoaDon (MaHD, NgayHD, MaKH, MaNV, TrangThai) VALUES
-('HD011', '10-01-2026', 'KH001', 'NV002', N'Chưa thanh toán'),
-('HD012', '15-02-2026', 'KH002', 'NV003', N'Đã thanh toán'),
-('HD013', '20-03-2026', 'KH003', 'NV004', N'Chưa thanh toán'),
-('HD014', '05-04-2026', 'KH004', 'NV005', N'Đã thanh toán'),
-('HD015', '12-04-2026', 'KH005', 'NV002', N'Chưa thanh toán'),
-('HD016', '20-05-2025', 'KH006', 'NV003', N'Đã thanh toán'),
-('HD017', '11-08-2025', 'KH007', 'NV004', N'Chưa thanh toán'),
-('HD018', '25-12-2025', 'KH008', 'NV005', N'Đã thanh toán'),
-('HD019', '14-03-2024', 'KH009', 'NV006', N'Chưa thanh toán'),
-('HD020', '30-10-2024', 'KH010', 'NV007', N'Đã thanh toán');
-GO
-
-INSERT INTO ChiTietHD (MaHD, MaLK, SoLuong, DonGia) VALUES
-('HD011', 'MOU001', 2, 150000),
-('HD012', 'RAM002', 1, 1200000),
-('HD013', 'CPU003', 1, 9500000),
-('HD014', 'VGA002', 1, 8500000),
-('HD015', 'LAP001', 1, 16500000),
-('HD016', 'SSD002', 1, 2100000),
-('HD017', 'KEY003', 2, 1850000),
-('HD018', 'PCX002', 1, 6500000),
-('HD019', 'MOU003', 3, 250000),
-('HD020', 'RAM004', 1, 4800000);
 GO
 
 ALTER TABLE HoaDon ADD PhuongThucThanhToan nvarchar(50) DEFAULT N'Tiền mặt';
