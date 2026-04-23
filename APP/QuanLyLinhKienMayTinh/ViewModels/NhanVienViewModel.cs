@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using QuanLyLinhKienMayTinh.Models;
+using QuanLyLinhKienMayTinh.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -156,42 +157,101 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // ── Khởi tạo Commands ────────────────────────────────────────────────
         private void KhoiTaoCommands()
         {
-            ThemNhanVienCommand = new RelayCommand<object>(
-                _ => true,
-                _ => MessageBox.Show(
-                    "Chức năng thêm nhân viên đang được phát triển.",
-                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information));
-
-            SuaNhanVienCommand = new RelayCommand<NhanVienDisplay>(
-                _ => true,
-                nv =>
+            // ── THÊM ─────────────────────────────────────────────────────
+            ThemNhanVienCommand = new RelayCommand<object>(_ => true, _ =>
+            {
+                try
                 {
-                    if (nv == null) return;
-                    MessageBox.Show(
-                        $"Chức năng sửa nhân viên [{nv.HoTen}] đang được phát triển.",
-                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                });
+                    var lastID = DataProvider.Ins.DB.NhanViens
+                        .OrderByDescending(x => x.MaNv)
+                        .Select(x => x.MaNv).FirstOrDefault();
+                    string newID = Services.AutoIDService.GetNextID("NV", lastID);
 
-            XoaNhanVienCommand = new RelayCommand<NhanVienDisplay>(
-                _ => true,
-                nv =>
+                    var dialog = new ThemSuaNhanVienDialog(newID);
+                    dialog.Owner = Application.Current.MainWindow;
+                    if (dialog.ShowDialog() == true)
+                    {
+                        var nvMoi = new NhanVien
+                        {
+                            MaNv = dialog.MaNv,
+                            TenNv = dialog.HoTen,
+                            ChucVu = dialog.ChucVu,
+                            GioiTinh = dialog.GioiTinh,
+                            Sdt = dialog.Sdt,
+                            Email = dialog.Email,
+                            NgaySinh = dialog.NgaySinh,
+                            NgayVaoLam = dialog.NgayVaoLam,
+                            DaNghiViec = false
+                        };
+
+                        // Tạo mặc định tài khoản cho nhân viên mới
+                        var tkMoi = new TaiKhoan { TenDn = newID, MatKhau = "123", MaNv = newID };
+
+                        DataProvider.Ins.DB.NhanViens.Add(nvMoi);
+                        DataProvider.Ins.DB.TaiKhoans.Add(tkMoi);
+                        DataProvider.Ins.DB.SaveChanges();
+
+                        TaiDuLieu();
+                        MessageBox.Show($"Thêm nhân viên thành công!\nTài khoản mặc định: {newID} / 123",
+                            "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                catch (Exception ex)
                 {
-                    if (nv == null) return;
-                    var res = MessageBox.Show(
-                        $"Bạn có chắc chắn muốn xóa nhân viên [{nv.HoTen}]?",
-                        "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (res == MessageBoxResult.Yes)
-                        ThucHienXoa(nv);
-                });
+                    MessageBox.Show("Lỗi khi thêm nhân viên: " + ex.Message,
+                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            });
 
+            // ── SỬA ──────────────────────────────────────────────────────
+            SuaNhanVienCommand = new RelayCommand<NhanVienDisplay>(nv => nv != null, nv =>
+            {
+                try
+                {
+                    var dialog = new ThemSuaNhanVienDialog(nv);
+                    dialog.Owner = Application.Current.MainWindow;
+                    if (dialog.ShowDialog() == true)
+                    {
+                        var entity = DataProvider.Ins.DB.NhanViens.Find(dialog.MaNv);
+                        if (entity != null)
+                        {
+                            entity.TenNv = dialog.HoTen;
+                            entity.ChucVu = dialog.ChucVu;
+                            entity.GioiTinh = dialog.GioiTinh;
+                            entity.Sdt = dialog.Sdt;
+                            entity.Email = dialog.Email;
+                            entity.NgaySinh = dialog.NgaySinh;
+                            entity.NgayVaoLam = dialog.NgayVaoLam;
+
+                            DataProvider.Ins.DB.SaveChanges();
+                            TaiDuLieu();
+
+                            MessageBox.Show("Cập nhật nhân viên thành công!",
+                                "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi sửa nhân viên: " + ex.Message,
+                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            });
+
+            // ── XÓA ──────────────────────────────────────────────────────
+            XoaNhanVienCommand = new RelayCommand<NhanVienDisplay>(nv => nv != null, nv =>
+            {
+                var res = MessageBox.Show(
+                    $"Bạn có chắc chắn muốn xóa nhân viên [{nv.HoTen}] không?",
+                    "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (res == MessageBoxResult.Yes)
+                    ThucHienXoa(nv);
+            });
+
+            // ── LÀM MỚI ─────────────────────────────────────────────────
             LamMoiCommand = new RelayCommand<object>(
                 _ => true,
-                _ =>
-                {
-                    TimKiem = string.Empty;
-                    ChucVuChon = null;
-                    TaiDuLieu();
-                });
+                _ => { TimKiem = string.Empty; TaiDuLieu(); });
         }
 
         // ── Xóa nhân viên ────────────────────────────────────────────────────

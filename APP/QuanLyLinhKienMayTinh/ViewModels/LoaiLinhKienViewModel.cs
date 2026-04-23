@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using QuanLyLinhKienMayTinh.Models;
+using QuanLyLinhKienMayTinh.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -103,35 +104,86 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // ── Khởi tạo Commands ────────────────────────────────────────────────
         private void KhoiTaoCommands()
         {
-            ThemLoaiCommand = new RelayCommand<object>(
-                _ => true,
-                _ => MessageBox.Show(
-                    "Chức năng thêm loại linh kiện đang được phát triển.",
-                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information));
-
-            SuaLoaiCommand = new RelayCommand<LoaiLkDisplay>(
-                _ => true,
-                loai =>
+            // ── THÊM ─────────────────────────────────────────────────────
+            ThemLoaiCommand = new RelayCommand<object>(_ => true, _ =>
+            {
+                try
                 {
-                    if (loai == null) return;
-                    MessageBox.Show(
-                        $"Chức năng sửa loại [{loai.TenLoai}] đang được phát triển.",
-                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                });
+                    var lastID = DataProvider.Ins.DB.LoaiLks
+                        .OrderByDescending(x => x.MaLoai)
+                        .Select(x => x.MaLoai).FirstOrDefault();
+                    string newID = Services.AutoIDService.GetNextID("LK", lastID);
 
-            XoaLoaiCommand = new RelayCommand<LoaiLkDisplay>(
-                _ => true,
-                loai =>
+                    var dialog = new ThemSuaLoaiLinhKienDialog(newID);
+                    dialog.Owner = Application.Current.MainWindow;
+                    if (dialog.ShowDialog() == true)
+                    {
+                        var kq = dialog.KetQua;
+                        var loaiMoi = new LoaiLk
+                        {
+                            MaLoai = kq.MaLoai,
+                            TenLoai = kq.TenLoai,
+                            MoTa = kq.MoTa
+                        };
+
+                        DataProvider.Ins.DB.LoaiLks.Add(loaiMoi);
+                        DataProvider.Ins.DB.SaveChanges();
+                        TaiDuLieu();
+
+                        MessageBox.Show("Thêm loại linh kiện thành công!",
+                            "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+                catch (Exception ex)
                 {
-                    if (loai == null) return;
-                    var res = MessageBox.Show(
-                        $"Bạn có chắc chắn muốn xóa loại [{loai.TenLoai}]?\n" +
-                        "Lưu ý: Không thể xóa nếu còn linh kiện thuộc loại này.",
-                        "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (res == MessageBoxResult.Yes)
-                        ThucHienXoa(loai);
-                });
+                    MessageBox.Show("Lỗi khi thêm loại linh kiện: " + ex.Message,
+                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            });
 
+            // ── SỬA ──────────────────────────────────────────────────────
+            SuaLoaiCommand = new RelayCommand<LoaiLkDisplay>(loai => loai != null, loai =>
+            {
+                try
+                {
+                    var dialog = new ThemSuaLoaiLinhKienDialog(loai);
+                    dialog.Owner = Application.Current.MainWindow;
+                    if (dialog.ShowDialog() == true)
+                    {
+                        var kq = dialog.KetQua;
+                        var entity = DataProvider.Ins.DB.LoaiLks.Find(kq.MaLoai);
+                        if (entity != null)
+                        {
+                            entity.TenLoai = kq.TenLoai;
+                            entity.MoTa = kq.MoTa;
+
+                            DataProvider.Ins.DB.SaveChanges();
+                            TaiDuLieu();
+
+                            MessageBox.Show("Cập nhật loại linh kiện thành công!",
+                                "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi sửa loại linh kiện: " + ex.Message,
+                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            });
+
+            // ── XÓA ──────────────────────────────────────────────────────
+            XoaLoaiCommand = new RelayCommand<LoaiLkDisplay>(loai => loai != null, loai =>
+            {
+                var res = MessageBox.Show(
+                    $"Bạn có chắc chắn muốn xóa loại [{loai.TenLoai}] không?\n" +
+                    "Lưu ý: Không thể xóa nếu còn linh kiện thuộc loại này.",
+                    "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (res == MessageBoxResult.Yes)
+                    ThucHienXoa(loai);
+            });
+
+            // ── LÀM MỚI ─────────────────────────────────────────────────
             LamMoiCommand = new RelayCommand<object>(
                 _ => true,
                 _ => { TimKiem = string.Empty; TaiDuLieu(); });
