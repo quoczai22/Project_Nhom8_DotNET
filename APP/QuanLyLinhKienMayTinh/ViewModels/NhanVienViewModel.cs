@@ -89,7 +89,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
 
                 var list = db.NhanViens
                 .AsNoTracking()
@@ -162,7 +162,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 try
                 {
-                    var lastID = DataProvider.Ins.DB.NhanViens
+                    var lastID = DataProvider.Ins.GetContext().NhanViens
                         .OrderByDescending(x => x.MaNv)
                         .Select(x => x.MaNv).FirstOrDefault();
                     string newID = Services.AutoIDService.GetNextID("NV", lastID);
@@ -187,9 +187,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                         // Tạo mặc định tài khoản cho nhân viên mới
                         var tkMoi = new TaiKhoan { TenDn = newID, MatKhau = "123", MaNv = newID };
 
-                        DataProvider.Ins.DB.NhanViens.Add(nvMoi);
-                        DataProvider.Ins.DB.TaiKhoans.Add(tkMoi);
-                        DataProvider.Ins.DB.SaveChanges();
+                        DataProvider.Ins.GetContext().NhanViens.Add(nvMoi);
+                        DataProvider.Ins.GetContext().TaiKhoans.Add(tkMoi);
+                        DataProvider.Ins.GetContext().SaveChanges();
 
                         TaiDuLieu();
                         MessageBox.Show($"Thêm nhân viên thành công!\nTài khoản mặc định: {newID} / 123",
@@ -212,7 +212,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     dialog.Owner = Application.Current.MainWindow;
                     if (dialog.ShowDialog() == true)
                     {
-                        var entity = DataProvider.Ins.DB.NhanViens.Find(dialog.MaNv);
+                        var entity = DataProvider.Ins.GetContext().NhanViens.Find(dialog.MaNv);
                         if (entity != null)
                         {
                             entity.TenNv = dialog.HoTen;
@@ -223,7 +223,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                             entity.NgaySinh = dialog.NgaySinh;
                             entity.NgayVaoLam = dialog.NgayVaoLam;
 
-                            DataProvider.Ins.DB.SaveChanges();
+                            DataProvider.Ins.GetContext().SaveChanges();
                             TaiDuLieu();
 
                             MessageBox.Show("Cập nhật nhân viên thành công!",
@@ -259,7 +259,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
                 var entity = db.NhanViens.Find(nv.MaNv);
                 if (entity == null) return;
 

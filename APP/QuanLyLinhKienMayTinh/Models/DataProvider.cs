@@ -1,54 +1,37 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-
 namespace QuanLyLinhKienMayTinh.Models
+
 {
+
     public class DataProvider
     {
         private static DataProvider _ins;
-        public static DataProvider Ins
-        {
-            get
-            {
-                if (_ins == null)
-                    _ins = new DataProvider();
-                return _ins;
-            }
-            set
-            {
-                _ins = value;
-            }
-        }
+        public static DataProvider Ins => _ins ??= new DataProvider();
 
-        public QL_LinhKien_PC_Context DB { get; set; }
+        private string _currentConnStr;
 
         private DataProvider()
         {
-           var options= new DbContextOptionsBuilder<QL_LinhKien_PC_Context>()
-                .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True",
-                sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(maxRetryCount:5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null))
+            _currentConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True";
+        }
+
+        public QL_LinhKien_PC_Context GetContext()
+        {
+            var options = new DbContextOptionsBuilder<QL_LinhKien_PC_Context>()
+                .UseSqlServer(_currentConnStr)
                 .Options;
 
-            DB = new QL_LinhKien_PC_Context(options);
+            return new QL_LinhKien_PC_Context(options);
         }
+
         public void ChangeToQuanLyConnection()
         {
-            string connStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;User Id=QuanLyLogin;Password=123;TrustServerCertificate=True;";
-            var options = new DbContextOptionsBuilder<QL_LinhKien_PC_Context>()
-                 .UseSqlServer(connStr, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null))
-                 .Options;
-
-            DB = new QL_LinhKien_PC_Context(options);
+            _currentConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;User Id=QuanLyLogin;Password=123;TrustServerCertificate=True;";
         }
 
-        public void ChangeToNhanVienConnection()        
+        public void ChangeToNhanVienConnection()
         {
-            string connStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;User Id=NhanVienBanHangLogin;Password=123;TrustServerCertificate=True;";
-            var options = new DbContextOptionsBuilder<QL_LinhKien_PC_Context>()
-                 .UseSqlServer(connStr, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null))
-                 .Options;
-
-            DB = new QL_LinhKien_PC_Context(options);
+            _currentConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;User Id=NhanVienBanHangLogin;Password=123;TrustServerCertificate=True;";
         }
-    }   
+    }
 }

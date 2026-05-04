@@ -45,7 +45,7 @@ namespace QuanLyLinhKienMayTinh.Views
             TaiDanhSachComboBox();
 
             // Load thêm thông tin từ DB cho Sửa
-            var entity = DataProvider.Ins.DB.LinhKiens.AsNoTracking().FirstOrDefault(x => x.MaLk == lk.MaLk);
+            var entity = DataProvider.Ins.GetContext().LinhKiens.AsNoTracking().FirstOrDefault(x => x.MaLk == lk.MaLk);
             if (entity != null)
             {
                 TxtDonGia.Text = entity.DonGiaBan?.ToString();
@@ -67,7 +67,7 @@ namespace QuanLyLinhKienMayTinh.Views
 
         private void TaiDanhSachComboBox()
         {
-            var db = DataProvider.Ins.DB;
+            var db = DataProvider.Ins.GetContext();   
             CboLoai.ItemsSource = db.LoaiLks.AsNoTracking().OrderBy(l => l.TenLoai).ToList();
             CboNsx.ItemsSource = db.NhaSanXuats.AsNoTracking().OrderBy(n => n.TenNsx).ToList();
         }

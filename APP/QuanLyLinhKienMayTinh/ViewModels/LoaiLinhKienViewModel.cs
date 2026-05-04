@@ -64,7 +64,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var list = DataProvider.Ins.DB.LoaiLks
+                var list = DataProvider.Ins.GetContext().LoaiLks
                     .AsNoTracking()
                     .Select(lk => new LoaiLkDisplay
                     {
@@ -109,7 +109,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 try
                 {
-                    var lastID = DataProvider.Ins.DB.LoaiLks
+                    var lastID = DataProvider.Ins.GetContext().LoaiLks
                         .OrderByDescending(x => x.MaLoai)
                         .Select(x => x.MaLoai).FirstOrDefault();
                     string newID = Services.AutoIDService.GetNextID("LK", lastID);
@@ -126,8 +126,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                             MoTa = kq.MoTa
                         };
 
-                        DataProvider.Ins.DB.LoaiLks.Add(loaiMoi);
-                        DataProvider.Ins.DB.SaveChanges();
+                        DataProvider.Ins.GetContext().LoaiLks.Add(loaiMoi);
+                        DataProvider.Ins.GetContext().SaveChanges();
                         TaiDuLieu();
 
                         MessageBox.Show("Thêm loại linh kiện thành công!",
@@ -151,13 +151,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     if (dialog.ShowDialog() == true)
                     {
                         var kq = dialog.KetQua;
-                        var entity = DataProvider.Ins.DB.LoaiLks.Find(kq.MaLoai);
+                        var entity = DataProvider.Ins.GetContext().LoaiLks.Find(kq.MaLoai);
                         if (entity != null)
                         {
                             entity.TenLoai = kq.TenLoai;
                             entity.MoTa = kq.MoTa;
 
-                            DataProvider.Ins.DB.SaveChanges();
+                            DataProvider.Ins.GetContext().SaveChanges();
                             TaiDuLieu();
 
                             MessageBox.Show("Cập nhật loại linh kiện thành công!",
@@ -194,7 +194,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
                 var entity = db.LoaiLks.Find(loai.MaLoai);
                 if (entity == null) return;
 

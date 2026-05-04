@@ -185,7 +185,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
 
                 var list = db.HoaDons
                     .AsNoTracking()
@@ -219,7 +219,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
                 var chiTiet = db.ChiTietHds
                 .AsNoTracking()
                 .Include(ct => ct.MaLkNavigation)
@@ -365,7 +365,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
                 try
                 {
-                    var entity = DataProvider.Ins.DB.HoaDons.Find(HoaDonChon.MaHoaDon);
+                    var entity = DataProvider.Ins.GetContext().HoaDons.Find(HoaDonChon.MaHoaDon);
                     if (entity == null) return;
 
                     // Đổi trạng thái thanh toán
@@ -378,7 +378,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                         {
                             entity.TrangThai = "Đã thanh toán";
                             entity.NgayThanhToan = DateOnly.FromDateTime(DateTime.Now);
-                            DataProvider.Ins.DB.SaveChanges();
+                            DataProvider.Ins.GetContext().SaveChanges();
                             TaiDuLieu();
                             MessageBox.Show("Cập nhật trạng thái hóa đơn thành công!",
                                 "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -457,7 +457,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // ── Tạo hóa đơn mới (Có dùng Transaction để bảo vệ tồn kho) ─────────────
         public void LuuHoaDonAnToan(HoaDon hdMoi, List<ChiTietHd> danhSachMonHang)
         {
-            var db = DataProvider.Ins.DB;
+            var db = DataProvider.Ins.GetContext();
             using (var giaoDich = db.Database.BeginTransaction()) //câu lệnh gọi để vào transaction mặc định của WPF
             {
                 try
@@ -495,7 +495,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
                 var entity = db.HoaDons
                     .Include(h => h.ChiTietHds)
                     .FirstOrDefault(h => h.MaHd == hd.MaHoaDon);

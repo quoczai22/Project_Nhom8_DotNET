@@ -81,7 +81,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
 
                 // Load với navigation property để lấy TenLoai
                 var list = db.LinhKiens
@@ -153,7 +153,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 try
                 {
-                    var lastID = DataProvider.Ins.DB.LinhKiens
+                    var lastID = DataProvider.Ins.GetContext().LinhKiens
                         .OrderByDescending(x => x.MaLk)
                         .Select(x => x.MaLk).FirstOrDefault();
                     string newID = Services.AutoIDService.GetNextID("LK", lastID);
@@ -176,8 +176,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                             NgungKinhDoanh = false
                         };
 
-                        DataProvider.Ins.DB.LinhKiens.Add(lkMoi);
-                        DataProvider.Ins.DB.SaveChanges();
+                        DataProvider.Ins.GetContext().LinhKiens.Add(lkMoi);
+                        DataProvider.Ins.GetContext().SaveChanges();
                         TaiDuLieu();
 
                         MessageBox.Show("Thêm linh kiện thành công!",
@@ -200,7 +200,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     dialog.Owner = Application.Current.MainWindow;
                     if (dialog.ShowDialog() == true)
                     {
-                        var entity = DataProvider.Ins.DB.LinhKiens.Find(dialog.MaLk);
+                        var entity = DataProvider.Ins.GetContext().LinhKiens.Find(dialog.MaLk);
                         if (entity != null)
                         {
                             entity.TenLk = dialog.TenLk;
@@ -213,7 +213,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                                 entity.SoLuongTon = dialog.SoLuongTon;
                             entity.NgayNhap = dialog.NgayNhap;
 
-                            DataProvider.Ins.DB.SaveChanges();
+                            DataProvider.Ins.GetContext().SaveChanges();
                             TaiDuLieu();
 
                             MessageBox.Show("Cập nhật linh kiện thành công!",
@@ -249,7 +249,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
                 var entity = db.LinhKiens.Find(lk.MaLk);
                 if (entity == null) return;
 

@@ -115,7 +115,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
 
                 var acc = db.TaiKhoans
                             .Include(t => t.MaNvNavigation) 
@@ -180,7 +180,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
 
                 if (db.TaiKhoans.Any(t => t.TenDn == SignUpUsername))
                 {

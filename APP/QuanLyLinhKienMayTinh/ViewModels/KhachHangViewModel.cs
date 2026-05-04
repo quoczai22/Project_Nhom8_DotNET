@@ -60,7 +60,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var list = DataProvider.Ins.DB.KhachHangs
+                var list = DataProvider.Ins.GetContext().KhachHangs
                     .AsNoTracking()
                     .Select(kh => new KhachHangDisplay
                     {
@@ -109,7 +109,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 try
                 {
-                    var lastID = DataProvider.Ins.DB.KhachHangs
+                    var lastID = DataProvider.Ins.GetContext().KhachHangs
                         .OrderByDescending(x => x.MaKh)
                         .Select(x => x.MaKh).FirstOrDefault();
                     string newID = Services.AutoIDService.GetNextID("KH", lastID);
@@ -128,8 +128,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                             Dchi = kq.DiaChi
                         };
 
-                        DataProvider.Ins.DB.KhachHangs.Add(khMoi);
-                        DataProvider.Ins.DB.SaveChanges();
+                        DataProvider.Ins.GetContext().KhachHangs.Add(khMoi);
+                        DataProvider.Ins.GetContext().SaveChanges();
                         TaiDuLieu();
 
                         MessageBox.Show("Thêm khách hàng thành công!",
@@ -153,7 +153,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     if (dialog.ShowDialog() == true)
                     {
                         var kq = dialog.KetQua;
-                        var entity = DataProvider.Ins.DB.KhachHangs.Find(kq.MaKh);
+                        var entity = DataProvider.Ins.GetContext().KhachHangs.Find(kq.MaKh);
                         if (entity != null)
                         {
                             entity.TenKh = kq.HoTen;
@@ -161,7 +161,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                             entity.Email = kq.Email;
                             entity.Dchi = kq.DiaChi;
 
-                            DataProvider.Ins.DB.SaveChanges();
+                            DataProvider.Ins.GetContext().SaveChanges();
                             TaiDuLieu();
 
                             MessageBox.Show("Cập nhật khách hàng thành công!",
@@ -197,7 +197,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
                 var entity = db.KhachHangs.Find(kh.MaKh);
                 if (entity == null) return;
 

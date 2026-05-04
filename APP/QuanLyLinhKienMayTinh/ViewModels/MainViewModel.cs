@@ -39,7 +39,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
                 soNhanVienGoc = db.NhanViens.Count();
                 soLinhKienGoc = db.LinhKiens.Count();
                 soHoaDonGoc = db.HoaDons.Count();
@@ -51,7 +51,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
                 int soNhanVienMoi = db.NhanViens.Count();
                 int soLinhKienMoi = db.LinhKiens.Count();
                 int soHoaDonMoi = db.HoaDons.Count();

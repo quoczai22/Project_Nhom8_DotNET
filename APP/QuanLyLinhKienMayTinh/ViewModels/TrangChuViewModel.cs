@@ -132,7 +132,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             try
             {
-                var db = DataProvider.Ins.DB;
+                var db = DataProvider.Ins.GetContext();
                 TongNV = db.NhanViens.Count();
                 TongKH = db.KhachHangs.Count();
                 TongLK = db.LinhKiens.Sum(lk => lk.SoLuongTon ?? 0);
@@ -211,7 +211,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             try
             {
                 ChucVu.Clear();
-            var db = DataProvider.Ins.DB;
+            var db = DataProvider.Ins.GetContext();
             var chucVuNV = db.NhanViens
                 .GroupBy(nv => nv.ChucVu)
                 .Select(g => new { ChucVu = g.Key, SoLuong = g.Count() })

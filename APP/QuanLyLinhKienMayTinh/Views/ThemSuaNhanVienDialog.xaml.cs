@@ -44,22 +44,29 @@ namespace QuanLyLinhKienMayTinh.Views
                 DpNgayVaoLam.SelectedDate = nv.NgayVaoLam.Value.ToDateTime(TimeOnly.MinValue);
 
             // Load thêm giới tính và ngày sinh từ DB
-            var entity = Models.DataProvider.Ins.DB.NhanViens
-                .Find(nv.MaNv);
-            if (entity != null)
+            using (var db = Models.DataProvider.Ins.GetContext())
             {
-                if (!string.IsNullOrEmpty(entity.GioiTinh))
+                var entity = db.NhanViens.Find(nv.MaNv);
+
+                if (entity != null)
                 {
-                    foreach (ComboBoxItem item in CboGioiTinh.Items)
+                    if (!string.IsNullOrEmpty(entity.GioiTinh))
                     {
-                        if (item.Content.ToString() == entity.GioiTinh)
-                        { CboGioiTinh.SelectedItem = item; break; }
+                        foreach (ComboBoxItem item in CboGioiTinh.Items)
+                        {
+                            if (item.Content.ToString() == entity.GioiTinh)
+                            {
+                                CboGioiTinh.SelectedItem = item;
+                                break;
+                            }
+                        }
                     }
+                    if (entity.NgaySinh.HasValue)
+                        DpNgaySinh.SelectedDate = entity.NgaySinh.Value.ToDateTime(TimeOnly.MinValue);
                 }
-                if (entity.NgaySinh.HasValue)
-                    DpNgaySinh.SelectedDate = entity.NgaySinh.Value.ToDateTime(TimeOnly.MinValue);
             }
         }
+        
 
         private void BtnLuu_Click(object sender, RoutedEventArgs e)
         {
