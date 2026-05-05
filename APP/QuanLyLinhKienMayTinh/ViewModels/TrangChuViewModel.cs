@@ -117,7 +117,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        
         public TrangChuViewModel()
         {
             DoanhThu = new SeriesCollection();
@@ -146,7 +146,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
                 // 2. Lấy toàn bộ hóa đơn trong năm hiện tại về Memory (để tối ưu truy vấn)
                 var hoaDonsTrongNam = db.HoaDons
-                    .Where(hd => hd.NgayHd.HasValue && year.Contains(hd.NgayHd.Value.Year))
+                    .Where(hd => hd.NgayHd.HasValue && year.Contains(hd.NgayHd.Value.Year)&& hd.TrangThai == "Đã thanh toán")
                     .Select(hd => new
                     {
                         Month = hd.NgayHd.Value.Month,

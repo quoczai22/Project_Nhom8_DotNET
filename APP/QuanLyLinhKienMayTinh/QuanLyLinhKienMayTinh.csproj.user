@@ -20,6 +20,9 @@
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\MomoPaymentView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\NhanVienView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

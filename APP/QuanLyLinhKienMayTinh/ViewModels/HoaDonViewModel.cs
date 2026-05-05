@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using QuanLyLinhKienMayTinh.Views;
 
 namespace QuanLyLinhKienMayTinh.ViewModels
 {
@@ -61,6 +62,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 ChiTietVisibility = value != null ? Visibility.Visible : Visibility.Collapsed;
                 ChuaChonHoaDonVisibility = value == null ? Visibility.Visible : Visibility.Collapsed;
                 TaiChiTietSanPham(value?.MaHoaDon);
+                ThanhToanButtonVisibility = (value != null && value.TrangThai != "Đã thanh toán")
+                    ? Visibility.Visible
+                    : Visibility.Collapsed;
             }
         }
 
@@ -158,12 +162,20 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _soHoaDonChoXuLy = value; OnPropertyChanged(); }
         }
 
+        private Visibility _thanhToanButtonVisibility = Visibility.Collapsed;
+        public Visibility ThanhToanButtonVisibility
+        {
+            get => _thanhToanButtonVisibility;
+            set { _thanhToanButtonVisibility = value; OnPropertyChanged(); }
+        }
+
         // ── Commands ─────────────────────────────────────────────────────────
         public ICommand TaoHoaDonMoiCommand { get; private set; }
         public ICommand SuaHoaDonCommand { get; private set; }
         public ICommand InHoaDonCommand { get; private set; }
         public ICommand XoaHoaDonCommand { get; private set; }
         public ICommand LocHoaDonCommand { get; private set; }
+        public ICommand ThanhToanHoaDonCommand { get; private set; }
 
         public HoaDonViewModel()
         {
@@ -336,7 +348,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             var list = ds.ToList();
             TongSoHoaDon = list.Count;
-            TongDoanhThu = list.Sum(hd => (long)(hd.TongTien ?? 0));
+            TongDoanhThu = list.Where(hd => hd.TrangThai == "Đã thanh toán").Sum(hd => (long)(hd.TongTien ?? 0));
             SoHoaDonDaThanhToan = list.Count(hd => hd.TrangThai == "Đã thanh toán");
             SoHoaDonChoXuLy = list.Count(hd => hd.TrangThai == "Chưa thanh toán");
         }
@@ -452,6 +464,20 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             LocHoaDonCommand = new RelayCommand<object>(
                 _ => true,
                 _ => LocHoaDon());
+            ThanhToanHoaDonCommand = new RelayCommand<object>(_ => HoaDonChon != null, _ =>
+            {
+                if (HoaDonChon == null) return;
+
+                var dialog = new ChonPhuongThucDialog(
+                    HoaDonChon.MaHoaDon,
+                    (long)(HoaDonChon.TongTien ?? 0),
+                    () => TaiDuLieu() // ← truyền callback TaiDuLieu
+                );
+
+                dialog.Owner = System.Windows.Application.Current.MainWindow;
+                dialog.ShowDialog();
+                TaiDuLieu();
+            });
         }
 
         // ── Tạo hóa đơn mới (Có dùng Transaction để bảo vệ tồn kho) ─────────────

@@ -379,6 +379,9 @@
                                     Command="{Binding InHoaDonCommand}" Margin="4" Padding="12,8"/>
                             <Button Content="🗑️ Xóa" Style="{StaticResource DangerBtnStyle}"
                                     Command="{Binding XoaHoaDonCommand}" Margin="4" Padding="12,8"/>
+                            <Button Content="💳  Thanh toán" Style="{StaticResource PrimaryBtnStyle}"
+                                    Command="{Binding ThanhToanHoaDonCommand}" Padding="12,8" Width="213"
+                                    Margin="4" Visibility="{Binding ThanhToanButtonVisibility}"/>
                         </WrapPanel>
                     </Border>
                 </Grid>
