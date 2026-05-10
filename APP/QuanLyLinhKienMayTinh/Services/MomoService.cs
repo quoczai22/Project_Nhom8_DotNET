@@ -1,115 +1,92 @@
 ﻿using Newtonsoft.Json;
+using QuanLyLinhKienMayTinh.Models;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace QuanLyLinhKienMayTinh.Services
 {
-    public class MomoService
+    public class MomoService : IMomoService
     {
-        // ==========================================
-        // CẤU HÌNH MOMO - Lấy từ MoMo Developer
-        // https://developers.momo.vn
-        // ==========================================
-        private const string Endpoint = "https://test-payment.momo.vn/v2/gateway/api/create";
-        private const string PartnerCode = "MOMO";
-        private const string AccessKey = "F8BBA842ECF85";
-        private const string SecretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
+        string MomoApiUrl = "https://test-payment.momo.vn/v2/gateway/api/create"; // điểm đến API của MoMo để tạo đơn thanh toán
+        string PartnerCode = "MOMO";
+        string AccessKey = "F8BBA842ECF85";
+        string SecretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
+        string ReturnUrl = "https://momo.vn"; // trả về trang chủ Mo Mo sau khi đã thanh toán 
+        string NotifyUrl = "https://ignition-good-urethane.ngrok-free.dev/api/payment/momo-ipn"; // đường dẫn để MoMo thông báo về trạng thái thanh toán 
+        string RequestType = "captureWallet"; // xác thực thông tin thanh toán bằng ví MoMo
 
-        // URL MoMo sẽ gọi vào sau khi thanh toán xong (IPN)
-        // Đây là Static Domain ngrok — cố định, không đổi mỗi lần mở máy
-        private const string IpnUrl = "https://ignition-good-urethane.ngrok-free.dev/api/payment/momo-ipn";
+        public MomoService() { }
 
-        // URL trang web mở ra trên điện thoại sau khi thanh toán xong
-        // Đang để Google, có thể đổi thành trang cảm ơn của bạn
-        private const string RedirectUrl = "https://google.com";
-
-        // ==========================================
-        // TẠO CHỮ KÝ HMAC-SHA256
-        // MoMo dùng chữ ký này để xác minh request có hợp lệ không
-        // ==========================================
-        public string CreateSignature(string rawHash, string secretKey)
+        string CreateSignature(string message, string secretKey) // Tạo chữ ký
         {
-            byte[] keyByte = Encoding.UTF8.GetBytes(secretKey);
-            byte[] messageBytes = Encoding.UTF8.GetBytes(rawHash);
+            byte[] keyByte = Encoding.UTF8.GetBytes(secretKey);  // Chuyển secretKey thành mảng byte để dùng trong HMAC
+            byte[] messageBytes = Encoding.UTF8.GetBytes(message);    // Chuyển message thành mảng byte để tính hash
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA256(keyByte))
+            using (var hmac = new HMACSHA256(keyByte)) // Tạo đối tượng HMACSHA256 với secretKey đã được chuyển thành mảng byte
             {
-                byte[] hash = hmac.ComputeHash(messageBytes);
-                return BitConverter.ToString(hash).Replace("-", "").ToLower();
+                byte[] hash = hmac.ComputeHash(messageBytes); // Tính hash của message bằng HMACSHA256
+                return BitConverter.ToString(hash).Replace("-", "").ToLower(); // Chuyển hash thành chuỗi hex và trả về
             }
         }
 
-        // ==========================================
-        // TẠO ĐƠN HÀNG MOMO VÀ LẤY QR CODE URL
-        // Trả về chuỗi qrCodeUrl dùng để vẽ QR trong WPF
-        // ==========================================
-        public async Task<string> GetMomoPaymentUrl(string maHd, long soTien)
+        public async Task<MomoResponse> CreatePaymentAsync(HoaDon hd)
         {
-            // orderId phải là duy nhất mỗi lần tạo đơn
-            // Dùng định dạng "MAHD_TIMESTAMP" để sau này tách lại được mã hóa đơn
-            // Ví dụ: "HD01_1714925432"
-            string orderId = maHd + "_" + DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            string requestId = Guid.NewGuid().ToString(); // ID request, phải unique
-            string orderInfo = "Thanh toán hóa đơn " + maHd;
-            string extraData = ""; // Dữ liệu thêm, để trống nếu không dùng
+            string orderId = hd.MaHd + "_" + DateTimeOffset.UtcNow.ToUnixTimeSeconds(); // Tạo orderId duy nhất trong mỗi lần tạo đơn
+            string orderInfo = "Thanh toan hoa don " + hd.MaHd;
+            long amount = hd.TongTien ?? 0;         // Số tiền phải thanh toán, lấy từ hóa đơn
+            string requestId = Guid.NewGuid().ToString(); // Tạo requestId duy nhất cho mỗi request
 
-            // ==========================================
-            // CHUỖI RAW ĐỂ TẠO CHỮ KÝ
-            // QUAN TRỌNG: Phải đúng thứ tự A-Z theo tài liệu MoMo v2
-            // Sai thứ tự → chữ ký sai → MoMo từ chối request
-            // ==========================================
-            string rawHash = "accessKey=" + AccessKey +
-                             "&amount=" + soTien +
-                             "&extraData=" + extraData +
-                             "&ipnUrl=" + IpnUrl +
-                             "&orderId=" + orderId +
-                             "&orderInfo=" + orderInfo +
-                             "&partnerCode=" + PartnerCode +
-                             "&redirectUrl=" + RedirectUrl +
-                             "&requestId=" + requestId +
-                             "&requestType=captureWallet";
+            var rawData =
+                $"accessKey={AccessKey}" +
+                $"&amount={amount}" +
+                $"&extraData=" +
+                $"&ipnUrl={NotifyUrl}" +
+                $"&orderId={orderId}" +
+                $"&orderInfo={orderInfo}" +
+                $"&partnerCode={PartnerCode}" +
+                $"&redirectUrl={ReturnUrl}" +
+                $"&requestId={requestId}" +
+                $"&requestType={RequestType}";
 
-            string signature = CreateSignature(rawHash, SecretKey);
+            string signature = CreateSignature(rawData, SecretKey);
 
-            // Đóng gói body JSON gửi lên MoMo
-            var requestBody = new
+            var requestData = new
             {
                 partnerCode = PartnerCode,
                 accessKey = AccessKey,
                 requestId,
-                amount = soTien,
+                amount,
                 orderId,
                 orderInfo,
-                redirectUrl = RedirectUrl,
-                ipnUrl = IpnUrl,
-                extraData,
-                requestType = "captureWallet",
-                signature,
-                lang = "vi"
+                redirectUrl = ReturnUrl,  
+                ipnUrl = NotifyUrl,  
+                requestType = RequestType,
+                extraData = "",
+                lang = "vi",
+                signature
             };
 
-            // Gửi request lên MoMo và nhận về qrCodeUrl
             using (var client = new HttpClient())
             {
-                var content = new StringContent(
-                    JsonConvert.SerializeObject(requestBody),
-                    Encoding.UTF8,
-                    "application/json");
+                var json = JsonConvert.SerializeObject(requestData); // Chuyển requestData thành chuỗi JSON để gửi lên MoMo
+                var content = new StringContent(json, Encoding.UTF8, "application/json"); // Tạo HttpContent từ chuỗi JSON để gửi lên MoMo
 
-                var response = await client.PostAsync(Endpoint, content);
-                var result = await response.Content.ReadAsStringAsync();
+                var response = await client.PostAsync(MomoApiUrl, content);          // Gửi request lên MoMo và nhận về response
+                var responseContent = await response.Content.ReadAsStringAsync();           // Đọc nội dung response từ MoMo dưới dạng chuỗi
 
-                dynamic data = JsonConvert.DeserializeObject(result);
-
-                // resultCode = 0 là thành công, khác 0 là lỗi
-                if (data.resultCode != 0)
-                    throw new Exception("Lỗi tạo đơn hàng MoMo: " + data.message);
-
-                // Trả về qrCodeUrl để WPF dùng vẽ QR
-                return data.qrCodeUrl;
+                return JsonConvert.DeserializeObject<MomoResponse>(responseContent); // Trả về đối tượng MomoResponse được tạo từ chuỗi JSON response của MoM 
             }
+        }
+
+        public MomoExecuteResponseModel PaymentExecuteAsync(Dictionary<string, string> collection)
+        {
+            collection.TryGetValue("amount", out var amount); // Lấy giá trị amount từ collection, nếu không tồn tại sẽ trả về null
+            collection.TryGetValue("orderId", out var orderId); // Lấy giá trị orderId từ collection, nếu không tồn tại sẽ trả về null
+            return new MomoExecuteResponseModel() { Amount = amount, OrderId = orderId }; 
         }
     }
 }

@@ -19,7 +19,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         private int soNhanVienGoc = 0;
         private int soLinhKienGoc = 0;
         private int soHoaDonGoc = 0;
-        bool _isDark = false;
+
+        bool _isDark = false; // cờ để theo dõi trạng thái theme hiện tại, mặc định là light
 
         public ICommand ThongBaoCommand { get; set; }
         public ICommand LogOutCommand { get; set; }
@@ -71,6 +72,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 if (soHoaDonMoi > soHoaDonGoc)
                     danhSachThongBao.Add($"- Có {soHoaDonMoi - soHoaDonGoc} hóa đơn MỚI.");
 
+                var spSapHetHang = db.LinhKiens.Where(lk => lk.SoLuongTon < 10).ToList();
+                if (spSapHetHang.Count > 0)
+                {
+                    danhSachThongBao.Add($"- CẢNH BÁO: Có {spSapHetHang.Count} linh kiện sắp hết hàng!");
+                }
+
                 if (danhSachThongBao.Count > 0)
                 {
                     MessageBox.Show("Hệ thống có thay đổi:\n\n" + string.Join("\n", danhSachThongBao),
@@ -79,11 +86,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     soNhanVienGoc = soNhanVienMoi;
                     soLinhKienGoc = soLinhKienMoi;
                     soHoaDonGoc = soHoaDonMoi;
-                }
-                else
-                {
-                    MessageBox.Show("Chưa có thay đổi dữ liệu mới.",
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
@@ -114,12 +116,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 var newThemeDict = new ResourceDictionary
                 {
-                    Source = new Uri(themeFile, UriKind.RelativeOrAbsolute)
+                    Source = new Uri(themeFile, UriKind.RelativeOrAbsolute) // tạo ResourceDictionary mới với đường dẫn đến file theme tương ứng
                 };
 
-                var mergedDicts = Application.Current.Resources.MergedDictionaries;
-                var oldThemeDict = mergedDicts.FirstOrDefault(d => d.Source != null && d.Source.OriginalString.Contains("Theme"));
-                mergedDicts.Add(newThemeDict);
+                var mergedDicts = Application.Current.Resources.MergedDictionaries; // lấy danh sách ResourceDictionary đã được gộp vào tài nguyên ứng dụng
+                var oldThemeDict = mergedDicts.FirstOrDefault(d => d.Source != null && d.Source.OriginalString.Contains("Theme")); // tìm ResourceDictionary có chứa "Theme" 
+                mergedDicts.Add(newThemeDict); // thêm ResourceDictionary mới vào danh sách gộp để áp dụng theme mới cho toàn bộ ứng dụng
                 if (oldThemeDict != null)
                 {
                     mergedDicts.Remove(oldThemeDict);

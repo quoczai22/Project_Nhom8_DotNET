@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using QuanLyLinhKienMayTinh.Services;
+using QuanLyLinhKienMayTinh.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +15,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using QuanLyLinhKienMayTinh.ViewModels;
 
 namespace QuanLyLinhKienMayTinh.Views
 {
@@ -24,7 +26,7 @@ namespace QuanLyLinhKienMayTinh.Views
         public HoaDonView()
         {
             InitializeComponent();
-            DataContext = new ViewModels.HoaDonViewModel();
+            DataContext = new HoaDonViewModel(new MomoService());
         }
     }
 }

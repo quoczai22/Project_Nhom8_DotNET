@@ -8,6 +8,10 @@ namespace QuanLyLinhKienMayTinh.Models;
 
 public partial class QL_LinhKien_PC_Context : DbContext
 {
+    public QL_LinhKien_PC_Context()
+    {
+    }
+
     public QL_LinhKien_PC_Context(DbContextOptions<QL_LinhKien_PC_Context> options)
         : base(options)
     {
@@ -33,17 +37,17 @@ public partial class QL_LinhKien_PC_Context : DbContext
 
     public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;Encrypt=True");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ChiTietHd>(entity =>
         {
             entity.HasKey(e => new { e.MaHd, e.MaLk }).HasName("PK_CTHD");
 
-            entity.ToTable("ChiTietHD", tb =>
-                {
-                    tb.HasTrigger("trg_CapNhatTongTien");
-                    tb.HasTrigger("trg_TruTonKhoKhiBan");
-                });
+            entity.ToTable("ChiTietHD");
 
             entity.Property(e => e.MaHd)
                 .HasMaxLength(5)
@@ -71,7 +75,7 @@ public partial class QL_LinhKien_PC_Context : DbContext
         {
             entity.HasKey(e => new { e.MaPn, e.MaLk }).HasName("PK_CTPN");
 
-            entity.ToTable("ChiTietPN", tb => tb.HasTrigger("trg_CongTonKhoKhiNhap"));
+            entity.ToTable("ChiTietPN");
 
             entity.Property(e => e.MaPn)
                 .HasMaxLength(5)
@@ -119,6 +123,9 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .IsFixedLength()
                 .HasColumnName("MaNV");
             entity.Property(e => e.NgayHd).HasColumnName("NgayHD");
+            entity.Property(e => e.PhuongThucThanhToan)
+                .HasMaxLength(50)
+                .HasDefaultValue("Tiền mặt");
             entity.Property(e => e.TongTien).HasDefaultValue(0);
             entity.Property(e => e.TrangThai)
                 .HasMaxLength(30)
@@ -141,8 +148,9 @@ public partial class QL_LinhKien_PC_Context : DbContext
 
             entity.ToTable("KhachHang");
 
-            entity.HasIndex(e => e.TenKh, "IX_KhachHang_TenKH");
             entity.HasIndex(e => e.Sdt, "IX_KhachHang_SDT");
+
+            entity.HasIndex(e => e.TenKh, "IX_KhachHang_TenKH");
 
             entity.Property(e => e.MaKh)
                 .HasMaxLength(6)
@@ -320,6 +328,7 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .HasConstraintName("FK_TaiKhoan_NhanVien");
         });
 
+        OnModelCreatingGeneratedFunctions(modelBuilder);
         OnModelCreatingPartial(modelBuilder);
     }
 

@@ -297,7 +297,7 @@ CREATE FUNCTION fn_DoanhThuTheoThang (@Thang INT, @Nam INT)
 RETURNS INT AS
 BEGIN
     DECLARE @DoanhThu INT;
-    SELECT @DoanhThu = SUM(TongTien) FROM HoaDon WHERE MONTH(NgayHD) = @Thang AND YEAR(NgayHD) = @Nam;
+    SELECT @DoanhThu = SUM(TongTien) FROM HoaDon WHERE MONTH(NgayHD) = @Thang AND YEAR(NgayHD) = @Nam AND TrangThai = N'Đã thanh toán';
     RETURN ISNULL(@DoanhThu, 0);
 END;
 GO
@@ -322,38 +322,6 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE sp_BanLinhKien 
-    @MaHD char(5), @NgayHD date, @MaKH char(6), @MaNV char(6), @MaLK char(6), @SoLuongBan tinyint
-AS
-BEGIN
-    BEGIN TRAN;
-    BEGIN TRY
-        DECLARE @TonKhoHienTai INT;
-        SELECT @TonKhoHienTai = SoLuongTon FROM LinhKien WHERE MaLK = @MaLK;
-
-        IF (@TonKhoHienTai < @SoLuongBan)
-        BEGIN
-            PRINT N'LỖI GIAO TÁC: Số lượng tồn kho không đủ để bán! Hóa đơn bị hủy.';
-            ROLLBACK TRAN; 
-            RETURN;
-        END
-
-        INSERT INTO HoaDon (MaHD, NgayHD, MaKH, MaNV) VALUES (@MaHD, @NgayHD, @MaKH, @MaNV);
-
-        DECLARE @GiaBan INT;
-        SELECT @GiaBan = DonGiaBan FROM LinhKien WHERE MaLK = @MaLK;
-        
-        INSERT INTO ChiTietHD (MaHD, MaLK, SoLuong, DonGia) VALUES (@MaHD, @MaLK, @SoLuongBan, @GiaBan);
-
-        COMMIT TRAN;
-        PRINT N'THÀNH CÔNG: Đã tạo hóa đơn và cập nhật tồn kho tự động.';
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRAN;
-        PRINT N'LỖI HỆ THỐNG: Đã hủy giao tác do có lỗi xảy ra - ' + ERROR_MESSAGE();
-    END CATCH
-END;
-GO
 
 --quản trị người dùng
 

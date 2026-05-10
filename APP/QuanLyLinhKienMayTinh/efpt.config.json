@@ -3,7 +3,7 @@
    "ContextClassName": "QL_LinhKien_PC_Context",
    "ContextNamespace": null,
    "FilterSchemas": false,
-   "IncludeConnectionString": false,
+   "IncludeConnectionString": true,
    "IrregularWords": null,
    "MinimumProductVersion": "2.6.1382",
    "ModelNamespace": null,
@@ -57,6 +57,14 @@
       {
          "Name": "[dbo].[TaiKhoan]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[sp_BaoCaoTonKho]",
+         "ObjectType": 1
+      },
+      {
+         "Name": "[dbo].[fn_DoanhThuTheoThang]",
+         "ObjectType": 2
       }
    ],
    "UiHint": null,

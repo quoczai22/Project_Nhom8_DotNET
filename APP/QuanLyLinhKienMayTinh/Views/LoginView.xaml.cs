@@ -30,21 +30,6 @@ namespace QuanLyLinhKienMayTinh.Views
             InitializeComponent();
             this.DataContext = new LoginViewModel();
         }
-
-        string GetSuPassword()
-        {
-            return suPassVisible ? suPasswordVisible.Text : suPassword.Password;
-        }
-
-        string GetSuConfirmPassword()
-        {
-            return suConfirmVisible ? suConfirmPasswordVisible.Text : suConfirmPassword.Password;
-        }
-
-        string GetLiPassword()
-        {
-            return liPassVisible ? liPasswordVisible.Text : liPassword.Password;
-        }
         void ToggleSuPassword_Click(object sender, RoutedEventArgs e)
         {
             if (suPassVisible)

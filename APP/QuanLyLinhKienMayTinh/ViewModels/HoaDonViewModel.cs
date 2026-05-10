@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using QuanLyLinhKienMayTinh.Models;
+using QuanLyLinhKienMayTinh.Services;
+using QuanLyLinhKienMayTinh.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using QuanLyLinhKienMayTinh.Views;
 
 namespace QuanLyLinhKienMayTinh.ViewModels
 {
@@ -35,7 +36,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         public int? DonGia { get; set; }
         public string HanBaoHanhHienThi { get; set; }
     }
-
     public class HoaDonViewModel : BaseViewModel, ISearchable
     {
         // ── Backing data ─────────────────────────────────────────────────────
@@ -48,6 +48,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             get => _danhSachHoaDon;
             set { _danhSachHoaDon = value; OnPropertyChanged(); }
         }
+
+        // Dịch vụ MoMo
+        IMomoService _momoService;
 
         // ── Hóa đơn đang chọn ───────────────────────────────────────────────
         private HoaDonDisplay _hoaDonChon;
@@ -177,7 +180,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         public ICommand LocHoaDonCommand { get; private set; }
         public ICommand ThanhToanHoaDonCommand { get; private set; }
 
-        public HoaDonViewModel()
+        public HoaDonViewModel(IMomoService momoService)
         {
             DanhSachTrangThai = new ObservableCollection<string>
             {
@@ -190,6 +193,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             };
             TaiDuLieu();
             KhoiTaoCommands();
+            _momoService = momoService; // Lưu service MoMo vào biến để sửa dụng sau này 
+
         }
 
         // ── Tải toàn bộ hóa đơn ─────────────────────────────────────────────
@@ -361,7 +366,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         }
 
         // ── Khởi tạo Commands ────────────────────────────────────────────────
-        private void KhoiTaoCommands()
+        private void KhoiTaoCommands( )
         {
             // ── TẠO HÓA ĐƠN MỚI ─────────────────────────────────────────
             TaoHoaDonMoiCommand = new RelayCommand<object>(_ => true, _ =>
@@ -464,19 +469,20 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             LocHoaDonCommand = new RelayCommand<object>(
                 _ => true,
                 _ => LocHoaDon());
-            ThanhToanHoaDonCommand = new RelayCommand<object>(_ => HoaDonChon != null, _ =>
-            {
-                if (HoaDonChon == null) return;
+
+            ThanhToanHoaDonCommand = new RelayCommand<object>(_ => HoaDonChon != null, _ => { // lamda để mở dialog chọn phương thức thanh toán
+                if (HoaDonChon == null) return; 
 
                 var dialog = new ChonPhuongThucDialog(
                     HoaDonChon.MaHoaDon,
                     (long)(HoaDonChon.TongTien ?? 0),
-                    () => TaiDuLieu() // ← truyền callback TaiDuLieu
+                    _momoService, // Chuyển service MoMo vào dialog để sử dụng
+                    () => TaiDuLieu()
                 );
 
-                dialog.Owner = System.Windows.Application.Current.MainWindow;
+                dialog.Owner = System.Windows.Application.Current.MainWindow; // đặt Owner để dialog luôn ở trên MainWindow
                 dialog.ShowDialog();
-                TaiDuLieu();
+
             });
         }
 

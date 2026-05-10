@@ -1,19 +1,21 @@
+using QuanLyLinhKienMayTinh.Services;
 using System.Windows;
 namespace QuanLyLinhKienMayTinh.Views
 {
     public partial class ChonPhuongThucDialog : Window
     {
-        private readonly string _maHd;
-        private readonly long _soTien;
-        private readonly Action _onThanhToanThanhCong; // ← thêm
+        string _maHd;
+        long _soTien;
+        Action _onThanhToanThanhCong; // khai báo biến để lưu callback khi thanh toán thành công
+        IMomoService _momoService; // khai báo biến để lưu service MoMo, sẽ được truyền vào từ bên ngoài
 
-        public ChonPhuongThucDialog(string maHd, long soTien, Action onThanhToanThanhCong = null)
+        public ChonPhuongThucDialog(string maHd, long soTien, IMomoService momoService, Action onThanhToanThanhCong = null )
         {
-            InitializeComponent();
+            InitializeComponent(); // truyền callcak vào hàm khởi tạo 
             _maHd = maHd;
             _soTien = soTien;
-            _onThanhToanThanhCong = onThanhToanThanhCong; // ← nhận callback
-            txtMaHD.Text = $"#{maHd}";
+            _momoService = momoService;
+            _onThanhToanThanhCong = onThanhToanThanhCong; 
             txtSoTien.Text = $"{soTien:N0} ₫";
         }
 
@@ -21,9 +23,9 @@ namespace QuanLyLinhKienMayTinh.Views
         {
             if (rdMomo.IsChecked == true)
             {
-                // ← truyền callback vào MomoPaymentWindow
-                var momoPage = new MomoPaymentWindow(_maHd, _soTien, _onThanhToanThanhCong);
-                momoPage.Owner = this;
+                var momoPage = new MomoPaymentWindow(_maHd, _soTien, _momoService, _onThanhToanThanhCong);// truyền thông tin đơn hàng
+
+                momoPage.Owner = this; // đặt cửa sổ cha để có thể gọi callback khi thanh toán thành công
                 momoPage.ShowDialog();
                 Close();
             }

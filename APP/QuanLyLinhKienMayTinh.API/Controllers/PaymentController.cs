@@ -11,10 +11,10 @@ namespace QuanLyLinhKienMayTinh.API.Controllers
     [ApiController]
     public class PaymentController : ControllerBase
     {
-        private readonly QL_LinhKien_PC_NETContext _context;
-        private readonly IConfiguration _config;
-        private readonly ILogger<PaymentController> _logger;
-        private readonly string _logsFolder;
+          QL_LinhKien_PC_NETContext _context;
+          IConfiguration _config;
+          ILogger<PaymentController> _logger;
+          string _logsFolder;
 
         public PaymentController(
             QL_LinhKien_PC_NETContext context,
