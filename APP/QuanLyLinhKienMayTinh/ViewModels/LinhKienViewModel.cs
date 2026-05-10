@@ -153,10 +153,21 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 try
                 {
-                    var lastID = DataProvider.Ins.GetContext().LinhKiens
-                        .OrderByDescending(x => x.MaLk)
-                        .Select(x => x.MaLk).FirstOrDefault();
-                    string newID = Services.AutoIDService.GetNextID("LK", lastID);
+                    // Tạo mã gợi ý, user có thể tự sửa trong dialog
+                    var dbRead = DataProvider.Ins.GetContext();
+                    var allMaLk = dbRead.LinhKiens
+                        .AsNoTracking()
+                        .Select(x => x.MaLk)
+                        .ToList();
+                    // Lấy số lớn nhất trong tất cả mã (vd: MOU003 → 3, VGA004 → 4)
+                    int maxNum = 0;
+                    foreach (var ma in allMaLk)
+                    {
+                        var m = System.Text.RegularExpressions.Regex.Match(ma ?? "", @"\d+$");
+                        if (m.Success && int.TryParse(m.Value, out int n) && n > maxNum)
+                            maxNum = n;
+                    }
+                    string newID = "LK" + (maxNum + 1).ToString("D3");
 
                     var dialog = new ThemSuaLinhKienDialog(newID);
                     dialog.Owner = Application.Current.MainWindow;
@@ -176,8 +187,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                             NgungKinhDoanh = false
                         };
 
-                        DataProvider.Ins.GetContext().LinhKiens.Add(lkMoi);
-                        DataProvider.Ins.GetContext().SaveChanges();
+                        var dbSave = DataProvider.Ins.GetContext();
+                        dbSave.LinhKiens.Add(lkMoi);
+                        dbSave.SaveChanges();
                         TaiDuLieu();
 
                         MessageBox.Show("Thêm linh kiện thành công!",
@@ -200,7 +212,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     dialog.Owner = Application.Current.MainWindow;
                     if (dialog.ShowDialog() == true)
                     {
-                        var entity = DataProvider.Ins.GetContext().LinhKiens.Find(dialog.MaLk);
+                        var db = DataProvider.Ins.GetContext();
+                        var entity = db.LinhKiens.Find(dialog.MaLk);
                         if (entity != null)
                         {
                             entity.TenLk = dialog.TenLk;
@@ -213,7 +226,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                                 entity.SoLuongTon = dialog.SoLuongTon;
                             entity.NgayNhap = dialog.NgayNhap;
 
-                            DataProvider.Ins.GetContext().SaveChanges();
+                            db.SaveChanges();
                             TaiDuLieu();
 
                             MessageBox.Show("Cập nhật linh kiện thành công!",

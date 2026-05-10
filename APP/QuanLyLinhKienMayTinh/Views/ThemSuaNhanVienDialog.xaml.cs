@@ -1,5 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using QuanLyLinhKienMayTinh.Models;
 using QuanLyLinhKienMayTinh.ViewModels;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -23,6 +27,7 @@ namespace QuanLyLinhKienMayTinh.Views
             TitleText.Text = "Thêm Nhân Viên";
             TxtMaNv.Text = maNvMoi;
             DpNgayVaoLam.SelectedDate = DateTime.Now;
+            TaiDanhSachChucVu();
         }
 
         /// <summary>Mở ở chế độ SỬA</summary>
@@ -36,18 +41,24 @@ namespace QuanLyLinhKienMayTinh.Views
             TxtSdt.Text = nv.Sdt;
             TxtEmail.Text = nv.Email;
 
-            // Set chức vụ ComboBox
-            if (!string.IsNullOrEmpty(nv.ChucVu))
-                CboChucVu.Text = nv.ChucVu;
-
             if (nv.NgayVaoLam.HasValue)
                 DpNgayVaoLam.SelectedDate = nv.NgayVaoLam.Value.ToDateTime(TimeOnly.MinValue);
 
+            TaiDanhSachChucVu();
+
+            // Set chức vụ sau khi đã load danh sách
+            if (!string.IsNullOrEmpty(nv.ChucVu))
+            {
+                var chucVuItem = CboChucVu.Items.Cast<ChucVuItem>()
+                    .FirstOrDefault(cv => cv.TenChucVu == nv.ChucVu);
+                if (chucVuItem != null)
+                    CboChucVu.SelectedItem = chucVuItem;
+            }
+
             // Load thêm giới tính và ngày sinh từ DB
-            using (var db = Models.DataProvider.Ins.GetContext())
+            using (var db = DataProvider.Ins.GetContext())
             {
                 var entity = db.NhanViens.Find(nv.MaNv);
-
                 if (entity != null)
                 {
                     if (!string.IsNullOrEmpty(entity.GioiTinh))
@@ -66,7 +77,35 @@ namespace QuanLyLinhKienMayTinh.Views
                 }
             }
         }
-        
+
+        private void TaiDanhSachChucVu()
+        {
+            // Lấy các chức vụ từ DB (distinct)
+            var cacChucVuDb = DataProvider.Ins.GetContext().NhanViens
+                .AsNoTracking()
+                .Where(nv => nv.ChucVu != null && nv.ChucVu != "")
+                .Select(nv => nv.ChucVu)
+                .Distinct()
+                .OrderBy(cv => cv)
+                .ToList();
+
+            // Đảm bảo luôn có các chức vụ cơ bản
+            var chucVuMacDinh = new List<string>
+            {
+                "Quản lý",
+                "Nhân viên thu ngân",
+                "Nhân viên bán hàng",
+                "Nhân viên kỹ thuật",
+                "Nhân viên kho"
+            };
+
+            var tatCaChucVu = cacChucVuDb.Union(chucVuMacDinh)
+                .OrderBy(cv => cv)
+                .Select(cv => new ChucVuItem { TenChucVu = cv })
+                .ToList();
+
+            CboChucVu.ItemsSource = tatCaChucVu;
+        }
 
         private void BtnLuu_Click(object sender, RoutedEventArgs e)
         {
@@ -78,9 +117,17 @@ namespace QuanLyLinhKienMayTinh.Views
                 return;
             }
 
+            if (CboChucVu.SelectedItem == null)
+            {
+                MessageBox.Show("Vui lòng chọn chức vụ!", "Thiếu thông tin",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                CboChucVu.Focus();
+                return;
+            }
+
             MaNv = TxtMaNv.Text.Trim();
             HoTen = TxtHoTen.Text.Trim();
-            ChucVu = CboChucVu.Text?.Trim();
+            ChucVu = ((ChucVuItem)CboChucVu.SelectedItem).TenChucVu;
             Sdt = TxtSdt.Text.Trim();
             Email = TxtEmail.Text.Trim();
 

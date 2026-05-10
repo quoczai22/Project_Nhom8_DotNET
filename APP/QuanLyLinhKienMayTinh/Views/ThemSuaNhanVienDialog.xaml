@@ -91,12 +91,7 @@
                           Background="{DynamicResource BackgroundColor2}"
                           Foreground="{DynamicResource MainTextColor}"
                           BorderBrush="{DynamicResource BorderColor}"
-                          IsEditable="True">
-                    <ComboBoxItem Content="Nhân viên"/>
-                    <ComboBoxItem Content="Quản lý"/>
-                    <ComboBoxItem Content="Thủ kho"/>
-                    <ComboBoxItem Content="Kế toán"/>
-                </ComboBox>
+                          DisplayMemberPath="TenChucVu"/>
             </StackPanel>
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Giới tính" Style="{StaticResource LabelStyle}"/>

@@ -72,9 +72,11 @@
         <TextBlock x:Name="TitleText" Text="Thêm Loại Linh Kiện" FontSize="18" FontWeight="Bold"
                    Foreground="{DynamicResource MainTextColor}" Margin="0,0,0,20"/>
 
-        <TextBlock Text="Mã loại" Style="{StaticResource LabelStyle}"/>
-        <TextBox x:Name="TxtMaLoai" Style="{StaticResource InputStyle}" Margin="0,0,0,14"
-                 IsReadOnly="True" Opacity="0.6"/>
+        <TextBlock Text="Mã loại *" Style="{StaticResource LabelStyle}"/>
+        <TextBox x:Name="TxtMaLoai" Style="{StaticResource InputStyle}" Margin="0,0,0,4"
+                 MaxLength="3"/>
+        <TextBlock x:Name="TxtMaLoaiHint" Text="Nhập mã tối đa 3 ký tự, ví dụ: MOU, RAM, CPU..."
+                   FontSize="11" Foreground="{DynamicResource SubTextColor}" Margin="0,0,0,14"/>
 
         <TextBlock Text="Tên loại linh kiện *" Style="{StaticResource LabelStyle}"/>
         <TextBox x:Name="TxtTenLoai" Style="{StaticResource InputStyle}" Margin="0,0,0,14"/>

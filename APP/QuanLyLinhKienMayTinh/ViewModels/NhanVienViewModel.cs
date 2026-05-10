@@ -162,7 +162,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 try
                 {
-                    var lastID = DataProvider.Ins.GetContext().NhanViens
+                    var dbRead = DataProvider.Ins.GetContext();
+                    var lastID = dbRead.NhanViens
                         .OrderByDescending(x => x.MaNv)
                         .Select(x => x.MaNv).FirstOrDefault();
                     string newID = Services.AutoIDService.GetNextID("NV", lastID);
@@ -171,11 +172,15 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     dialog.Owner = Application.Current.MainWindow;
                     if (dialog.ShowDialog() == true)
                     {
+                        // Xác định quyền dựa trên chức vụ
+                        string quyen = LayQuyenTuChucVu(dialog.ChucVu);
+
                         var nvMoi = new NhanVien
                         {
                             MaNv = dialog.MaNv,
                             TenNv = dialog.HoTen,
                             ChucVu = dialog.ChucVu,
+                            Quyen = quyen,
                             GioiTinh = dialog.GioiTinh,
                             Sdt = dialog.Sdt,
                             Email = dialog.Email,
@@ -187,9 +192,10 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                         // Tạo mặc định tài khoản cho nhân viên mới
                         var tkMoi = new TaiKhoan { TenDn = newID, MatKhau = "123", MaNv = newID };
 
-                        DataProvider.Ins.GetContext().NhanViens.Add(nvMoi);
-                        DataProvider.Ins.GetContext().TaiKhoans.Add(tkMoi);
-                        DataProvider.Ins.GetContext().SaveChanges();
+                        var dbSave = DataProvider.Ins.GetContext();
+                        dbSave.NhanViens.Add(nvMoi);
+                        dbSave.TaiKhoans.Add(tkMoi);
+                        dbSave.SaveChanges();
 
                         TaiDuLieu();
                         MessageBox.Show($"Thêm nhân viên thành công!\nTài khoản mặc định: {newID} / 123",
@@ -212,18 +218,20 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     dialog.Owner = Application.Current.MainWindow;
                     if (dialog.ShowDialog() == true)
                     {
-                        var entity = DataProvider.Ins.GetContext().NhanViens.Find(dialog.MaNv);
+                        var db = DataProvider.Ins.GetContext();
+                        var entity = db.NhanViens.Find(dialog.MaNv);
                         if (entity != null)
                         {
                             entity.TenNv = dialog.HoTen;
                             entity.ChucVu = dialog.ChucVu;
+                            entity.Quyen = LayQuyenTuChucVu(dialog.ChucVu);
                             entity.GioiTinh = dialog.GioiTinh;
                             entity.Sdt = dialog.Sdt;
                             entity.Email = dialog.Email;
                             entity.NgaySinh = dialog.NgaySinh;
                             entity.NgayVaoLam = dialog.NgayVaoLam;
 
-                            DataProvider.Ins.GetContext().SaveChanges();
+                            db.SaveChanges();
                             TaiDuLieu();
 
                             MessageBox.Show("Cập nhật nhân viên thành công!",
@@ -275,6 +283,20 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MessageBox.Show("Lỗi khi xóa nhân viên: " + ex.Message,
                     "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        /// <summary>Xác định quyền dựa trên chức vụ</summary>
+        private string LayQuyenTuChucVu(string chucVu)
+        {
+            return chucVu switch
+            {
+                "Quản lý" => "Quản lý toàn bộ",
+                "Nhân viên thu ngân" => "Thu ngân",
+                "Nhân viên bán hàng" => "Bán hàng",
+                "Nhân viên kỹ thuật" => "Kỹ thuật",
+                "Nhân viên kho" => "Kho",
+                _ => "Bán hàng"
+            };
         }
     }
 }

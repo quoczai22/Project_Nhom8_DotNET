@@ -109,7 +109,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 try
                 {
-                    var lastID = DataProvider.Ins.GetContext().KhachHangs
+                    var dbRead = DataProvider.Ins.GetContext();
+                    var lastID = dbRead.KhachHangs
                         .OrderByDescending(x => x.MaKh)
                         .Select(x => x.MaKh).FirstOrDefault();
                     string newID = Services.AutoIDService.GetNextID("KH", lastID);
@@ -128,8 +129,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                             Dchi = kq.DiaChi
                         };
 
-                        DataProvider.Ins.GetContext().KhachHangs.Add(khMoi);
-                        DataProvider.Ins.GetContext().SaveChanges();
+                        var dbSave = DataProvider.Ins.GetContext();
+                        dbSave.KhachHangs.Add(khMoi);
+                        dbSave.SaveChanges();
                         TaiDuLieu();
 
                         MessageBox.Show("Thêm khách hàng thành công!",
@@ -153,7 +155,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     if (dialog.ShowDialog() == true)
                     {
                         var kq = dialog.KetQua;
-                        var entity = DataProvider.Ins.GetContext().KhachHangs.Find(kq.MaKh);
+                        var db = DataProvider.Ins.GetContext();
+                        var entity = db.KhachHangs.Find(kq.MaKh);
                         if (entity != null)
                         {
                             entity.TenKh = kq.HoTen;
@@ -161,7 +164,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                             entity.Email = kq.Email;
                             entity.Dchi = kq.DiaChi;
 
-                            DataProvider.Ins.GetContext().SaveChanges();
+                            db.SaveChanges();
                             TaiDuLieu();
 
                             MessageBox.Show("Cập nhật khách hàng thành công!",

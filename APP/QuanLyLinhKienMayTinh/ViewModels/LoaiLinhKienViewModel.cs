@@ -109,10 +109,11 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 try
                 {
-                    var lastID = DataProvider.Ins.GetContext().LoaiLks
+                    var dbRead = DataProvider.Ins.GetContext();
+                    var lastID = dbRead.LoaiLks
                         .OrderByDescending(x => x.MaLoai)
                         .Select(x => x.MaLoai).FirstOrDefault();
-                    string newID = Services.AutoIDService.GetNextID("LK", lastID);
+                    string newID = Services.AutoIDService.GetNextLoaiID(lastID);
 
                     var dialog = new ThemSuaLoaiLinhKienDialog(newID);
                     dialog.Owner = Application.Current.MainWindow;
@@ -126,8 +127,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                             MoTa = kq.MoTa
                         };
 
-                        DataProvider.Ins.GetContext().LoaiLks.Add(loaiMoi);
-                        DataProvider.Ins.GetContext().SaveChanges();
+                        var dbSave = DataProvider.Ins.GetContext();
+                        dbSave.LoaiLks.Add(loaiMoi);
+                        dbSave.SaveChanges();
                         TaiDuLieu();
 
                         MessageBox.Show("Thêm loại linh kiện thành công!",
@@ -151,13 +153,14 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     if (dialog.ShowDialog() == true)
                     {
                         var kq = dialog.KetQua;
-                        var entity = DataProvider.Ins.GetContext().LoaiLks.Find(kq.MaLoai);
+                        var db = DataProvider.Ins.GetContext();
+                        var entity = db.LoaiLks.Find(kq.MaLoai);
                         if (entity != null)
                         {
                             entity.TenLoai = kq.TenLoai;
                             entity.MoTa = kq.MoTa;
 
-                            DataProvider.Ins.GetContext().SaveChanges();
+                            db.SaveChanges();
                             TaiDuLieu();
 
                             MessageBox.Show("Cập nhật loại linh kiện thành công!",

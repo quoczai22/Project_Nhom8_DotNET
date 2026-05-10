@@ -368,11 +368,30 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // ── Khởi tạo Commands ────────────────────────────────────────────────
         private void KhoiTaoCommands( )
         {
-            // ── TẠO HÓA ĐƠN MỚI ─────────────────────────────────────────
+            // ── TẠO HÓA ĐƠN MỠI ─────────────────────────────────
             TaoHoaDonMoiCommand = new RelayCommand<object>(_ => true, _ =>
             {
-                MessageBox.Show("Chức năng tạo hóa đơn mới.\nVui lòng sử dụng giao diện bán hàng để tạo hóa đơn.",
-                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                try
+                {
+                    // Tạo mã hóa đơn mới dựa theo số lớn nhất hiện có
+                    var dbRead = DataProvider.Ins.GetContext();
+                    var lastID = dbRead.HoaDons
+                        .OrderByDescending(x => x.MaHd)
+                        .Select(x => x.MaHd).FirstOrDefault();
+                    string newID = Services.AutoIDService.GetNextID("HD", lastID);
+
+                    var dialog = new ThemHoaDonDialog(newID);
+                    dialog.Owner = Application.Current.MainWindow;
+                    if (dialog.ShowDialog() == true)
+                    {
+                        LuuHoaDonAnToan(dialog.HoaDonMoi, dialog.ChiTietHds);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi khi tạo hóa đơn: " + ex.Message,
+                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             });
 
             // ── SỬA HÓA ĐƠN ─────────────────────────────────────────────
@@ -380,31 +399,21 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 if (HoaDonChon == null) return;
 
+                // Chỉ cho phép sửa hóa đơn chưa thanh toán
+                if (HoaDonChon.TrangThai == "Đã thanh toán")
+                {
+                    MessageBox.Show("Hóa đơn đã thanh toán, không thể chỉnh sửa nội dung!",
+                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
                 try
                 {
-                    var entity = DataProvider.Ins.GetContext().HoaDons.Find(HoaDonChon.MaHoaDon);
-                    if (entity == null) return;
-
-                    // Đổi trạng thái thanh toán
-                    if (entity.TrangThai == "Chưa thanh toán")
+                    var dialog = new SuaHoaDonDialog(HoaDonChon.MaHoaDon);
+                    dialog.Owner = Application.Current.MainWindow;
+                    if (dialog.ShowDialog() == true)
                     {
-                        var res = MessageBox.Show(
-                            "Bạn muốn chuyển hóa đơn này sang trạng thái 'Đã thanh toán'?",
-                            "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                        if (res == MessageBoxResult.Yes)
-                        {
-                            entity.TrangThai = "Đã thanh toán";
-                            entity.NgayThanhToan = DateOnly.FromDateTime(DateTime.Now);
-                            DataProvider.Ins.GetContext().SaveChanges();
-                            TaiDuLieu();
-                            MessageBox.Show("Cập nhật trạng thái hóa đơn thành công!",
-                                "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("Hóa đơn đã thanh toán, không thể sửa.",
-                            "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                        TaiDuLieu();
                     }
                 }
                 catch (Exception ex)

@@ -19,12 +19,16 @@ namespace QuanLyLinhKienMayTinh.Views
         public int? SoLuongTon { get; private set; }
         public DateOnly? NgayNhap { get; private set; }
 
+        private readonly bool _laMoiThem;
+
         /// <summary>Mở ở chế độ THÊM</summary>
-        public ThemSuaLinhKienDialog(string maLkMoi)
+        public ThemSuaLinhKienDialog(string maLkGoiY)
         {
             InitializeComponent();
+            _laMoiThem = true;
             TitleText.Text = "Thêm Linh Kiện";
-            TxtMaLk.Text = maLkMoi;
+            TxtMaLk.Text = maLkGoiY;
+            TxtMaLkHint.Visibility = Visibility.Visible;
             DpNgayNhap.SelectedDate = DateTime.Now;
             TaiDanhSachComboBox();
         }
@@ -33,9 +37,13 @@ namespace QuanLyLinhKienMayTinh.Views
         public ThemSuaLinhKienDialog(LinhKienDisplay lk)
         {
             InitializeComponent();
+            _laMoiThem = false;
             TitleText.Text = "Sửa Linh Kiện";
             BtnLuu.Content = "Cập nhật";
             TxtMaLk.Text = lk.MaLk;
+            TxtMaLk.IsReadOnly = true;
+            TxtMaLk.Opacity = 0.6;
+            TxtMaLkHint.Visibility = Visibility.Collapsed;
             TxtTenLk.Text = lk.TenLk;
             TxtDvt.Text = lk.Dvt;
             TxtTgbh.Text = lk.Tgbh?.ToString();
@@ -67,13 +75,23 @@ namespace QuanLyLinhKienMayTinh.Views
 
         private void TaiDanhSachComboBox()
         {
-            var db = DataProvider.Ins.GetContext();   
+            var db = DataProvider.Ins.GetContext();
             CboLoai.ItemsSource = db.LoaiLks.AsNoTracking().OrderBy(l => l.TenLoai).ToList();
             CboNsx.ItemsSource = db.NhaSanXuats.AsNoTracking().OrderBy(n => n.TenNsx).ToList();
         }
 
         private void BtnLuu_Click(object sender, RoutedEventArgs e)
         {
+            // Validate MaLk
+            string maLk = TxtMaLk.Text.Trim().ToUpper();
+            if (string.IsNullOrWhiteSpace(maLk))
+            {
+                MessageBox.Show("Vui lòng nhập mã linh kiện!", "Thiếu thông tin",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                TxtMaLk.Focus();
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(TxtTenLk.Text))
             {
                 MessageBox.Show("Vui lòng nhập tên linh kiện!", "Thiếu thông tin",
@@ -94,7 +112,45 @@ namespace QuanLyLinhKienMayTinh.Views
                 return;
             }
 
-            MaLk = TxtMaLk.Text.Trim();
+            // Validate số liệu
+            if (!string.IsNullOrWhiteSpace(TxtDonGia.Text) && !int.TryParse(TxtDonGia.Text, out _))
+            {
+                MessageBox.Show("Đơn giá bán phải là số nguyên!", "Dữ liệu không hợp lệ",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                TxtDonGia.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(TxtSoLuong.Text) && !int.TryParse(TxtSoLuong.Text, out _))
+            {
+                MessageBox.Show("Số lượng tồn phải là số nguyên!", "Dữ liệu không hợp lệ",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                TxtSoLuong.Focus();
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(TxtTgbh.Text) && !byte.TryParse(TxtTgbh.Text, out _))
+            {
+                MessageBox.Show("Thời gian bảo hành phải là số nguyên (0-255)!", "Dữ liệu không hợp lệ",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                TxtTgbh.Focus();
+                return;
+            }
+
+            // Kiểm tra trùng mã khi thêm mới
+            if (_laMoiThem)
+            {
+                bool trung = DataProvider.Ins.GetContext().LinhKiens
+                    .AsNoTracking()
+                    .Any(lk => lk.MaLk == maLk);
+                if (trung)
+                {
+                    MessageBox.Show($"Mã linh kiện '{maLk}' đã tồn tại! Vui lòng nhập mã khác.",
+                        "Trùng mã", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    TxtMaLk.Focus();
+                    return;
+                }
+            }
+
+            MaLk = maLk;
             TenLk = TxtTenLk.Text.Trim();
             MaLoai = ((LoaiLk)CboLoai.SelectedItem).MaLoai;
             MaNsx = ((NhaSanXuat)CboNsx.SelectedItem).MaNsx;
