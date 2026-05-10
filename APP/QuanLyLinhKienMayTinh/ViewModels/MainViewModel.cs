@@ -47,45 +47,59 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
             catch { }
         }
-
-        public void ThongBao()
+        public async void ThongBao()
         {
             try
             {
-                var db = DataProvider.Ins.GetContext();
-                int soNhanVienMoi = db.NhanViens.Count();
-                int soLinhKienMoi = db.LinhKiens.Count();
-                int soHoaDonMoi = db.HoaDons.Count();
-
-                List<string> danhSachThongBao = new List<string>();
-
-                if (soNhanVienMoi > soNhanVienGoc)
-                    danhSachThongBao.Add($"- Có {soNhanVienMoi - soNhanVienGoc} nhân viên MỚI gia nhập.");
-                else if (soNhanVienMoi < soNhanVienGoc)
-                    danhSachThongBao.Add($"- Có {soNhanVienGoc - soNhanVienMoi} nhân viên ĐÃ NGHỈ VIỆC.");
-
-                if (soLinhKienMoi > soLinhKienGoc)
-                    danhSachThongBao.Add($"- Có {soLinhKienMoi - soLinhKienGoc} mã linh kiện MỚI.");
-                else if (soLinhKienMoi < soLinhKienGoc)
-                    danhSachThongBao.Add($"- Có {soLinhKienGoc - soLinhKienMoi} mã linh kiện bị xóa.");
-
-                if (soHoaDonMoi > soHoaDonGoc)
-                    danhSachThongBao.Add($"- Có {soHoaDonMoi - soHoaDonGoc} hóa đơn MỚI.");
-
-                var spSapHetHang = db.LinhKiens.Where(lk => lk.SoLuongTon < 10).ToList();
-                if (spSapHetHang.Count > 0)
+                using (var db = DataProvider.Ins.GetContext())
                 {
-                    danhSachThongBao.Add($"- CẢNH BÁO: Có {spSapHetHang.Count} linh kiện sắp hết hàng!");
-                }
+                    int soNhanVienMoi = db.NhanViens.Count();
+                    int soLinhKienMoi = db.LinhKiens.Count();
+                    int soHoaDonMoi = db.HoaDons.Count();
 
-                if (danhSachThongBao.Count > 0)
-                {
-                    MessageBox.Show("Hệ thống có thay đổi:\n\n" + string.Join("\n", danhSachThongBao),
-                                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    List<string> danhSachThongBao = new List<string>();
 
-                    soNhanVienGoc = soNhanVienMoi;
-                    soLinhKienGoc = soLinhKienMoi;
-                    soHoaDonGoc = soHoaDonMoi;
+                    if (soNhanVienMoi > soNhanVienGoc)
+                        danhSachThongBao.Add($"- Có {soNhanVienMoi - soNhanVienGoc} nhân viên MỚI gia nhập.");
+                    else if (soNhanVienMoi < soNhanVienGoc)
+                        danhSachThongBao.Add($"- Có {soNhanVienGoc - soNhanVienMoi} nhân viên ĐÃ NGHỈ VIỆC.");
+
+                    if (soLinhKienMoi > soLinhKienGoc)
+                        danhSachThongBao.Add($"- Có {soLinhKienMoi - soLinhKienGoc} mã linh kiện MỚI.");
+                    else if (soLinhKienMoi < soLinhKienGoc)
+                        danhSachThongBao.Add($"- Có {soLinhKienGoc - soLinhKienMoi} mã linh kiện bị xóa.");
+
+                    if (soHoaDonMoi > soHoaDonGoc)
+                        danhSachThongBao.Add($"- Có {soHoaDonMoi - soHoaDonGoc} hóa đơn MỚI.");
+
+                    var spSapHetHang = await db.Procedures.sp_BaoCaoTonKhoAsync();
+
+                    if (spSapHetHang != null && spSapHetHang.Count > 0)
+                    {
+                        danhSachThongBao.Add($"- CẢNH BÁO: Có {spSapHetHang.Count} linh kiện sắp hết hàng!");
+                    }
+
+                    if (danhSachThongBao.Count > 0)
+                    {
+                        MessageBox.Show("Hệ thống có thay đổi:\n\n" + string.Join("\n", danhSachThongBao),
+                                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                        if (spSapHetHang != null && spSapHetHang.Count > 0)
+                        {
+                            var window = new ThongBaoTonKhoWindow(spSapHetHang);
+                            window.Owner = Application.Current.MainWindow; 
+                            window.ShowDialog();
+                        }
+
+                        soNhanVienGoc = soNhanVienMoi;
+                        soLinhKienGoc = soLinhKienMoi;
+                        soHoaDonGoc = soHoaDonMoi;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Mọi thứ đang hoạt động ổn định, không có thông báo mới!",
+                                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
             }
             catch (Exception ex)

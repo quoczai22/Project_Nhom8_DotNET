@@ -43,7 +43,7 @@ namespace QuanLyLinhKienMayTinh.Models
             _context = context;
         }
 
-        public virtual async Task<int> sp_BaoCaoTonKhoAsync(OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default)
+        public virtual async Task<List<sp_BaoCaoTonKhoResult>> sp_BaoCaoTonKhoAsync(OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default)
         {
             var parameterreturnValue = new SqlParameter
             {
@@ -56,7 +56,7 @@ namespace QuanLyLinhKienMayTinh.Models
             {
                 parameterreturnValue,
             };
-            var _ = await _context.Database.ExecuteSqlRawAsync("EXEC @returnValue = [dbo].[sp_BaoCaoTonKho]", sqlParameters, cancellationToken);
+            var _ = await _context.SqlQueryAsync<sp_BaoCaoTonKhoResult>("EXEC @returnValue = [dbo].[sp_BaoCaoTonKho]", sqlParameters, cancellationToken);
 
             returnValue?.SetValue(parameterreturnValue.Value);
 

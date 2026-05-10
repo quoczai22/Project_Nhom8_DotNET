@@ -13,6 +13,6 @@ namespace QuanLyLinhKienMayTinh.Models
 {
     public partial interface IQL_LinhKien_PC_ContextProcedures
     {
-        Task<int> sp_BaoCaoTonKhoAsync(OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default);
+        Task<List<sp_BaoCaoTonKhoResult>> sp_BaoCaoTonKhoAsync(OutputParameter<int> returnValue = null, CancellationToken cancellationToken = default);
     }
 }

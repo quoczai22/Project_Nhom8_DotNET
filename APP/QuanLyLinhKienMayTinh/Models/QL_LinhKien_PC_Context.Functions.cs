@@ -14,14 +14,18 @@ namespace QuanLyLinhKienMayTinh.Models
         [DbFunction("fn_DoanhThuTheoThang", "dbo")]
         public static int? fn_DoanhThuTheoThang(int? Thang, int? Nam)
         {
-            return new QL_LinhKien_PC_Context().Database
-                .SqlQuery<int?>($"SELECT dbo.fn_DoanhThuTheoThang({Thang}, {Nam}) AS Value")
-                .AsEnumerable()
-                .FirstOrDefault() ?? 0;
+            using (var db = DataProvider.Ins.GetContext())
+            {
+                return db.Database
+                    .SqlQuery<int?>($"SELECT dbo.fn_DoanhThuTheoThang({Thang}, {Nam}) AS Value")
+                    .AsEnumerable()
+                    .FirstOrDefault() ?? 0;
+            }
         }
 
         protected void OnModelCreatingGeneratedFunctions(ModelBuilder modelBuilder)
         {
+
         }
     }
 }

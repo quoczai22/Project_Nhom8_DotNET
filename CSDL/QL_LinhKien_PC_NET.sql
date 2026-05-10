@@ -383,4 +383,16 @@ GO
 --WITH REPLACE;
 --GO
 
-select * from HoaDon
+ALTER PROCEDURE sp_BaoCaoTonKho
+AS
+BEGIN
+    SELECT 
+        MaLK, 
+        TenLK, 
+        SoLuongTon,
+        DVT,
+        DonGiaBan
+    FROM LinhKien
+    WHERE SoLuongTon < 10;
+END;
+GO
