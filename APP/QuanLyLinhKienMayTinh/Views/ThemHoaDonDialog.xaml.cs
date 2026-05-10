@@ -144,6 +144,12 @@ namespace QuanLyLinhKienMayTinh.Views
             string maHd = TxtMaHd.Text.Trim();
             int tongTien = _gioHang.Sum(g => g.ThanhTien);
 
+            string phuongThuc = "Tiền mặt";
+            if (CboPhuongThuc.SelectedItem is System.Windows.Controls.ComboBoxItem selectedItem)
+            {
+                phuongThuc = selectedItem.Content.ToString();
+            }
+
             HoaDonMoi = new HoaDon
             {
                 MaHd = maHd,
@@ -152,7 +158,7 @@ namespace QuanLyLinhKienMayTinh.Views
                 MaNv = nv.MaNv,
                 TongTien = tongTien,
                 TrangThai = "Chưa thanh toán",
-                PhuongThucThanhToan = "Tiền mặt"
+                PhuongThucThanhToan = phuongThuc
             };
 
             ChiTietHds = _gioHang.Select(g => new ChiTietHd

@@ -37,6 +37,8 @@ namespace QuanLyLinhKienMayTinh.Views
             TitleText.Text = "Sửa Nhân Viên";
             BtnLuu.Content = "Cập nhật";
             TxtMaNv.Text = nv.MaNv;
+            TxtMaNv.IsReadOnly = true;
+            TxtMaNv.Opacity = 0.6;
             TxtHoTen.Text = nv.HoTen;
             TxtSdt.Text = nv.Sdt;
             TxtEmail.Text = nv.Email;

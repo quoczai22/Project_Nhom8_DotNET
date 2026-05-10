@@ -75,8 +75,7 @@
 
         <!-- Mã KH (readonly khi sửa) -->
         <TextBlock Text="Mã khách hàng" Style="{StaticResource LabelStyle}"/>
-        <TextBox x:Name="TxtMaKh" Style="{StaticResource InputStyle}" Margin="0,0,0,14"
-                 IsReadOnly="True" Opacity="0.6"/>
+        <TextBox x:Name="TxtMaKh" Style="{StaticResource InputStyle}" Margin="0,0,0,14"/>
 
         <!-- Họ tên -->
         <TextBlock Text="Họ tên *" Style="{StaticResource LabelStyle}"/>

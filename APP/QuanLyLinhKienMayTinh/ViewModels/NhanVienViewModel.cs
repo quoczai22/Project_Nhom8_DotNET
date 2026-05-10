@@ -157,131 +157,141 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // ── Khởi tạo Commands ────────────────────────────────────────────────
         private void KhoiTaoCommands()
         {
-            // ── THÊM ─────────────────────────────────────────────────────
-            ThemNhanVienCommand = new RelayCommand<object>(_ => true, _ =>
-            {
-                try
-                {
-                    var dbRead = DataProvider.Ins.GetContext();
-                    var lastID = dbRead.NhanViens
-                        .OrderByDescending(x => x.MaNv)
-                        .Select(x => x.MaNv).FirstOrDefault();
-                    string newID = Services.AutoIDService.GetNextID("NV", lastID);
-
-                    var dialog = new ThemSuaNhanVienDialog(newID);
-                    dialog.Owner = Application.Current.MainWindow;
-                    if (dialog.ShowDialog() == true)
-                    {
-                        // Xác định quyền dựa trên chức vụ
-                        string quyen = LayQuyenTuChucVu(dialog.ChucVu);
-
-                        var nvMoi = new NhanVien
-                        {
-                            MaNv = dialog.MaNv,
-                            TenNv = dialog.HoTen,
-                            ChucVu = dialog.ChucVu,
-                            Quyen = quyen,
-                            GioiTinh = dialog.GioiTinh,
-                            Sdt = dialog.Sdt,
-                            Email = dialog.Email,
-                            NgaySinh = dialog.NgaySinh,
-                            NgayVaoLam = dialog.NgayVaoLam,
-                            DaNghiViec = false
-                        };
-
-                        // Tạo mặc định tài khoản cho nhân viên mới
-                        var tkMoi = new TaiKhoan { TenDn = newID, MatKhau = "123", MaNv = newID };
-
-                        var dbSave = DataProvider.Ins.GetContext();
-                        dbSave.NhanViens.Add(nvMoi);
-                        dbSave.TaiKhoans.Add(tkMoi);
-                        dbSave.SaveChanges();
-
-                        TaiDuLieu();
-                        MessageBox.Show($"Thêm nhân viên thành công!\nTài khoản mặc định: {newID} / 123",
-                            "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi khi thêm nhân viên: " + ex.Message,
-                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
-
-            // ── SỬA ──────────────────────────────────────────────────────
-            SuaNhanVienCommand = new RelayCommand<NhanVienDisplay>(nv => nv != null, nv =>
-            {
-                try
-                {
-                    var dialog = new ThemSuaNhanVienDialog(nv);
-                    dialog.Owner = Application.Current.MainWindow;
-                    if (dialog.ShowDialog() == true)
-                    {
-                        var db = DataProvider.Ins.GetContext();
-                        var entity = db.NhanViens.Find(dialog.MaNv);
-                        if (entity != null)
-                        {
-                            entity.TenNv = dialog.HoTen;
-                            entity.ChucVu = dialog.ChucVu;
-                            entity.Quyen = LayQuyenTuChucVu(dialog.ChucVu);
-                            entity.GioiTinh = dialog.GioiTinh;
-                            entity.Sdt = dialog.Sdt;
-                            entity.Email = dialog.Email;
-                            entity.NgaySinh = dialog.NgaySinh;
-                            entity.NgayVaoLam = dialog.NgayVaoLam;
-
-                            db.SaveChanges();
-                            TaiDuLieu();
-
-                            MessageBox.Show("Cập nhật nhân viên thành công!",
-                                "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi khi sửa nhân viên: " + ex.Message,
-                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
-
-            // ── XÓA ──────────────────────────────────────────────────────
-            XoaNhanVienCommand = new RelayCommand<NhanVienDisplay>(nv => nv != null, nv =>
-            {
-                var res = MessageBox.Show(
-                    $"Bạn có chắc chắn muốn xóa nhân viên [{nv.HoTen}] không?",
-                    "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (res == MessageBoxResult.Yes)
-                    ThucHienXoa(nv);
-            });
-
-            // ── LÀM MỚI ─────────────────────────────────────────────────
-            LamMoiCommand = new RelayCommand<object>(
-                _ => true,
-                _ => { TimKiem = string.Empty; TaiDuLieu(); });
+            ThemNhanVienCommand = new RelayCommand<object>(_ => true, _ => ThucHienThem());
+            SuaNhanVienCommand = new RelayCommand<NhanVienDisplay>(nv => nv != null, nv => ThucHienSua(nv));
+            XoaNhanVienCommand = new RelayCommand<NhanVienDisplay>(nv => nv != null, nv => ThucHienXoa(nv));
+            LamMoiCommand = new RelayCommand<object>(_ => true, _ => { TimKiem = string.Empty; TaiDuLieu(); });
         }
 
-        // ── Xóa nhân viên ────────────────────────────────────────────────────
-        private void ThucHienXoa(NhanVienDisplay nv)
+        // ── Logic Thêm Nhân Viên ─────────────────────────────────────────────
+        private void ThucHienThem()
         {
+            if (LuuTrangThai.QuyenDangNhap != "Quản lý toàn bộ")
+            {
+                MessageBox.Show("Chỉ tài khoản quản lý (machpv) mới được phép thêm nhân viên!", "Từ chối truy cập", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             try
             {
-                var db = DataProvider.Ins.GetContext();
-                var entity = db.NhanViens.Find(nv.MaNv);
-                if (entity == null) return;
+                using var db = DataProvider.Ins.GetContext(); // Sử dụng 1 DbContext duy nhất cho toàn bộ giao dịch
 
-                entity.DaNghiViec = true;
-                db.SaveChanges();
-                _all.Remove(nv);
+                // Tạo mã gợi ý tự động
+                var lastID = db.NhanViens
+                    .OrderByDescending(x => x.MaNv)
+                    .Select(x => x.MaNv).FirstOrDefault();
+                string newID = Services.AutoIDService.GetNextID("NV", lastID);
 
-                MessageBox.Show("Xóa nhân viên thành công!",
-                    "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                var dialog = new ThemSuaNhanVienDialog(newID);
+                dialog.Owner = Application.Current.MainWindow;
+                if (dialog.ShowDialog() == true)
+                {
+                    string quyen = LayQuyenTuChucVu(dialog.ChucVu);
+
+                    var nvMoi = new NhanVien
+                    {
+                        MaNv = dialog.MaNv,
+                        TenNv = dialog.HoTen,
+                        ChucVu = dialog.ChucVu,
+                        Quyen = quyen,
+                        GioiTinh = dialog.GioiTinh,
+                        Sdt = dialog.Sdt,
+                        Email = dialog.Email,
+                        NgaySinh = dialog.NgaySinh,
+                        NgayVaoLam = dialog.NgayVaoLam,
+                        DaNghiViec = false
+                    };
+
+                    // Tạo mặc định tài khoản đăng nhập cho nhân viên mới
+                    var tkMoi = new TaiKhoan { TenDn = dialog.MaNv, MatKhau = "123", MaNv = dialog.MaNv };
+
+                    db.NhanViens.Add(nvMoi);
+                    db.TaiKhoans.Add(tkMoi);
+                    db.SaveChanges();
+
+                    TaiDuLieu();
+                    MessageBox.Show($"Thêm nhân viên thành công!\nTài khoản mặc định: {dialog.MaNv} / 123",
+                        "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Lỗi khi xóa nhân viên: " + ex.Message,
-                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Lỗi khi thêm nhân viên: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // ── Logic Sửa Nhân Viên ─────────────────────────────────────────────
+        private void ThucHienSua(NhanVienDisplay nv)
+        {
+            if (LuuTrangThai.QuyenDangNhap != "Quản lý toàn bộ")
+            {
+                MessageBox.Show("Chỉ tài khoản quản lý (machpv) mới được phép sửa nhân viên!", "Từ chối truy cập", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                var dialog = new ThemSuaNhanVienDialog(nv);
+                dialog.Owner = Application.Current.MainWindow;
+                if (dialog.ShowDialog() == true)
+                {
+                    using var db = DataProvider.Ins.GetContext();
+                    var entity = db.NhanViens.Find(dialog.MaNv);
+                    if (entity != null)
+                    {
+                        entity.TenNv = dialog.HoTen;
+                        entity.ChucVu = dialog.ChucVu;
+                        entity.Quyen = LayQuyenTuChucVu(dialog.ChucVu);
+                        entity.GioiTinh = dialog.GioiTinh;
+                        entity.Sdt = dialog.Sdt;
+                        entity.Email = dialog.Email;
+                        entity.NgaySinh = dialog.NgaySinh;
+                        entity.NgayVaoLam = dialog.NgayVaoLam;
+
+                        db.SaveChanges();
+                        TaiDuLieu();
+
+                        MessageBox.Show("Cập nhật nhân viên thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi sửa nhân viên: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // ── Logic Xóa Nhân Viên ─────────────────────────────────────────────
+        private void ThucHienXoa(NhanVienDisplay nv)
+        {
+            if (LuuTrangThai.QuyenDangNhap != "Quản lý toàn bộ")
+            {
+                MessageBox.Show("Chỉ tài khoản quản lý (machpv) mới được phép xóa nhân viên!", "Từ chối truy cập", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var res = MessageBox.Show(
+                $"Bạn có chắc chắn muốn xóa nhân viên [{nv.HoTen}] không?",
+                "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+            if (res != MessageBoxResult.Yes) return;
+
+            try
+            {
+                using var db = DataProvider.Ins.GetContext();
+                var entity = db.NhanViens.Find(nv.MaNv);
+                if (entity == null) return;
+
+                entity.DaNghiViec = true; // Soft-delete (nghỉ việc)
+                db.SaveChanges();
+
+                _all.Remove(nv);
+
+                MessageBox.Show("Xóa nhân viên thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi xóa nhân viên: " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

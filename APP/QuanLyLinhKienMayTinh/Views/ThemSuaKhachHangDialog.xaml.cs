@@ -29,6 +29,8 @@ namespace QuanLyLinhKienMayTinh.Views
             TitleText.Text = "Sửa Khách Hàng";
             BtnLuu.Content = "Cập nhật";
             TxtMaKh.Text = kh.MaKh;
+            TxtMaKh.IsReadOnly = true;
+            TxtMaKh.Opacity = 0.6;
             TxtHoTen.Text = kh.HoTen;
             TxtSdt.Text = kh.Sdt;
             TxtEmail.Text = kh.Email;

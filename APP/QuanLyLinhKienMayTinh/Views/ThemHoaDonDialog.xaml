@@ -93,11 +93,13 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="12"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Mã hóa đơn" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="TxtMaHd" Style="{StaticResource InputStyle}" IsReadOnly="True" Opacity="0.6"/>
+                <TextBox x:Name="TxtMaHd" Style="{StaticResource InputStyle}"/>
             </StackPanel>
 
             <StackPanel Grid.Column="2">
@@ -116,6 +118,17 @@
                           Foreground="{DynamicResource MainTextColor}"
                           BorderBrush="{DynamicResource BorderColor}"
                           DisplayMemberPath="TenNv"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="6">
+                <TextBlock Text="Thanh toán" Style="{StaticResource LabelStyle}"/>
+                <ComboBox x:Name="CboPhuongThuc" Padding="10,8" FontSize="13"
+                          Background="{DynamicResource BackgroundColor2}"
+                          Foreground="{DynamicResource MainTextColor}"
+                          BorderBrush="{DynamicResource BorderColor}">
+                    <ComboBoxItem Content="Tiền mặt" IsSelected="True"/>
+                    <ComboBoxItem Content="Ví MoMo"/>
+                </ComboBox>
             </StackPanel>
         </Grid>
 
