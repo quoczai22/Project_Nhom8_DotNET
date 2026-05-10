@@ -174,37 +174,42 @@
                 <Rectangle DockPanel.Dock="Bottom" Height="1" Fill="{DynamicResource BackgroundColor2}" Margin="16,0,16,8"/>
 
                 <StackPanel Margin="0,4,0,0">
-                    <Button Style="{StaticResource menuButton}" Click="btnDashboard_Click">
+                    <Button Style="{StaticResource menuButton}" Click="btnDashboard_Click" Visibility="{Binding MenuDashboardVisibility}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="ViewDashboardOutline" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Trang Chủ" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource menuButton}" Click="btnLinhKien_Click">
+
+                    <Button Style="{StaticResource menuButton}" Click="btnLinhKien_Click" Visibility="{Binding MenuLinhKienVisibility}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="Memory" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Linh Kiện" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource menuButton}" Click="btnLoaiLK_Click">
+
+                    <Button Style="{StaticResource menuButton}" Click="btnLoaiLK_Click" Visibility="{Binding MenuLoaiLKVisibility}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="TagMultiple" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Loại Linh Kiện" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource menuButton}" Click="btnKhachHang_Click">
+
+                    <Button Style="{StaticResource menuButton}" Click="btnKhachHang_Click" Visibility="{Binding MenuKhachHangVisibility}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="AccountGroupOutline" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Khách Hàng" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource menuButton}" Click="btnNhanVien_Click">
+
+                    <Button Style="{StaticResource menuButton}" Click="btnNhanVien_Click" Visibility="{Binding MenuNhanVienVisibility}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="AccountTie" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Nhân Viên" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
-                    <Button Style="{StaticResource menuButton}" Click="btnHoaDon_Click">
+
+                    <Button Style="{StaticResource menuButton}" Click="btnHoaDon_Click" Visibility="{Binding MenuHoaDonVisibility}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="ReceiptOutline" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Hóa Đơn" VerticalAlignment="Center"/>

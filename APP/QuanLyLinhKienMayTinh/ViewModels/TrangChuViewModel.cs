@@ -146,7 +146,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
                 foreach (int  y in year)
                 {
-                    for (int m = 1; m <= 12; m+=4)
+                    for (int m = 1; m <= 12; m++)
                     {
                         var doanhThuThang = QL_LinhKien_PC_Context.fn_DoanhThuTheoThang(m, y); // gọi hàm tính doanh thu theo tháng từ database
 

@@ -41,7 +41,7 @@ public partial class QL_LinhKien_PC_Context : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;Encrypt=False;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;Encrypt=True;TrustServerCertificate=True");
         }
     }
 

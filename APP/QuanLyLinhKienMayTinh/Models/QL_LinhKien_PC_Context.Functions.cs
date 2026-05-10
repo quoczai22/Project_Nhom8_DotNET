@@ -25,7 +25,6 @@ namespace QuanLyLinhKienMayTinh.Models
 
         protected void OnModelCreatingGeneratedFunctions(ModelBuilder modelBuilder)
         {
-
         }
     }
 }

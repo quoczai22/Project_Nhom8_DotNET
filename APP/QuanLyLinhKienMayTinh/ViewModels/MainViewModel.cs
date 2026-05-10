@@ -20,6 +20,47 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         private int soLinhKienGoc = 0;
         private int soHoaDonGoc = 0;
 
+        private Visibility _menuDashboardVisibility = Visibility.Visible;
+        public Visibility MenuDashboardVisibility
+        {
+            get => _menuDashboardVisibility;
+            set { _menuDashboardVisibility = value; OnPropertyChanged(); }
+        }
+
+        private Visibility _menuLinhKienVisibility = Visibility.Collapsed;
+        public Visibility MenuLinhKienVisibility
+        {
+            get => _menuLinhKienVisibility;
+            set { _menuLinhKienVisibility = value; OnPropertyChanged(); }
+        }
+
+        private Visibility _menuLoaiLKVisibility = Visibility.Collapsed;
+        public Visibility MenuLoaiLKVisibility
+        {
+            get => _menuLoaiLKVisibility;
+            set { _menuLoaiLKVisibility = value; OnPropertyChanged(); }
+        }
+        private Visibility _menuNhanVienVisibility = Visibility.Collapsed;
+        public Visibility MenuNhanVienVisibility
+        {
+            get => _menuNhanVienVisibility;
+            set { _menuNhanVienVisibility = value; OnPropertyChanged(); }
+        }
+
+        private Visibility _menuKhachHangVisibility = Visibility.Collapsed;
+        public Visibility MenuKhachHangVisibility
+        {
+            get => _menuKhachHangVisibility;
+            set { _menuKhachHangVisibility = value; OnPropertyChanged(); }
+        }
+
+        private Visibility _menuHoaDonVisibility = Visibility.Collapsed;
+        public Visibility MenuHoaDonVisibility
+        {
+            get => _menuHoaDonVisibility;
+            set { _menuHoaDonVisibility = value; OnPropertyChanged(); }
+        }
+
         bool _isDark = false; // cờ để theo dõi trạng thái theme hiện tại, mặc định là light
 
         public ICommand ThongBaoCommand { get; set; }
@@ -30,12 +71,52 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             CurrentUsername = username;
             LaySoLuongGoc();
+            PhanQuyenGiaoDien();
 
             ThongBaoCommand = new RelayCommand<object>((p) => true, (p) => ThongBao());
             LogOutCommand = new RelayCommand<object>((p) => true, (p) => LogOut());
             ToggleThemeCommand = new RelayCommand<object>((p) => true, (p) => ExecuteToggleTheme(p));
         }
-
+        private void PhanQuyenGiaoDien()
+        {
+            string quyen = LuuTrangThai.QuyenDangNhap;
+            if(quyen == "Quản lý toàn bộ")
+            {
+                MenuDashboardVisibility = Visibility.Visible;
+                MenuLinhKienVisibility = Visibility.Visible;
+                MenuLoaiLKVisibility = Visibility.Visible;
+                MenuNhanVienVisibility = Visibility.Visible;
+                MenuKhachHangVisibility = Visibility.Visible;
+                MenuHoaDonVisibility = Visibility.Visible;
+            }    
+            else if(quyen == "Thu ngân")
+            {
+                MenuDashboardVisibility = Visibility.Visible;
+                MenuLinhKienVisibility = Visibility.Collapsed;
+                MenuLoaiLKVisibility = Visibility.Collapsed;
+                MenuNhanVienVisibility = Visibility.Collapsed;
+                MenuKhachHangVisibility = Visibility.Collapsed;
+                MenuHoaDonVisibility = Visibility.Visible;
+            }
+            else if (quyen == "Chăm sóc khách hàng")
+            {
+                MenuDashboardVisibility = Visibility.Visible;
+                MenuLinhKienVisibility = Visibility.Collapsed;
+                MenuLoaiLKVisibility = Visibility.Collapsed;
+                MenuNhanVienVisibility = Visibility.Collapsed;
+                MenuKhachHangVisibility = Visibility.Visible;
+                MenuHoaDonVisibility = Visibility.Collapsed;
+            }
+            else
+            {
+                MenuDashboardVisibility = Visibility.Visible;
+                MenuLinhKienVisibility = Visibility.Visible;
+                MenuLoaiLKVisibility = Visibility.Visible;
+                MenuNhanVienVisibility = Visibility.Collapsed;
+                MenuKhachHangVisibility = Visibility.Collapsed;
+                MenuHoaDonVisibility = Visibility.Collapsed;
+            }
+        }
         private void LaySoLuongGoc()
         {
             try

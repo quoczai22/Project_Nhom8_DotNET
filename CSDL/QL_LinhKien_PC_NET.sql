@@ -85,7 +85,7 @@ create table NhanVien (
     GioiTinh nvarchar(5),
     NgaySinh date,
     SDT char(10),
-    ChucVu nvarchar(20),
+    ChucVu nvarchar(30),
     Quyen nvarchar(20),
     Email varchar(50) null,      
     NgayVaoLam date null,      
@@ -149,11 +149,16 @@ go
 
 -- thêm dữ liệu
 insert into NhaSanXuat values
-('NSX01', 'Genius', 'Taiwan'), ('NSX02', 'Logitech', 'Switzerland'),
-('NSX03', 'Kingston', 'USA'), ('NSX04', 'Intel', 'USA'),
-('NSX05', 'AMD', 'USA'), ('NSX06', 'ASUS', 'Taiwan'),
-('NSX07', 'Samsung', 'South Korea'), ('NSX08', 'Gigabyte', 'Taiwan'),
-('NSX09', 'Keychron', 'China'), ('NSX10', 'H hành', 'Vietnam');
+('NSX01', 'Genius', 'Taiwan'), 
+('NSX02', 'Logitech', 'Switzerland'),
+('NSX03', 'Kingston', 'USA'), 
+('NSX04', 'Intel', 'USA'),
+('NSX05', 'AMD', 'USA'), 
+('NSX06', 'ASUS', 'Taiwan'),
+('NSX07', 'Samsung', 'South Korea'), 
+('NSX08', 'Gigabyte', 'Taiwan'),
+('NSX09', 'Keychron', 'China'), 
+('NSX10', 'H hành', 'Vietnam');
 go
 
 insert into LoaiLK values
@@ -222,38 +227,35 @@ insert into NhanVien (MaNV, TenNV, GioiTinh, NgaySinh, SDT, ChucVu, Quyen, Email
 ('NV002', N'Trần Thị Dung', N'Nữ', '20-10-1998', '0902234567', N'Nhân viên thu ngân', N'Thu ngân', 'dung1998@gmail.com', '15-08-2021'),
 ('NV003', N'Lý Thị Nhung', N'Nữ', '08-03-2001', '0910234567', N'Nhân viên thu ngân', N'Thu ngân', 'nhung2001@gmail.com', '20-02-2023'),
 ('NV004', N'Lê Văn Anh', N'Nam', '05-09-1992', '0903234567', N'Nhân viên thu ngân', N'Thu ngân', 'anh1992@gmail.com', '05-01-2018'),
-('NV005', N'Nguyễn Thị Điệp', N'Nữ', '12-12-2000', '0904234567', N'Nhân viên Kỹ thuật', N'Kỹ Thuật', 'diep2000@gmail.com', '12-11-2022'),
-('NV006', N'Hoàng Văn Tuấn', N'Nam', '01-01-1997', '0905234567', N'Nhân viên kỹ thuật', N'Kỹ thuật', 'tuan1997@gmail.com', '01-04-2021'),
-('NV007', N'Bùi Văn Quốc', N'Nam', '30-04-1994', '0907234567', N'Nhân viên kỹ thuật', N'Kỹ thuật', 'quoc1994@gmail.com', '18-09-2019'),
+('NV005', N'Nguyễn Thị Điệp', N'Nữ', '12-12-2000', '0904234567', N'Nhân viên chăm sóc khách hàng', N'Chăm sóc khách hàng', 'diep2000@gmail.com', '12-11-2022'),
+('NV006', N'Hoàng Văn Tuấn', N'Nam', '01-01-1997', '0905234567', N'Nhân viên chăm sóc khách hàng', N'Chăm sóc khách hàng', 'tuan1997@gmail.com', '01-04-2021'),
+('NV007', N'Bùi Văn Quốc', N'Nam', '30-04-1994', '0907234567', N'Nhân viên chăm sóc khách hàng', N'Chăm sóc khách hàng', 'quoc1994@gmail.com', '18-09-2019'),
 ('NV008', N'Đặng Thị Hà Anh', N'Nữ', '14-02-1999', '0906234567', N'Nhân viên kho', N'Kho', 'anh1999@gmail.com', '25-05-2022'),
 ('NV009', N'Đỗ Thị Ngọc Huyền', N'Nữ', '02-09-1996', '0908234567', N'Nhân viên kho', N'Kho', 'huyen1996@gmail.com', '03-07-2020'),
 ('NV010', N'Võ Văn An', N'Nam', '22-12-1993', '0909234567', N'Nhân viên kho', N'Kho', 'an1993@gmail.com', '11-10-2018');
 go
 
-insert into HoaDon (MaHD, NgayHD, MaKH, MaNV) values
-('HD001', '01-04-2023', 'KH001', 'NV001'), 
-('HD002', '15-05-2023', 'KH005', 'NV002'),
-('HD003', '14-06-2023', 'KH004', 'NV001'), 
-('HD004', '03-06-2023', 'KH005', 'NV003'),
-('HD005', '05-06-2023', 'KH001', 'NV002'), 
-('HD006', '07-07-2023', 'KH003', 'NV004'),
-('HD007', '12-08-2023', 'KH002', 'NV005'), 
-('HD008', '25-09-2023', 'KH003', 'NV001'),
-('HD009', '10-10-2023', 'KH008', 'NV006'), 
-('HD010', '11-11-2023', 'KH010', 'NV007'),
-('HD011', '14-03-2024', 'KH001', 'NV002'),
-('HD012', '30-10-2024', 'KH002', 'NV003'),
-('HD013', '20-05-2025', 'KH003', 'NV004'),
-('HD014', '11-08-2025', 'KH004', 'NV005'),
-('HD015', '25-12-2025', 'KH005', 'NV002'),
-('HD016', '10-01-2026', 'KH006', 'NV003'),
-('HD017', '15-02-2026', 'KH007', 'NV004'),
-('HD018', '20-03-2026', 'KH008', 'NV005'),
-('HD019', '05-04-2026', 'KH009', 'NV006'),
-('HD020', '12-04-2026', 'KH010', 'NV007');
-go
-
-update HoaDon set TrangThai = N'Đã thanh toán' where MaHD in ('HD001', 'HD002', 'HD005');
+insert into HoaDon (MaHD, NgayHD, MaKH, MaNV, TrangThai) values
+('HD001', '01-04-2023', 'KH001', 'NV001', N'Đã thanh toán'), 
+('HD002', '15-05-2023', 'KH005', 'NV002', N'Đã thanh toán'),
+('HD003', '14-06-2023', 'KH004', 'NV001', N'Chưa thanh toán'), 
+('HD004', '03-06-2023', 'KH005', 'NV003', N'Chưa thanh toán'),
+('HD005', '05-06-2023', 'KH001', 'NV002', N'Đã thanh toán'), 
+('HD006', '07-07-2023', 'KH003', 'NV004', N'Chưa thanh toán'),
+('HD007', '12-08-2023', 'KH002', 'NV005', N'Chưa thanh toán'), 
+('HD008', '25-09-2023', 'KH003', 'NV001', N'Chưa thanh toán'),
+('HD009', '10-10-2023', 'KH008', 'NV006', N'Chưa thanh toán'), 
+('HD010', '11-11-2023', 'KH010', 'NV007', N'Chưa thanh toán'),
+('HD011', '14-03-2024', 'KH001', 'NV002', N'Chưa thanh toán'),
+('HD012', '30-10-2024', 'KH002', 'NV003', N'Đã thanh toán'),
+('HD013', '20-05-2025', 'KH003', 'NV004', N'Chưa thanh toán'),
+('HD014', '11-08-2025', 'KH004', 'NV005', N'Đã thanh toán'),
+('HD015', '25-12-2025', 'KH005', 'NV002', N'Chưa thanh toán'),
+('HD016', '10-01-2026', 'KH006', 'NV003', N'Đã thanh toán'),
+('HD017', '15-02-2026', 'KH007', 'NV004', N'Chưa thanh toán'),
+('HD018', '20-03-2026', 'KH008', 'NV005', N'Đã thanh toán'),
+('HD019', '05-04-2026', 'KH009', 'NV006', N'Chưa thanh toán'),
+('HD020', '12-04-2026', 'KH010', 'NV007', N'Đã thanh toán');
 go
 
 insert into ChiTietHD values
