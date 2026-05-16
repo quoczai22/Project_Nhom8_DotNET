@@ -368,134 +368,147 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // ── Khởi tạo Commands ────────────────────────────────────────────────
         private void KhoiTaoCommands( )
         {
-            // ── TẠO HÓA ĐƠN MỠI ─────────────────────────────────
-            TaoHoaDonMoiCommand = new RelayCommand<object>(_ => true, _ =>
+            TaoHoaDonMoiCommand = new RelayCommand<object>(CanTaoHoaDon, ThucHienTaoHoaDon);
+            SuaHoaDonCommand = new RelayCommand<object>(CanSuaHoaDon, ThucHienSuaHoaDon);
+            InHoaDonCommand = new RelayCommand<object>(CanInHoaDon, ThucHienInHoaDon);
+            XoaHoaDonCommand = new RelayCommand<object>(CanXoaHoaDon, ThucHienXoaHoaDon);
+            LocHoaDonCommand = new RelayCommand<object>(CanLocHoaDon, ThucHienLocHoaDon);
+            ThanhToanHoaDonCommand = new RelayCommand<object>(CanThanhToanHoaDon, ThucHienThanhToan);
+        }
+        private bool CanTaoHoaDon(object parameter)
+        {
+            return true; 
+        }
+        private void ThucHienTaoHoaDon(object parameter)
+        {
+            try
             {
-                try
-                {
-                    // Tạo mã hóa đơn mới dựa theo số lớn nhất hiện có
-                    var dbRead = DataProvider.Ins.GetContext();
-                    var lastID = dbRead.HoaDons
-                        .OrderByDescending(x => x.MaHd)
-                        .Select(x => x.MaHd).FirstOrDefault();
-                    string newID = Services.AutoIDService.GetNextID("HD", lastID);
+                var dbRead = DataProvider.Ins.GetContext();
+                var lastID = dbRead.HoaDons
+                    .OrderByDescending(x => x.MaHd)
+                    .Select(x => x.MaHd).FirstOrDefault();
+                string newID = Services.AutoIDService.GetNextID("HD", lastID);
 
-                    var dialog = new ThemHoaDonDialog(newID);
-                    dialog.Owner = Application.Current.MainWindow;
-                    if (dialog.ShowDialog() == true)
-                    {
-                        LuuHoaDonAnToan(dialog.HoaDonMoi, dialog.ChiTietHds);
-                    }
-                }
-                catch (Exception ex)
+                var dialog = new ThemHoaDonDialog(newID);
+                dialog.Owner = Application.Current.MainWindow;
+                if (dialog.ShowDialog() == true)
                 {
-                    MessageBox.Show("Lỗi khi tạo hóa đơn: " + ex.Message,
-                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    LuuHoaDonAnToan(dialog.HoaDonMoi, dialog.ChiTietHds);
                 }
-            });
-
-            // ── SỬA HÓA ĐƠN ─────────────────────────────────────────────
-            SuaHoaDonCommand = new RelayCommand<object>(_ => HoaDonChon != null, _ =>
+            }
+            catch (Exception ex)
             {
-                if (HoaDonChon == null) return;
-
-                // Chỉ cho phép sửa hóa đơn chưa thanh toán
-                if (HoaDonChon.TrangThai == "Đã thanh toán")
-                {
-                    MessageBox.Show("Hóa đơn đã thanh toán, không thể chỉnh sửa nội dung!",
-                        "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
-
-                try
-                {
-                    var dialog = new SuaHoaDonDialog(HoaDonChon.MaHoaDon);
-                    dialog.Owner = Application.Current.MainWindow;
-                    if (dialog.ShowDialog() == true)
-                    {
-                        TaiDuLieu();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi khi sửa hóa đơn: " + ex.Message,
-                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
-
-            // ── IN HÓA ĐƠN ──────────────────────────────────────────────
-            InHoaDonCommand = new RelayCommand<object>(
-                _ => HoaDonChon != null,
-                _ => {
-                    var hd = HoaDonChon;
-                    var chiTiet = ChiTietSanPham;
-
-                    // Tạo nội dung hóa đơn để in
-                    string content = $"HÓA ĐƠN BÁN HÀNG\n" +
-                                     $"Mã HD: {hd.MaHoaDon}\n" +
-                                     $"Ngày: {hd.NgayTao:dd/MM/yyyy}\n" +
-                                     $"Khách hàng: {hd.TenKhachHang}\n" +
-                                     $"SĐT: {hd.SoDienThoai}\n" +
-                                     "------------------------------------------\n" +
-                                     "Sản phẩm\tSL\tĐơn giá\n";
-
-                    foreach (var item in chiTiet)
-                    {
-                        content += $"{item.TenSanPham}\t{item.SoLuong}\t{item.DonGia:N0}\n";
-                    }
-
-                    content += "------------------------------------------\n" +
-                               $"TỔNG TIỀN: {hd.TongTien:N0} VNĐ";
-
-                    // Hiển thị hộp thoại lưu file (Export ra file text để in)
-                    var sfd = new Microsoft.Win32.SaveFileDialog
-                    {
-                        FileName = $"HoaDon_{hd.MaHoaDon}.txt",
-                        Filter = "Text File (*.txt)|*.txt"
-                    };
-
-                    if (sfd.ShowDialog() == true)
-                    {
-                        System.IO.File.WriteAllText(sfd.FileName, content);
-                        MessageBox.Show("Đã xuất hóa đơn thành công!", "In hóa đơn");
-                    }
-                });
-
-            // ── XÓA HÓA ĐƠN ─────────────────────────────────────────────
-            XoaHoaDonCommand = new RelayCommand<object>(_ => HoaDonChon != null, _ =>
-            {
-                if (HoaDonChon == null) return;
-
-                var res = MessageBox.Show(
-                    $"Bạn có chắc chắn muốn xóa hóa đơn [{HoaDonChon.MaHoaDon}] không?\n" +
-                    "Hàng tồn kho sẽ được hoàn trả lại.",
-                    "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (res == MessageBoxResult.Yes)
-                    ThucHienXoa(HoaDonChon);
-            });
-
-            // ── LỌC ──────────────────────────────────────────────────────
-            LocHoaDonCommand = new RelayCommand<object>(
-                _ => true,
-                _ => LocHoaDon());
-
-            ThanhToanHoaDonCommand = new RelayCommand<object>(_ => HoaDonChon != null, _ => { // lamda để mở dialog chọn phương thức thanh toán
-                if (HoaDonChon == null) return; 
-
-                var dialog = new ChonPhuongThucDialog(
-                    HoaDonChon.MaHoaDon,
-                    (long)(HoaDonChon.TongTien ?? 0),
-                    _momoService, // Chuyển service MoMo vào dialog để sử dụng
-                    () => TaiDuLieu()
-                );
-
-                dialog.Owner = System.Windows.Application.Current.MainWindow; // đặt Owner để dialog luôn ở trên MainWindow
-                dialog.ShowDialog();
-
-            });
+                MessageBox.Show("Lỗi khi tạo hóa đơn: " + ex.Message,
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private bool CanSuaHoaDon(object parameter)
+        {
+            return HoaDonChon != null;
         }
 
-        // ── Tạo hóa đơn mới (Có dùng Transaction để bảo vệ tồn kho) ─────────────
+        private void ThucHienSuaHoaDon(object parameter)
+        {
+            if (HoaDonChon == null) return;
+            if (HoaDonChon.TrangThai == "Đã thanh toán")
+            {
+                MessageBox.Show("Hóa đơn đã thanh toán, không thể chỉnh sửa nội dung!",
+                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            try
+            {
+                var dialog = new SuaHoaDonDialog(HoaDonChon.MaHoaDon);
+                dialog.Owner = Application.Current.MainWindow;
+                if (dialog.ShowDialog() == true)
+                {
+                    TaiDuLieu();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi sửa hóa đơn: " + ex.Message,
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private bool CanInHoaDon(object parameter)
+        {
+            return HoaDonChon != null;
+        }
+        private void ThucHienInHoaDon(object parameter)
+        {
+            var hd = HoaDonChon;
+            var chiTiet = ChiTietSanPham;
+            string content = $"HÓA ĐƠN BÁN HÀNG\n" +
+                             $"Mã HD: {hd.MaHoaDon}\n" +
+                             $"Ngày: {hd.NgayTao:dd/MM/yyyy}\n" +
+                             $"Khách hàng: {hd.TenKhachHang}\n" +
+                             $"SĐT: {hd.SoDienThoai}\n" +
+                             "------------------------------------------\n" +
+                             "Sản phẩm\tSL\tĐơn giá\n";
+
+            foreach (var item in chiTiet)
+            {
+                content += $"{item.TenSanPham}\t{item.SoLuong}\t{item.DonGia:N0}\n";
+            }
+
+            content += "------------------------------------------\n" +
+                       $"TỔNG TIỀN: {hd.TongTien:N0} VNĐ";
+            var sfd = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = $"HoaDon_{hd.MaHoaDon}.txt",
+                Filter = "Text File (*.txt)|*.txt"
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                System.IO.File.WriteAllText(sfd.FileName, content);
+                MessageBox.Show("Đã xuất hóa đơn thành công!", "In hóa đơn");
+            }
+        }
+        private bool CanXoaHoaDon(object parameter)
+        {
+            return HoaDonChon != null;
+        }
+        private void ThucHienXoaHoaDon(object parameter)
+        {
+            if (HoaDonChon == null) return;
+
+            var res = MessageBox.Show(
+                $"Bạn có chắc chắn muốn xóa hóa đơn [{HoaDonChon.MaHoaDon}] không?\n" +
+                "Hàng tồn kho sẽ được hoàn trả lại.",
+                "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (res == MessageBoxResult.Yes)
+                ThucHienXoa(HoaDonChon);
+        }
+        private bool CanLocHoaDon(object parameter)
+        {
+            return true;
+        }
+        private void ThucHienLocHoaDon(object parameter)
+        {
+            LocHoaDon();
+        }
+        private bool CanThanhToanHoaDon(object parameter)
+        {
+            return HoaDonChon != null && HoaDonChon.TrangThai != "Chưa thanh toán";
+        }
+        private void ThucHienThanhToan(object parameter)
+        {
+            if (HoaDonChon == null) return;
+
+            var dialog = new ChonPhuongThucDialog(
+                HoaDonChon.MaHoaDon,
+                (long)(HoaDonChon.TongTien ?? 0),
+                _momoService, 
+                () => TaiDuLieu()
+            );
+
+            dialog.Owner = System.Windows.Application.Current.MainWindow; 
+            dialog.ShowDialog();
+
+        }
         public void LuuHoaDonAnToan(HoaDon hdMoi, List<ChiTietHd> danhSachMonHang)
         {
             var db = DataProvider.Ins.GetContext();
