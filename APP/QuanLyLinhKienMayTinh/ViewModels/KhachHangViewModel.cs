@@ -46,6 +46,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _timKiem = value; OnPropertyChanged(); DanhSachKhachHang?.Refresh(); }
         }
 
+        // Commands
         public ICommand ThemKhachHangCommand { get; private set; }
         public ICommand SuaKhachHangCommand { get; private set; }
         public ICommand XoaKhachHangCommand { get; private set; }
@@ -56,6 +57,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             TaiDuLieu();
             KhoiTaoCommands();
         }
+        // Tải danh sách khách hàng từ cơ sở dữ liệu và thiết lập bộ lọc hiển thị
         public void TaiDuLieu()
         {
             try
@@ -83,6 +85,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         }
 
 
+        // Kiểm tra xem khách hàng có khớp với từ khóa tìm kiếm hay không
         private bool Filter(object obj)
         {
             if (obj is not KhachHangDisplay item) return false;
@@ -96,6 +99,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         }
 
 
+        // Cập nhật từ khóa tìm kiếm khi người dùng nhập liệu trên thanh tìm kiếm
         public void ApplySearch(string keyword)
         {
             TimKiem = keyword?.Trim() ?? string.Empty;
@@ -104,98 +108,129 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
         private void KhoiTaoCommands()
         {
-            // ── THÊM ─────────────────────────────────────────────────────────
-            ThemKhachHangCommand = new RelayCommand<object>(_ => true, _ =>
+            ThemKhachHangCommand = new RelayCommand<object>(CanThemKhachHang, ThucHienThemKhachHang);
+            SuaKhachHangCommand = new RelayCommand<KhachHangDisplay>(CanSuaKhachHang, ThucHienSuaKhachHang);
+            XoaKhachHangCommand = new RelayCommand<KhachHangDisplay>(CanXoaKhachHang, ThucHienXoaKhachHang);
+            LamMoiCommand = new RelayCommand<object>(CanLamMoi, ThucHienLamMoi);
+        }
+
+        // Kiểm tra điều kiện: Luôn cho phép người dùng mở cửa sổ thêm khách hàng mới
+        private bool CanThemKhachHang(object parameter)
+        {
+            return true;
+        }
+
+        // Thực hiện mở cửa sổ thêm khách hàng, tự động tạo mã mới và lưu dữ liệu nếu người dùng đồng ý
+        private void ThucHienThemKhachHang(object parameter)
+        {
+            try
             {
-                try
+                var dbRead = DataProvider.Ins.GetContext();
+                var lastID = dbRead.KhachHangs
+                    .OrderByDescending(x => x.MaKh)
+                    .Select(x => x.MaKh).FirstOrDefault();
+                string newID = Services.AutoIDService.GetNextID("KH", lastID);
+
+                var dialog = new ThemSuaKhachHangDialog(newID);
+                dialog.Owner = Application.Current.MainWindow;
+                if (dialog.ShowDialog() == true)
                 {
-                    var dbRead = DataProvider.Ins.GetContext();
-                    var lastID = dbRead.KhachHangs
-                        .OrderByDescending(x => x.MaKh)
-                        .Select(x => x.MaKh).FirstOrDefault();
-                    string newID = Services.AutoIDService.GetNextID("KH", lastID);
-
-                    var dialog = new ThemSuaKhachHangDialog(newID);
-                    dialog.Owner = Application.Current.MainWindow;
-                    if (dialog.ShowDialog() == true)
+                    var kq = dialog.KetQua;
+                    var khMoi = new KhachHang
                     {
-                        var kq = dialog.KetQua;
-                        var khMoi = new KhachHang
-                        {
-                            MaKh = kq.MaKh,
-                            TenKh = kq.HoTen,
-                            Sdt = kq.Sdt,
-                            Email = kq.Email,
-                            Dchi = kq.DiaChi
-                        };
+                        MaKh = kq.MaKh,
+                        TenKh = kq.HoTen,
+                        Sdt = kq.Sdt,
+                        Email = kq.Email,
+                        Dchi = kq.DiaChi
+                    };
 
-                        var dbSave = DataProvider.Ins.GetContext();
-                        dbSave.KhachHangs.Add(khMoi);
-                        dbSave.SaveChanges();
+                    var dbSave = DataProvider.Ins.GetContext();
+                    dbSave.KhachHangs.Add(khMoi);
+                    dbSave.SaveChanges();
+                    TaiDuLieu();
+
+                    MessageBox.Show("Thêm khách hàng thành công!",
+                        "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi thêm khách hàng: " + ex.Message,
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        // Kiểm tra điều kiện: Chỉ cho phép sửa khi đã chọn một khách hàng cụ thể trong danh sách
+        private bool CanSuaKhachHang(KhachHangDisplay kh)
+        {
+            return kh != null;
+        }
+
+        // Thực hiện mở cửa sổ sửa thông tin khách hàng đang chọn và cập nhật thay đổi vào cơ sở dữ liệu
+        private void ThucHienSuaKhachHang(KhachHangDisplay kh)
+        {
+            try
+            {
+                var dialog = new ThemSuaKhachHangDialog(kh);
+                dialog.Owner = Application.Current.MainWindow;
+                if (dialog.ShowDialog() == true)
+                {
+                    var kq = dialog.KetQua;
+                    var db = DataProvider.Ins.GetContext();
+                    var entity = db.KhachHangs.Find(kq.MaKh);
+                    if (entity != null)
+                    {
+                        entity.TenKh = kq.HoTen;
+                        entity.Sdt = kq.Sdt;
+                        entity.Email = kq.Email;
+                        entity.Dchi = kq.DiaChi;
+
+                        db.SaveChanges();
                         TaiDuLieu();
 
-                        MessageBox.Show("Thêm khách hàng thành công!",
+                        MessageBox.Show("Cập nhật khách hàng thành công!",
                             "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi khi thêm khách hàng: " + ex.Message,
-                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
-
-            // ── SỬA ──────────────────────────────────────────────────────────
-            SuaKhachHangCommand = new RelayCommand<KhachHangDisplay>(kh => kh != null, kh =>
+            }
+            catch (Exception ex)
             {
-                try
-                {
-                    var dialog = new ThemSuaKhachHangDialog(kh);
-                    dialog.Owner = Application.Current.MainWindow;
-                    if (dialog.ShowDialog() == true)
-                    {
-                        var kq = dialog.KetQua;
-                        var db = DataProvider.Ins.GetContext();
-                        var entity = db.KhachHangs.Find(kq.MaKh);
-                        if (entity != null)
-                        {
-                            entity.TenKh = kq.HoTen;
-                            entity.Sdt = kq.Sdt;
-                            entity.Email = kq.Email;
-                            entity.Dchi = kq.DiaChi;
-
-                            db.SaveChanges();
-                            TaiDuLieu();
-
-                            MessageBox.Show("Cập nhật khách hàng thành công!",
-                                "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi khi sửa khách hàng: " + ex.Message,
-                        "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            });
-
-            // ── XÓA ──────────────────────────────────────────────────────────
-            XoaKhachHangCommand = new RelayCommand<KhachHangDisplay>(kh => kh != null, kh =>
-            {
-                var res = MessageBox.Show(
-                    $"Bạn có chắc chắn muốn xóa khách hàng [{kh.HoTen}] không?",
-                    "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if (res == MessageBoxResult.Yes)
-                    ThucHienXoa(kh);
-            });
-
-            // ── LÀM MỚI ─────────────────────────────────────────────────────
-            LamMoiCommand = new RelayCommand<object>(
-                _ => true,
-                _ => { TimKiem = string.Empty; TaiDuLieu(); });
+                MessageBox.Show("Lỗi khi sửa khách hàng: " + ex.Message,
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        // ── Xóa khách hàng ───────────────────────────────────────────────
+        // Kiểm tra điều kiện: Chỉ cho phép thao tác xóa khi đã chọn một khách hàng
+        private bool CanXoaKhachHang(KhachHangDisplay kh)
+        {
+            return kh != null;
+        }
+
+        // Hiển thị hộp thoại xác nhận trước khi xóa khách hàng để tránh xóa nhầm
+        private void ThucHienXoaKhachHang(KhachHangDisplay kh)
+        {
+            var res = MessageBox.Show(
+                $"Bạn có chắc chắn muốn xóa khách hàng [{kh.HoTen}] không?",
+                "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (res == MessageBoxResult.Yes)
+                ThucHienXoa(kh);
+        }
+
+        // Kiểm tra điều kiện: Luôn cho phép làm mới lại danh sách khách hàng
+        private bool CanLamMoi(object parameter)
+        {
+            return true;
+        }
+
+        // Thực hiện xóa từ khóa tìm kiếm hiện tại và tải lại dữ liệu mới nhất từ cơ sở dữ liệu
+        private void ThucHienLamMoi(object parameter)
+        {
+            TimKiem = string.Empty;
+            TaiDuLieu();
+        }
+
+        // Tiến hành xóa khách hàng khỏi cơ sở dữ liệu và loại bỏ khỏi danh sách đang hiển thị
         private void ThucHienXoa(KhachHangDisplay kh)
         {
             try

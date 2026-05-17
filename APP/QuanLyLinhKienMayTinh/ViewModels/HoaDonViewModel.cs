@@ -136,7 +136,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _denNgay = value; OnPropertyChanged(); }
         }
 
-        // ── Footer thống kê ──────────────────────────────────────────────────
+        // Footer thống kê 
         private int _tongSoHoaDon;
         public int TongSoHoaDon
         {
@@ -172,7 +172,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _thanhToanButtonVisibility = value; OnPropertyChanged(); }
         }
 
-        // ── Commands ─────────────────────────────────────────────────────────
+        // Commands 
         public ICommand TaoHoaDonMoiCommand { get; private set; }
         public ICommand SuaHoaDonCommand { get; private set; }
         public ICommand InHoaDonCommand { get; private set; }
@@ -197,7 +197,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
         }
 
-        // ── Tải toàn bộ hóa đơn ─────────────────────────────────────────────
+        // Lấy toàn bộ danh sách hóa đơn từ cơ sở dữ liệu và tự động cập nhật số liệu thống kê
         public void TaiDuLieu()
         {
             try
@@ -225,7 +225,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Tải chi tiết sản phẩm khi chọn hóa đơn ─────────────────────────
+        // Tải danh sách chi tiết các linh kiện (sản phẩm) thuộc về hóa đơn đang được chọn
         private void TaiChiTietSanPham(string maHoaDon)
         {
             if (string.IsNullOrEmpty(maHoaDon))
@@ -277,7 +277,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Map entity → display ─────────────────────────────────────────────
+        // Chuyển đổi dữ liệu hóa đơn từ cơ sở dữ liệu sang đối tượng hiển thị với màu sắc trạng thái tương ứng
         private static HoaDonDisplay MapToDisplay(HoaDon hd)
         {
             string trangThai = hd.TrangThai ?? "Chưa thanh toán";
@@ -317,7 +317,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             };
         }
 
-        // ── Lọc hóa đơn theo toolbar ─────────────────────────────────────────
+        // Lọc danh sách hóa đơn dựa trên từ khóa tìm kiếm, trạng thái thanh toán và khoảng thời gian
         private void LocHoaDon()
         {
             var filtered = _all.AsEnumerable();
@@ -348,7 +348,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             HoaDonChon = null;
         }
 
-        // ── Cập nhật thống kê footer ─────────────────────────────────────────
+        // Tính toán tổng số lượng hóa đơn, doanh thu và phân loại trạng thái để hiển thị ở thanh footer
         private void CapNhatThongKe(IEnumerable<HoaDonDisplay> ds)
         {
             var list = ds.ToList();
@@ -358,14 +358,14 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             SoHoaDonChoXuLy = list.Count(hd => hd.TrangThai == "Chưa thanh toán");
         }
 
-        // ── ISearchable ──────────────────────────────────────────────────────
+        // Cập nhật từ khóa tìm kiếm từ giao diện và kích hoạt lại bộ lọc danh sách hóa đơn
         public void ApplySearch(string keyword)
         {
             TuKhoanTimKiem = keyword?.Trim() ?? string.Empty;
             LocHoaDon();
         }
 
-        // ── Khởi tạo Commands ────────────────────────────────────────────────
+        // Cấu hình các thao tác Thêm, Sửa, In, Xóa và Thanh toán cho các nút bấm trên giao diện
         private void KhoiTaoCommands( )
         {
             TaoHoaDonMoiCommand = new RelayCommand<object>(CanTaoHoaDon, ThucHienTaoHoaDon);
@@ -375,10 +375,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             LocHoaDonCommand = new RelayCommand<object>(CanLocHoaDon, ThucHienLocHoaDon);
             ThanhToanHoaDonCommand = new RelayCommand<object>(CanThanhToanHoaDon, ThucHienThanhToan);
         }
+        // Kiểm tra điều kiện: Luôn cho phép mở giao diện tạo hóa đơn mới
         private bool CanTaoHoaDon(object parameter)
         {
             return true; 
         }
+        // Xử lý tạo mã hóa đơn mới, mở cửa sổ nhập thông tin và lưu hóa đơn nếu thành công
         private void ThucHienTaoHoaDon(object parameter)
         {
             try
@@ -402,11 +404,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        // Kiểm tra điều kiện: Chỉ cho phép chỉnh sửa khi người dùng đã chọn một hóa đơn cụ thể
         private bool CanSuaHoaDon(object parameter)
         {
             return HoaDonChon != null;
         }
 
+        // Mở cửa sổ chỉnh sửa thông tin cho hóa đơn đang chọn (từ chối nếu hóa đơn đã thanh toán)
         private void ThucHienSuaHoaDon(object parameter)
         {
             if (HoaDonChon == null) return;
@@ -432,10 +436,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        // Kiểm tra điều kiện: Chỉ cho phép in khi đã chọn một hóa đơn
         private bool CanInHoaDon(object parameter)
         {
             return HoaDonChon != null;
         }
+        // Trích xuất thông tin chi tiết của hóa đơn và xuất ra file văn bản (TXT)
         private void ThucHienInHoaDon(object parameter)
         {
             var hd = HoaDonChon;
@@ -467,10 +473,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MessageBox.Show("Đã xuất hóa đơn thành công!", "In hóa đơn");
             }
         }
+        // Kiểm tra điều kiện: Chỉ cho phép xóa khi người dùng đã chọn một hóa đơn
         private bool CanXoaHoaDon(object parameter)
         {
             return HoaDonChon != null;
         }
+        // Hiển thị hộp thoại cảnh báo người dùng trước khi tiến hành xóa hóa đơn
         private void ThucHienXoaHoaDon(object parameter)
         {
             if (HoaDonChon == null) return;
@@ -482,18 +490,22 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             if (res == MessageBoxResult.Yes)
                 ThucHienXoa(HoaDonChon);
         }
+        // Kiểm tra điều kiện: Luôn cho phép chạy bộ lọc dữ liệu
         private bool CanLocHoaDon(object parameter)
         {
             return true;
         }
+        // Kích hoạt chức năng lọc lại danh sách hóa đơn theo các tiêu chí hiện tại
         private void ThucHienLocHoaDon(object parameter)
         {
             LocHoaDon();
         }
+        // Kiểm tra điều kiện: Chỉ cho phép thanh toán nếu hóa đơn đang ở trạng thái chưa thanh toán
         private bool CanThanhToanHoaDon(object parameter)
         {
             return HoaDonChon != null && HoaDonChon.TrangThai != "Chưa thanh toán";
         }
+        // Mở cửa sổ lựa chọn phương thức thanh toán (Tiền mặt, MoMo, v.v.) cho hóa đơn đang chọn
         private void ThucHienThanhToan(object parameter)
         {
             if (HoaDonChon == null) return;
@@ -509,6 +521,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             dialog.ShowDialog();
 
         }
+        // Lưu hóa đơn vào cơ sở dữ liệu một cách an toàn (Sử dụng Transaction để trừ số lượng linh kiện trong kho)
         public void LuuHoaDonAnToan(HoaDon hdMoi, List<ChiTietHd> danhSachMonHang)
         {
             var db = DataProvider.Ins.GetContext();
@@ -544,7 +557,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Xóa hóa đơn ─────────────────────────────────────────────────────
+        // Xử lý xóa hóa đơn khỏi cơ sở dữ liệu và tự động hoàn trả lại số lượng linh kiện tương ứng vào kho
         private void ThucHienXoa(HoaDonDisplay hd)
         {
             try

@@ -31,10 +31,10 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
     public class NhanVienViewModel : BaseViewModel, ISearchable
     {
-        // ── Backing collection ──────────────────────────────────────────────
+        // Backing collection 
         private ObservableCollection<NhanVienDisplay> _all;
 
-        // ── Bound to DataGrid ────────────────────────────────────────────────
+        // Bound to DataGrid 
         private ICollectionView _danhSachNhanVien;
         public ICollectionView DanhSachNhanVien
         {
@@ -49,7 +49,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _nhanVienChon = value; OnPropertyChanged(); }
         }
 
-        // ── ComboBox chức vụ ────────────────────────────────────────────────
+        // ComboBox chức vụ
         private ObservableCollection<ChucVuItem> _danhSachChucVu;
         public ObservableCollection<ChucVuItem> DanhSachChucVu
         {
@@ -64,7 +64,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _chucVuChon = value; OnPropertyChanged(); DanhSachNhanVien?.Refresh(); }
         }
 
-        // ── Search box ───────────────────────────────────────────────────────
+        // Search box 
         private string _timKiem = string.Empty;
         public string TimKiem
         {
@@ -72,7 +72,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _timKiem = value; OnPropertyChanged(); DanhSachNhanVien?.Refresh(); }
         }
 
-        // ── Commands ─────────────────────────────────────────────────────────
+        // Commands 
         public ICommand ThemNhanVienCommand { get; private set; }
         public ICommand SuaNhanVienCommand { get; private set; }
         public ICommand XoaNhanVienCommand { get; private set; }
@@ -84,7 +84,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             KhoiTaoCommands();
         }
 
-        // ── Tải dữ liệu ─────────────────────────────────────────────────────
+        // Lấy danh sách nhân viên đang làm việc từ cơ sở dữ liệu và tải danh mục chức vụ
         public void TaiDuLieu()
         {
             try
@@ -128,7 +128,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Filter ───────────────────────────────────────────────────────────
+        // Lọc danh sách nhân viên theo từ khóa tìm kiếm và chức vụ được chọn
         private bool Filter(object obj)
         {
             if (obj is not NhanVienDisplay item) return false;
@@ -148,23 +148,49 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             return matchSearch && matchChucVu;
         }
 
-        // ── ISearchable ──────────────────────────────────────────────────────
+        // Cập nhật từ khóa tìm kiếm từ giao diện và áp dụng lại bộ lọc hiển thị
         public void ApplySearch(string keyword)
         {
             TimKiem = keyword?.Trim() ?? string.Empty;
         }
 
-        // ── Khởi tạo Commands ────────────────────────────────────────────────
+        // Cấu hình các thao tác Thêm, Sửa, Xóa và Làm mới cho các nút bấm trên giao diện
         private void KhoiTaoCommands()
         {
-            ThemNhanVienCommand = new RelayCommand<object>(_ => true, _ => ThucHienThem());
-            SuaNhanVienCommand = new RelayCommand<NhanVienDisplay>(nv => nv != null, nv => ThucHienSua(nv));
-            XoaNhanVienCommand = new RelayCommand<NhanVienDisplay>(nv => nv != null, nv => ThucHienXoa(nv));
-            LamMoiCommand = new RelayCommand<object>(_ => true, _ => { TimKiem = string.Empty; TaiDuLieu(); });
+            ThemNhanVienCommand = new RelayCommand<object>(CanThemNhanVien, ThucHienThemNhanVien);
+            SuaNhanVienCommand = new RelayCommand<NhanVienDisplay>(CanSuaNhanVien, ThucHienSuaNhanVien);
+            XoaNhanVienCommand = new RelayCommand<NhanVienDisplay>(CanXoaNhanVien, ThucHienXoaNhanVien);
+            LamMoiCommand = new RelayCommand<object>(CanLamMoi, ThucHienLamMoi);
         }
 
-        // ── Logic Thêm Nhân Viên ─────────────────────────────────────────────
-        private void ThucHienThem()
+        private bool CanThemNhanVien(object parameter)
+        {
+            return true;
+        }
+
+        private bool CanSuaNhanVien(NhanVienDisplay nv)
+        {
+            return nv != null;
+        }
+
+        private bool CanXoaNhanVien(NhanVienDisplay nv)
+        {
+            return nv != null;
+        }
+
+        private bool CanLamMoi(object parameter)
+        {
+            return true;
+        }
+
+        private void ThucHienLamMoi(object parameter)
+        {
+            TimKiem = string.Empty;
+            TaiDuLieu();
+        }
+
+        // Xử lý thêm nhân viên mới: Tự động tính toán mã, phân quyền theo chức vụ và cấp tài khoản mặc định
+        private void ThucHienThemNhanVien(object parameter)
         {
             if (LuuTrangThai.QuyenDangNhap != "Quản lý toàn bộ")
             {
@@ -220,8 +246,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Logic Sửa Nhân Viên ─────────────────────────────────────────────
-        private void ThucHienSua(NhanVienDisplay nv)
+        // Xử lý cập nhật thông tin nhân viên đã chọn và phân quyền lại dựa trên chức vụ mới
+        private void ThucHienSuaNhanVien(NhanVienDisplay nv)
         {
             if (LuuTrangThai.QuyenDangNhap != "Quản lý toàn bộ")
             {
@@ -261,8 +287,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Logic Xóa Nhân Viên ─────────────────────────────────────────────
-        private void ThucHienXoa(NhanVienDisplay nv)
+        // Xử lý đánh dấu nhân viên đã nghỉ việc (Soft delete) thay vì xóa hoàn toàn dữ liệu khỏi hệ thống
+        private void ThucHienXoaNhanVien(NhanVienDisplay nv)
         {
             if (LuuTrangThai.QuyenDangNhap != "Quản lý toàn bộ")
             {

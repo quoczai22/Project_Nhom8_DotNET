@@ -1,4 +1,4 @@
-﻿using QuanLyLinhKienMayTinh.Models;
+using QuanLyLinhKienMayTinh.Models;
 using QuanLyLinhKienMayTinh.Views;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,10 +73,41 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             LaySoLuongGoc();
             PhanQuyenGiaoDien();
 
-            ThongBaoCommand = new RelayCommand<object>((p) => true, (p) => ThongBao());
-            LogOutCommand = new RelayCommand<object>((p) => true, (p) => LogOut());
-            ToggleThemeCommand = new RelayCommand<object>((p) => true, (p) => ExecuteToggleTheme(p));
+            ThongBaoCommand = new RelayCommand<object>(CanThongBao, ThucHienThongBao);
+            LogOutCommand = new RelayCommand<object>(CanLogOut, ThucHienLogOut);
+            ToggleThemeCommand = new RelayCommand<object>(CanToggleTheme, ThucHienToggleTheme);
         }
+
+        private bool CanThongBao(object parameter)
+        {
+            return true;
+        }
+
+        private void ThucHienThongBao(object parameter)
+        {
+            ThongBao();
+        }
+
+        private bool CanLogOut(object parameter)
+        {
+            return true;
+        }
+
+        private void ThucHienLogOut(object parameter)
+        {
+            LogOut();
+        }
+
+        private bool CanToggleTheme(object parameter)
+        {
+            return true;
+        }
+
+        private void ThucHienToggleTheme(object parameter)
+        {
+            ExecuteToggleTheme(parameter);
+        }
+        // Ẩn/hiện các menu chức năng trên giao diện dựa theo quyền hạn của tài khoản đang đăng nhập
         private void PhanQuyenGiaoDien()
         {
             string quyen = LuuTrangThai.QuyenDangNhap;
@@ -117,6 +148,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuHoaDonVisibility = Visibility.Collapsed;
             }
         }
+        // Lấy số lượng dữ liệu hiện tại (nhân viên, linh kiện, hóa đơn) để làm cơ sở tính toán thông báo
         private void LaySoLuongGoc()
         {
             try
@@ -128,6 +160,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
             catch { }
         }
+        // Kiểm tra các thay đổi dữ liệu (mới thêm, xóa) và cảnh báo linh kiện sắp hết hàng
         public async void ThongBao()
         {
             try
@@ -190,6 +223,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         }
 
 
+        // Hiển thị hộp thoại xác nhận, sau đó đóng cửa sổ chính và quay lại màn hình đăng nhập
         private void LogOut()
         {
             MessageBoxResult result = MessageBox.Show("Bạn có muốn đăng xuất không?", "Thông báo",
@@ -201,6 +235,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 Application.Current.Windows.OfType<MainWindow>().FirstOrDefault()?.Close();
             }
         }
+        // Thay đổi tập tin giao diện (ResourceDictionary) để chuyển đổi giữa Sáng/Tối
         private void ExecuteToggleTheme(object obj)
         {
 

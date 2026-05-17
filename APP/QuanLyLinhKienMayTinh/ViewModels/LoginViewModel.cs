@@ -1,4 +1,4 @@
-﻿using QuanLyLinhKienMayTinh.Models;
+using QuanLyLinhKienMayTinh.Models;
 using QuanLyLinhKienMayTinh;
 using System;
 using System.Linq;
@@ -77,35 +77,68 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
         public LoginViewModel()
         {
-            ToggleThemeCommand = new RelayCommand<object>((p) => true, (p) =>
-            {
-                ExecuteToggleTheme(p);
-            });
-            ShowSignUpCommand = new RelayCommand<object>((p) => true, (p) =>
-            {
-                LoginVisibility = Visibility.Collapsed;
-                SignUpVisibility = Visibility.Visible;
-                Message = "Vui lòng điền thông tin để đăng ký tài khoản mới";
-            });
-
-            ShowLoginCommand = new RelayCommand<object>((p) => true, (p) =>
-            {
-                SignUpVisibility = Visibility.Collapsed;
-                LoginVisibility = Visibility.Visible;
-                Message = "Vui lòng đăng nhập để tiếp tục";
-            });
-
-            LoginCommand = new RelayCommand<object>((p) => true, (p) =>
-            {
-                ThucHienDangNhap();
-            });
-
-            SignUpCommand = new RelayCommand<object>((p) => true, (p) =>
-            {
-                ThucHienDangKy();
-            });
+            ToggleThemeCommand = new RelayCommand<object>(CanToggleTheme, ThucHienToggleTheme);
+            ShowSignUpCommand = new RelayCommand<object>(CanShowSignUp, ThucHienShowSignUp);
+            ShowLoginCommand = new RelayCommand<object>(CanShowLogin, ThucHienShowLogin);
+            LoginCommand = new RelayCommand<object>(CanLogin, ThucHienLogin);
+            SignUpCommand = new RelayCommand<object>(CanSignUp, ThucHienSignUp);
         }
 
+        private bool CanToggleTheme(object parameter)
+        {
+            return true;
+        }
+
+        private void ThucHienToggleTheme(object parameter)
+        {
+            ExecuteToggleTheme(parameter);
+        }
+
+        private bool CanShowSignUp(object parameter)
+        {
+            return true;
+        }
+
+        private void ThucHienShowSignUp(object parameter)
+        {
+            LoginVisibility = Visibility.Collapsed;
+            SignUpVisibility = Visibility.Visible;
+            Message = "Vui lòng điền thông tin để đăng ký tài khoản mới";
+        }
+
+        private bool CanShowLogin(object parameter)
+        {
+            return true;
+        }
+
+        private void ThucHienShowLogin(object parameter)
+        {
+            SignUpVisibility = Visibility.Collapsed;
+            LoginVisibility = Visibility.Visible;
+            Message = "Vui lòng đăng nhập để tiếp tục";
+        }
+
+        private bool CanLogin(object parameter)
+        {
+            return true;
+        }
+
+        private void ThucHienLogin(object parameter)
+        {
+            ThucHienDangNhap();
+        }
+
+        private bool CanSignUp(object parameter)
+        {
+            return true;
+        }
+
+        private void ThucHienSignUp(object parameter)
+        {
+            ThucHienDangKy();
+        }
+
+        // Xử lý xác thực tài khoản đăng nhập, cấp quyền tương ứng và mở giao diện chính
         public void ThucHienDangNhap()
         {
             if (string.IsNullOrEmpty(LoginUsername) || string.IsNullOrEmpty(LoginPassword))
@@ -159,6 +192,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
+        // Kiểm tra thông tin đăng ký hợp lệ và lưu tài khoản mới vào cơ sở dữ liệu
         public void ThucHienDangKy()
         {
             if (string.IsNullOrEmpty(SignUpUsername))
@@ -210,6 +244,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MessageBox.Show(ex.Message);
             }
         }
+        // Chuyển đổi qua lại giữa giao diện Sáng (Light mode) và Tối (Dark mode)
         void ExecuteToggleTheme(object obj)
         {
 
