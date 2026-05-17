@@ -11,6 +11,9 @@ namespace QuanLyLinhKienMayTinh.Services
 {
     public class MomoService : IMomoService
     {
+        
+        static readonly HttpClient _client = new HttpClient(); // Tạo 1 hằng số HttpClient để tái sử dụng trong suốt vòng đời của ứng dụng, tránh việc tạo nhiều instance HttpClient
+
         string MomoApiUrl = "https://test-payment.momo.vn/v2/gateway/api/create"; // điểm đến API của MoMo để tạo đơn thanh toán
         string PartnerCode = "MOMO";
         string AccessKey = "F8BBA842ECF85";
@@ -70,12 +73,11 @@ namespace QuanLyLinhKienMayTinh.Services
                 signature
             };
 
-            using (var client = new HttpClient())
             {
                 var json = JsonConvert.SerializeObject(requestData); // Chuyển requestData thành chuỗi JSON để gửi lên MoMo
                 var content = new StringContent(json, Encoding.UTF8, "application/json"); // Tạo HttpContent từ chuỗi JSON để gửi lên MoMo
 
-                var response = await client.PostAsync(MomoApiUrl, content);          // Gửi request lên MoMo và nhận về response
+                var response = await _client.PostAsync(MomoApiUrl, content);          // Gửi request lên MoMo và nhận về response
                 var responseContent = await response.Content.ReadAsStringAsync();           // Đọc nội dung response từ MoMo dưới dạng chuỗi
 
                 return JsonConvert.DeserializeObject<MomoResponse>(responseContent); // Trả về đối tượng MomoResponse được tạo từ chuỗi JSON response của MoM 

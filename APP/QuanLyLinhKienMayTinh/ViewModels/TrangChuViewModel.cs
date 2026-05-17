@@ -138,7 +138,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 TongLK = db.LinhKiens.Sum(lk => lk.SoLuongTon ?? 0);
                 TongLoaiLK = db.LoaiLks.Count();
                 TongHD = db.HoaDons.Count();
-                var year = Enumerable.Range(2023,4).ToList();
+                var year = Enumerable.Range(2023,4).ToList(); // tạo danh sách năm từ 2023 đến 2026 để hiển thị doanh thu theo tháng trong khoảng thời gian này
 
                 // 1. Khởi tạo dữ liệu
                 var giaTriDoanhThu = new ChartValues<double>(); // Dữ liệu doanh thu theo tháng
@@ -146,7 +146,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
                 foreach (int  y in year)
                 {
-                    for (int m = 1; m <= 12; m++)
+                    for (int m = 1; m <= 12; m+=3)
                     {
                         var doanhThuThang = QL_LinhKien_PC_Context.fn_DoanhThuTheoThang(m, y); // gọi hàm tính doanh thu theo tháng từ database
 

@@ -522,36 +522,52 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
         }
         // Lưu hóa đơn vào cơ sở dữ liệu một cách an toàn (Sử dụng Transaction để trừ số lượng linh kiện trong kho)
-        public void LuuHoaDonAnToan(HoaDon hdMoi, List<ChiTietHd> danhSachMonHang)
+        public async Task LuuHoaDonAnToan(HoaDon hdMoi, List<ChiTietHd> danhSachMonHang)
         {
             var db = DataProvider.Ins.GetContext();
-            using (var giaoDich = db.Database.BeginTransaction()) //câu lệnh gọi để vào transaction mặc định của WPF
+
+            // Sử dụng Bất đồng bộ để UI WPF không bị đơ
+            using (var giaoDich = await db.Database.BeginTransactionAsync())
             {
                 try
                 {
                     db.HoaDons.Add(hdMoi);
 
+                    // 1. TỐI ƯU HIỆU NĂNG (GOM LÔ): Lấy toàn bộ mã linh kiện khách mua
+                    var danhSachMaLk = danhSachMonHang.Select(m => m.MaLk).ToList();
+
+                    // Bắn 1 câu lệnh SQL DUY NHẤT để lấy tất cả linh kiện cần thiết lên RAM
+                    var danhSachKho = await db.LinhKiens
+                                              .Where(lk => danhSachMaLk.Contains(lk.MaLk))
+                                              .ToDictionaryAsync(lk => lk.MaLk);
+
+                    // 2. XỬ LÝ LOGIC TRÊN RAM
                     foreach (var mon in danhSachMonHang)
                     {
-                        var kho = db.LinhKiens.Find(mon.MaLk);
+                        if (!danhSachKho.TryGetValue(mon.MaLk, out var kho))
+                        {
+                            throw new Exception($"Không tìm thấy dữ liệu cho mã '{mon.MaLk}'!");
+                        }
+
                         if (kho.SoLuongTon < mon.SoLuong)
                         {
                             throw new Exception($"Linh kiện '{kho.TenLk}' không đủ hàng!");
                         }
 
-                        kho.SoLuongTon -= mon.SoLuong; 
+                        kho.SoLuongTon -= mon.SoLuong;
                         db.ChiTietHds.Add(mon);
                     }
 
-                    db.SaveChanges();
-                    giaoDich.Commit(); 
+                    // 3. GHI XUỐNG DB & HOÀN TẤT GIAO DỊCH
+                    await db.SaveChangesAsync(); // Ghi 1 cục duy nhất xuống Transaction Log (Chống chai máy)
+                    await giaoDich.CommitAsync();
 
-                    TaiDuLieu(); 
+                    TaiDuLieu();
                     MessageBox.Show("Thanh toán thành công! Đã cập nhật kho.", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    giaoDich.Rollback(); 
+                    await giaoDich.RollbackAsync();
                     MessageBox.Show("Lỗi thanh toán: " + ex.Message, "Báo lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
