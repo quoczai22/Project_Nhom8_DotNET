@@ -1,5 +1,6 @@
 ﻿using QuanLyLinhKienMayTinh.Models;
 using QuanLyLinhKienMayTinh.ViewModels;
+using QuanLyLinhKienMayTinh.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Metsys.Bson;
 
 namespace QuanLyLinhKienMayTinh.Views
 {
@@ -21,86 +23,11 @@ namespace QuanLyLinhKienMayTinh.Views
     /// </summary>
     public partial class LoginView : Window
     {
-        bool suPassVisible = false;
-        bool suConfirmVisible = false;
-        bool liPassVisible = false;
 
         public LoginView()
         {
             InitializeComponent();
-            this.DataContext = new LoginViewModel();
-        }
-        void ToggleSuPassword_Click(object sender, RoutedEventArgs e)
-        {
-            if (suPassVisible)
-            {
-                suPassword.Password = suPasswordVisible.Text;
-                suPassword.Visibility = Visibility.Visible;
-                suPasswordVisible.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                suPasswordVisible.Text = suPassword.Password;
-                suPassword.Visibility = Visibility.Collapsed;
-                suPasswordVisible.Visibility = Visibility.Visible;
-            }
-            suPassVisible = !suPassVisible;
-        }
-
-        void ToggleSuConfirmPassword_Click(object sender, RoutedEventArgs e)
-        {
-            if (suConfirmVisible)
-            {
-                suConfirmPassword.Password = suConfirmPasswordVisible.Text;
-                suConfirmPassword.Visibility = Visibility.Visible;
-                suConfirmPasswordVisible.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                suConfirmPasswordVisible.Text = suConfirmPassword.Password;
-                suConfirmPassword.Visibility = Visibility.Collapsed;
-                suConfirmPasswordVisible.Visibility = Visibility.Visible;
-            }
-            suConfirmVisible = !suConfirmVisible;
-        }
-
-
-        void ToggleLiPassword_Click(object sender, RoutedEventArgs e)
-        {
-            if (liPassVisible)
-            {
-                liPassword.Password = liPasswordVisible.Text;
-                liPassword.Visibility = Visibility.Visible;
-                liPasswordVisible.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                liPasswordVisible.Text = liPassword.Password;
-                liPassword.Visibility = Visibility.Collapsed;
-                liPasswordVisible.Visibility = Visibility.Visible;
-            }
-            liPassVisible = !liPassVisible;
-        }
-        void LiPassword_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            if(DataContext is LoginViewModel vm)
-            {
-                vm.LoginPassword = liPassword.Password;
-            }
-        }
-        void SuPassword_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            if(DataContext is LoginViewModel vm)
-            {
-                vm.SignUpPassword = suPassword.Password;
-            }
-        }
-        void SuConfirmPassword_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            if (DataContext is LoginViewModel vm)
-            {
-                vm.ConfirmPassword = suConfirmPassword.Password;
-            }
+            DataContext = new LoginViewModel();
         }
     }
 }
