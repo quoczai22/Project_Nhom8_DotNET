@@ -1,5 +1,8 @@
 name: WPF CI/CD Pipeline (.NET 8) với Artifact
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches: [ "main" ]
