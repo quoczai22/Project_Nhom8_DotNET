@@ -1,0 +1,49 @@
+name: WPF CI/CD Pipeline (.NET 8) với Artifact
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build_and_release:
+    runs-on: windows-latest 
+
+    steps:
+    - name: Checkout mã nguồn
+      uses: actions/checkout@v4
+
+    - name: Thiết lập .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x' 
+
+    - name: Khôi phục các dependencies (Restore)
+      run: dotnet restore
+
+    - name: Đóng gói ứng dụng (Publish)
+      run: dotnet publish QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj -c Release -o ./publish
+
+    # --- BƯỚC TẠO VÀ LƯU ARTIFACT ---
+    - name: Lưu trữ Artifact của bản Build
+      uses: actions/upload-artifact@v4
+      with:
+        name: Thư-Mục-Publish-Net8 # Tên hiển thị của Artifact trên GitHub
+        path: ./publish             # Đường dẫn tới thư mục chứa kết quả từ lệnh dotnet publish
+        retention-days: 7          # Thời gian lưu trữ file trên GitHub (7 ngày)
+
+    # --- TỰ ĐỘNG TẠO RELEASES KHI MERGE VÀO NHÁNH MAIN ---
+    - name: Nén file thực thi thành file ZIP
+      run: |
+        Compress-Archive -Path ./publish/* -DestinationPath QuanLyLinhKienMayTinh-Release.zip -Force
+
+    - name: Tạo GitHub Release và đính kèm Tệp ZIP
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: "v1.0.${{ github.run_number }}"
+        name: "Release Phiên bản v1.0.${{ github.run_number }}"
+        files: QuanLyLinhKienMayTinh-Release.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
