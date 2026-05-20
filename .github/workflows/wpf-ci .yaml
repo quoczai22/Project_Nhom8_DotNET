@@ -23,10 +23,10 @@ jobs:
         dotnet-version: '8.0.x' 
 
     - name: Khôi phục các dependencies (Restore)
-      run: dotnet restore QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj
+      run: dotnet restore APP/QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj
 
     - name: Đóng gói ứng dụng (Publish)
-      run: dotnet publish QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj -c Release -o ./publish
+      run: dotnet publish APP/QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj -c Release -o ./publish
 
     # --- BƯỚC TẠO VÀ LƯU ARTIFACT ---
     - name: Lưu trữ Artifact của bản Build
