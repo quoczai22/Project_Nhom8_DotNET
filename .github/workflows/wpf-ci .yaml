@@ -20,7 +20,7 @@ jobs:
         dotnet-version: '8.0.x' 
 
     - name: Khôi phục các dependencies (Restore)
-      run: dotnet restore
+      run: dotnet restore QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj
 
     - name: Đóng gói ứng dụng (Publish)
       run: dotnet publish QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj -c Release -o ./publish
