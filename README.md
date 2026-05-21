@@ -31,7 +31,6 @@
 - [Công nghệ sử dụng](#-công-nghệ-sử-dụng)
 - [Kiến trúc hệ thống](#-kiến-trúc-hệ-thống)
 - [Cấu trúc thư mục](#-cấu-trúc-thư-mục)
-- [Giao diện ứng dụng](#-giao-diện-ứng-dụng)
 - [Hướng dẫn cài đặt](#-hướng-dẫn-cài-đặt)
 - [Thông tin nhóm](#-thông-tin-nhóm)
 
