@@ -209,20 +209,6 @@
 
 ---
 
-## 📸 Giao diện ứng dụng
-
-> ![image.png](attachment:image.png)
-
-| Màn hình | Mô tả |
-|---|---|
-| ![Login](https://placehold.co/600x340/3f51b5/ffffff?text=Đăng+Nhập) | **Đăng nhập** — Xác thực tài khoản & phân quyền |
-| ![Dashboard](https://placehold.co/600x340/3f51b5/ffffff?text=Trang+Chủ) | **Trang chủ** — Tổng quan thống kê, cảnh báo tồn kho |
-| ![Product](https://placehold.co/600x340/3f51b5/ffffff?text=Linh+Kiện) | **Quản lý Linh kiện** — CRUD, tìm kiếm, lọc danh mục |
-| ![Invoice](https://placehold.co/600x340/3f51b5/ffffff?text=Hóa+Đơn) | **Hóa đơn** — Tạo, xuất file, in & thanh toán MoMo QR |
-| ![Dark Mode](https://placehold.co/600x340/1a1a2e/3f51b5?text=Dark+Mode) | **Dark Mode** — Chuyển đổi giao diện sáng/tối |
-
----
-
 ## ⚙️ Hướng dẫn cài đặt
 
 ### ▶️ Cách 1 — Chạy file `.exe` (khuyến nghị)
