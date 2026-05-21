@@ -126,7 +126,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 string newID = Services.AutoIDService.GetNextLoaiID(lastID);
 
                 var dialog = new ThemSuaLoaiLinhKienDialog(newID);
-                dialog.Owner = Application.Current.MainWindow;
+                var window = Application.Current.MainWindow;
+                if (window != null && window.IsVisible && window.IsLoaded)
+                {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                }
+
                 if (dialog.ShowDialog() == true)
                 {
                     var kq = dialog.KetQua;
@@ -163,7 +169,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             try
             {
                 var dialog = new ThemSuaLoaiLinhKienDialog(loai);
-                dialog.Owner = Application.Current.MainWindow;
+                var window = Application.Current.MainWindow;
+                if (window != null && window.IsVisible && window.IsLoaded)
+                {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                }
+
                 if (dialog.ShowDialog() == true)
                 {
                     var kq = dialog.KetQua;

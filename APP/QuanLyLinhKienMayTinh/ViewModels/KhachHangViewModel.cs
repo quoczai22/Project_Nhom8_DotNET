@@ -132,7 +132,11 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 string newID = Services.AutoIDService.GetNextID("KH", lastID);
 
                 var dialog = new ThemSuaKhachHangDialog(newID);
-                dialog.Owner = Application.Current.MainWindow;
+                var window = Application.Current.MainWindow;
+                if(window != null && window.IsVisible && window.IsLoaded) {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                }
                 if (dialog.ShowDialog() == true)
                 {
                     var kq = dialog.KetQua;
@@ -173,7 +177,11 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             try
             {
                 var dialog = new ThemSuaKhachHangDialog(kh);
-                dialog.Owner = Application.Current.MainWindow;
+                var window = Application.Current.MainWindow;
+                if(window != null && window.IsVisible && window.IsLoaded) {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                }
                 if (dialog.ShowDialog() == true)
                 {
                     var kq = dialog.KetQua;

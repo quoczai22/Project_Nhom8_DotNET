@@ -201,7 +201,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                         if (spSapHetHang != null && spSapHetHang.Count > 0)
                         {
                             var window = new ThongBaoTonKhoWindow(spSapHetHang);
-                            window.Owner = Application.Current.MainWindow; 
+                            var mainwindow = System.Windows.Application.Current.MainWindow;
+                            if(mainwindow != null && mainwindow.IsVisible && mainwindow.IsLoaded) {
+                                window.Owner = mainwindow;
+                                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                            }
+
                             window.ShowDialog();
                         }
 

@@ -209,7 +209,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 string newID = Services.AutoIDService.GetNextID("NV", lastID);
 
                 var dialog = new ThemSuaNhanVienDialog(newID);
-                dialog.Owner = Application.Current.MainWindow;
+                var window = Application.Current.MainWindow;
+                if (window != null && window.IsVisible && window.IsLoaded)
+                {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                }
                 if (dialog.ShowDialog() == true)
                 {
                     string quyen = LayQuyenTuChucVu(dialog.ChucVu);
@@ -258,7 +263,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             try
             {
                 var dialog = new ThemSuaNhanVienDialog(nv);
-                dialog.Owner = Application.Current.MainWindow;
+                var window = Application.Current.MainWindow;
+                if (window != null && window.IsVisible && window.IsLoaded)
+                {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                }
                 if (dialog.ShowDialog() == true)
                 {
                     using var db = DataProvider.Ins.GetContext();

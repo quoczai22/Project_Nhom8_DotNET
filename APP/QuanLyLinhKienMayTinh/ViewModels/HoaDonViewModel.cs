@@ -392,7 +392,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 string newID = Services.AutoIDService.GetNextID("HD", lastID);
 
                 var dialog = new ThemHoaDonDialog(newID);
-                dialog.Owner = Application.Current.MainWindow;
+                var window = Application.Current.MainWindow;
+                if(window != null && window.IsVisible && window.IsLoaded)
+                {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                }
                 if (dialog.ShowDialog() == true)
                 {
                     LuuHoaDonAnToan(dialog.HoaDonMoi, dialog.ChiTietHds);
@@ -424,7 +429,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             try
             {
                 var dialog = new SuaHoaDonDialog(HoaDonChon.MaHoaDon);
-                dialog.Owner = Application.Current.MainWindow;
+                var window = Application.Current.MainWindow;
+                if (window != null && window.IsVisible && window.IsLoaded)
+                {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                }
                 if (dialog.ShowDialog() == true)
                 {
                     TaiDuLieu();
@@ -503,7 +513,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // Kiểm tra điều kiện: Chỉ cho phép thanh toán nếu hóa đơn đang ở trạng thái chưa thanh toán
         private bool CanThanhToanHoaDon(object parameter)
         {
-            return HoaDonChon != null && HoaDonChon.TrangThai != "Chưa thanh toán";
+            return HoaDonChon != null && HoaDonChon.TrangThai != "Đã thanh toán";
         }
         // Mở cửa sổ lựa chọn phương thức thanh toán (Tiền mặt, MoMo, v.v.) cho hóa đơn đang chọn
         private void ThucHienThanhToan(object parameter)
@@ -517,7 +527,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 () => TaiDuLieu()
             );
 
-            dialog.Owner = System.Windows.Application.Current.MainWindow; 
+            var window = Application.Current.MainWindow;
+            if (window != null && window.IsVisible && window.IsLoaded)
+            {
+                dialog.Owner = window;
+                dialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
             dialog.ShowDialog();
 
         }

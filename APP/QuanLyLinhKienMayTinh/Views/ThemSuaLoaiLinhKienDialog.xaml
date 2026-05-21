@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Thông Tin Loại Linh Kiện"
         Width="440" SizeToContent="Height"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="{DynamicResource BackgroundColor}">
     <Window.Resources>

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Tạo Hóa Đơn Mới"
         Width="700" Height="600"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         Background="{DynamicResource BackgroundColor}">
     <Window.Resources>

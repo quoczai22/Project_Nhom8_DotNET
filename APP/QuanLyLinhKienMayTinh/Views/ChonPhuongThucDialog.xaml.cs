@@ -25,7 +25,11 @@ namespace QuanLyLinhKienMayTinh.Views
             {
                 var momoPage = new MomoPaymentWindow(_maHd, _soTien, _momoService, _onThanhToanThanhCong);// truyền thông tin đơn hàng
 
-                momoPage.Owner = this; // đặt cửa sổ cha để có thể gọi callback khi thanh toán thành công
+                var window = System.Windows.Application.Current.MainWindow;
+                if(window != null && window.IsVisible && window.IsLoaded) {
+                    momoPage.Owner = window; // đặt cửa sổ cha để có thể gọi callback khi thanh toán thành công
+                    momoPage.WindowStartupLocation = WindowStartupLocation.CenterScreen; // căn giữa so với cửa sổ cha
+                }
                 momoPage.ShowDialog();
                 Close();
             }

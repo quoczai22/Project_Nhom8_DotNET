@@ -180,7 +180,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 string newID = "LK" + (maxNum + 1).ToString("D3");
 
                 var dialog = new ThemSuaLinhKienDialog(newID);
-                dialog.Owner = Application.Current.MainWindow;
+                var window = System.Windows.Application.Current.MainWindow;
+                if (window != null && window.IsVisible && window.IsLoaded)
+                {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
+                }
                 if (dialog.ShowDialog() == true)
                 {
                     var lkMoi = new LinhKien
@@ -224,9 +229,10 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 var dialog = new ThemSuaLinhKienDialog(lk);
                 var window=System.Windows.Application.Current.MainWindow;
-                if(window != null) {
+                if (window != null && window.IsVisible && window.IsLoaded)
+                {
                     dialog.Owner = window;
-                    dialog.WindowStartupLocation =System.Windows.WindowStartupLocation.CenterOwner;
+                    dialog.WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
                 }
                 if (dialog.ShowDialog() == true)
                 {
