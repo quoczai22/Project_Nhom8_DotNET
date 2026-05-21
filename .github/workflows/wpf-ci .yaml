@@ -25,8 +25,8 @@ jobs:
     - name: Khôi phục các dependencies (Restore)
       run: dotnet restore APP/QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj
 
-    - name: Đóng gói ứng dụng (Publish)
-      run: dotnet publish APP/QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj -c Release -o ./publish
+    - name: Biên dịch và Đóng gói ứng dụng
+      run: dotnet publish APP/QuanLyLinhKienMayTinh/QuanLyLinhKienMayTinh.csproj -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true /p:PublishReadyToRun=true -o ./publish
 
     # --- BƯỚC TẠO VÀ LƯU ARTIFACT ---
     - name: Lưu trữ Artifact của bản Build
