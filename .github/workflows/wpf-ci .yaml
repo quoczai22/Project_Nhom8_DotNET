@@ -5,9 +5,9 @@ env:
 
 on:
   push:
-    branches: [ "Quoc_test_branch" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "Quoc_test_branch" ]
+    branches: [ "main" ]
 
 jobs:
   build_and_release:
