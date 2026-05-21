@@ -223,7 +223,11 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             try
             {
                 var dialog = new ThemSuaLinhKienDialog(lk);
-                dialog.Owner = Application.Current.MainWindow;
+                var window=System.Windows.Application.Current.MainWindow;
+                if(window != null) {
+                    dialog.Owner = window;
+                    dialog.WindowStartupLocation =System.Windows.WindowStartupLocation.CenterOwner;
+                }
                 if (dialog.ShowDialog() == true)
                 {
                     var db = DataProvider.Ins.GetContext();
