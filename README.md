@@ -1,163 +1,315 @@
-<!-- Capsule Render Banner -->
-![Header](https://capsule-render.vercel.app/api?type=waving&color=3f51b5&height=220&section=header&text=PC%20Parts%20Manager&fontSize=50&fontColor=ffffff&fontAlignY=38&desc=Hệ%20thống%20quản%20lý%20linh%20kiện%20máy%20tính%20thông%20minh&descAlignY=60&descFontColor=c5cae9)
-
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-2.1.0-3f51b5?style=for-the-badge&logo=semantic-release)
-![Build](https://img.shields.io/badge/build-passing-4caf50?style=for-the-badge&logo=github-actions)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6?style=for-the-badge&logo=typescript)
-![React](https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react)
-![License](https://img.shields.io/badge/license-MIT-ff9800?style=for-the-badge)
+<img src="https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 8.0"/>
+<img src="https://img.shields.io/badge/WPF-MVVM-3f51b5?style=for-the-badge&logo=windows&logoColor=white" alt="WPF MVVM"/>
+<img src="https://img.shields.io/badge/SQL%20Server-EF%20Core-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white" alt="SQL Server"/>
+<img src="https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD"/>
+
+<br/><br/>
+
+# 🖥️ Quản Lý Linh Kiện Máy Tính 
+
+> Ứng dụng desktop quản lý linh kiện máy tính toàn diện, xây dựng bằng **WPF .NET 8.0** theo kiến trúc **MVVM**, kết nối **SQL Server** qua **Entity Framework Core**.
+
+**Đồ án cuối kỳ — Môn Công nghệ .NET Chiều T3 T7-T12**
+
+<br/>
+
+[![Download .exe](https://img.shields.io/github/v/release/quoczai22/Project_Nhom8_DotNET?style=flat-square&label=⬇️%20Tải%20file%20.exe&color=3f51b5&logoColor=white)](https://github.com/quoczai22/Project_Nhom8_DotNET/releases/latest)
+[![GitHub stars](https://img.shields.io/github/stars/quoczai22/Project_Nhom8_DotNET?style=flat-square&color=3f51b5)](https://github.com/quoczai22/Project_Nhom8_DotNET/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/quoczai22/Project_Nhom8_DotNET?style=flat-square&color=3f51b5)](https://github.com/quoczai22/Project_Nhom8_DotNET/issues)
 
 </div>
+
 
 ---
 
 ## 📋 Mục lục
 
-- [✨ Tính năng](#-tính-năng)
-- [📸 Giao diện](#-giao-diện)
-- [🛠️ Công nghệ](#️-công-nghệ)
-- [🚀 Cài đặt](#-cài-đặt)
-- [⚙️ Cấu hình](#️-cấu-hình)
-- [📖 Hướng dẫn sử dụng](#-hướng-dẫn-sử-dụng)
-- [🤝 Đóng góp](#-đóng-góp)
-- [📄 License](#-license)
+- [Giới thiệu](#-giới-thiệu)
+- [Tính năng nổi bật](#-tính-năng-nổi-bật)
+- [Công nghệ sử dụng](#-công-nghệ-sử-dụng)
+- [Kiến trúc hệ thống](#-kiến-trúc-hệ-thống)
+- [Cấu trúc thư mục](#-cấu-trúc-thư-mục)
+- [Giao diện ứng dụng](#-giao-diện-ứng-dụng)
+- [Hướng dẫn cài đặt](#-hướng-dẫn-cài-đặt)
+- [Thông tin nhóm](#-thông-tin-nhóm)
 
 ---
 
-## ✨ Tính năng
+## 🚀 Giới thiệu
 
-| Tính năng | Mô tả |
+**Quản Lý Linh Kiện Máy Tính** là ứng dụng desktop được xây dựng nhằm hỗ trợ các cửa hàng linh kiện máy tính trong việc quản lý hàng hóa, xuất hóa đơn và theo dõi khách hàng — nhân viên một cách hiệu quả.
+
+Ứng dụng cung cấp giao diện trực quan, hỗ trợ **chế độ sáng/tối**, tích hợp thanh toán **MoMo qua QR**, và có thể chạy ngay từ file `.exe` mà không cần cài đặt phức tạp.
+
+---
+
+## ✨ Tính năng nổi bật
+
+### 🔐 Xác thực & Phân quyền
+- Đăng nhập / Đăng xuất an toàn
+- Phân quyền theo vai trò (Admin / Nhân viên)
+
+### 📦 Quản lý Linh kiện
+- Xem danh sách, thêm, sửa, xóa linh kiện
+- Phân loại theo **Loại linh kiện**
+- Tìm kiếm & lọc nhanh
+- Cảnh báo **tồn kho thấp** tự động
+
+### 🧾 Hóa đơn & Thanh toán
+- Tạo hóa đơn bán hàng
+- Xuất hóa đơn ra file & in trực tiếp
+- Thanh toán **MoMo** qua quét mã QR *(demo)*
+
+### 👥 Quản lý nhân sự & Khách hàng
+- CRUD Nhân viên, Khách hàng
+- Tra cứu lịch sử giao dịch
+
+### 🎨 Giao diện
+- Chuyển đổi **Light Mode / Dark Mode**
+- Màu chủ đạo `#3f51b5` (Material Indigo)
+- Thiết kế theo chuẩn Material Design
+
+---
+
+## 🛠️ Công nghệ sử dụng
+
+| Thành phần | Công nghệ |
 |---|---|
-| 📦 **Quản lý kho** | Theo dõi CPU, GPU, RAM, SSD, Mainboard theo thời gian thực |
-| 🔔 **Cảnh báo tồn kho** | Tự động thông báo khi linh kiện sắp hết hàng |
-| 📊 **Dashboard thống kê** | Biểu đồ xuất nhập, doanh thu, top sản phẩm |
-| 🔍 **Tìm kiếm nâng cao** | Lọc theo danh mục, thương hiệu, giá, tình trạng |
-| 📤 **Xuất báo cáo** | Export Excel, PDF — lịch sử giao dịch chi tiết |
-| 👥 **Phân quyền** | Admin, Nhân viên kho, Kế toán |
+| Ngôn ngữ | C# 12 |
+| Framework UI | WPF (.NET 8.0) |
+| Kiến trúc | MVVM (Model-View-ViewModel) |
+| ORM | Entity Framework Core 8 |
+| Database | Microsoft SQL Server |
+| Thiết kế DB | T-SQL |
+| Thanh toán | MoMo Payment API (QR demo) |
+| CI/CD | GitHub Actions (auto build & release `.exe`) |
+| Report / Print | Xuất PDF / In hóa đơn |
 
 ---
 
-## 📸 Giao diện
-
-> _Screenshot hoặc GIF demo tại đây_
+## 🏗️ Kiến trúc hệ thống
 
 ```
-┌─────────────────────────────────────────────┐
-│  🖥️  PC Parts Manager          [+ Thêm mới] │
-├──────────────┬──────────┬────────┬──────────┤
-│ Tên linh kiện│ Danh mục │Tồn kho │Trạng thái│
-├──────────────┼──────────┼────────┼──────────┤
-│ i9-13900K    │ CPU      │  14    │ ✅ Còn   │
-│ RTX 4080     │ GPU      │   3    │ ⚠️ Thấp  │
-│ Samsung 990  │ SSD      │   0    │ ❌ Hết   │
-└──────────────┴──────────┴────────┴──────────┘
+┌─────────────────────────────────────────────────────────┐
+│                        VIEW (XAML)                       │
+│   MainWindow · LoginView · ProductView · InvoiceView    │
+│   CustomerView · EmployeeView · CategoryView · ...      │
+└───────────────────────┬─────────────────────────────────┘
+                        │  Data Binding / Command
+┌───────────────────────▼─────────────────────────────────┐
+│                     VIEWMODEL                            │
+│   BaseViewModel · LoginVM · ProductVM · InvoiceVM       │
+│   CustomerVM · EmployeeVM · CategoryVM · ...            │
+└───────────────────────┬─────────────────────────────────┘
+                        │  Repository Pattern
+┌───────────────────────▼─────────────────────────────────┐
+│                       MODEL                              │
+│   Entities: Product · Category · Invoice · Customer     │
+│             Employee · InvoiceDetail · ...              │
+└───────────────────────┬─────────────────────────────────┘
+                        │  Entity Framework Core
+┌───────────────────────▼─────────────────────────────────┐
+│                  SQL SERVER DATABASE                     │
+│           (Code First Migration / T-SQL)                │
+└─────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🛠️ Công nghệ
+## 📁 Cấu trúc thư mục
 
-<div align="center">
-
-![React](https://img.shields.io/badge/React_18-20232A?style=flat-square&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)
-![Material UI](https://img.shields.io/badge/Material_UI-3f51b5?style=flat-square&logo=mui&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-43853D?style=flat-square&logo=node.js&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=flat-square&logo=postgresql&logoColor=white)
-![Chart.js](https://img.shields.io/badge/Chart.js-FF6384?style=flat-square&logo=chart.js&logoColor=white)
-
-</div>
+```
+📦 Repository Root
+│
+├── 📂 CSDL/                                        # Script T-SQL thiết kế database
+│   └── *QuanLyLinhKienMayTinh_NET.sql                                       # Tạo bảng, stored procedures, functions
+│
+└── 📂 Project_Nhom8_DotNET/                        # Source code WPF
+    │
+    ├── 📂 Helpers/
+    │   └── Multipasswordconverter.cs               # Converter hỗ trợ PasswordBox binding
+    │
+    ├── 📂 Images/
+    │   ├── avatar.png
+    │   └── logo_momo.png
+    │
+    ├── 📂 Models/                                  # EF Core entities + DbContext
+    │   ├── QL_LinhKien_PC_Context.cs               # DbContext chính
+    │   ├── QL_LinhKien_PC_Context.Functions.cs     # DB Functions mapping
+    │   ├── QL_LinhKien_PC_ContextProcedures.cs     # Stored Procedures mapping
+    │   ├── IQL_LinhKien_PC_ContextProcedures.cs    # Interface cho procedures
+    │   ├── DbContextExtensions.cs
+    │   ├── DataProvider.cs
+    │   │
+    │   ├── LinhKien.cs                             # Entity: Linh kiện
+    │   ├── LoaiLk.cs                               # Entity: Loại linh kiện
+    │   ├── NhaSanXuat.cs                           # Entity: Nhà sản xuất
+    │   ├── HoaDon.cs                               # Entity: Hóa đơn
+    │   ├── ChiTietHd.cs                            # Entity: Chi tiết hóa đơn
+    │   ├── PhieuNhap.cs                            # Entity: Phiếu nhập
+    │   ├── ChiTietPn.cs                            # Entity: Chi tiết phiếu nhập
+    │   ├── KhachHang.cs                            # Entity: Khách hàng
+    │   ├── NhanVien.cs                             # Entity: Nhân viên
+    │   ├── TaiKhoan.cs                             # Entity: Tài khoản đăng nhập
+    │   ├── ThongKeBanHang.cs                       # Model: Thống kê bán hàng
+    │   ├── ThongKeHang.cs                          # Model: Thống kê hàng
+    │   ├── sp_BaoCaoTonKhoResult.cs                # Model: Kết quả báo cáo tồn kho
+    │   ├── MomoExecuteResponseModel.cs             # Model: Response MoMo
+    │   └── MomoResponse.cs                         # Model: Dữ liệu MoMo
+    │
+    ├── 📂 Services/
+    │   ├── IMomoService.cs                         # Interface thanh toán MoMo
+    │   ├── MomoService.cs                          # Xử lý API MoMo (QR, callback)
+    │   └── AutoIDServices.cs                       # Tự động sinh ID
+    │
+    ├── 📂 Themes/                                  # Giao diện sáng / tối
+    │   ├── ThemeLight.xaml
+    │   └── ThemeDark.xaml
+    │
+    ├── 📂 ViewModels/                              # MVVM – logic & data binding
+    │   ├── BaseViewModel.cs                        # Base với INotifyPropertyChanged
+    │   ├── RelayCommand.cs                         # ICommand implementation
+    │   ├── ISearchable.cs                          # Interface tìm kiếm dùng chung
+    │   ├── LoginViewModel.cs
+    │   ├── MainViewModel.cs
+    │   ├── TrangChuViewModel.cs
+    │   ├── LinhKienViewModel.cs
+    │   ├── LoaiLinhKienViewModel.cs
+    │   ├── HoaDonViewModel.cs
+    │   ├── KhachHangViewModel.cs
+    │   └── NhanVienViewModel.cs
+    │
+    ├── 📂 Views/                                   # XAML – giao diện người dùng
+    │   ├── LoginView.xaml                          # Màn hình đăng nhập
+    │   ├── MainWindow.xaml                         # Cửa sổ chính (navigation)
+    │   ├── TrangChuView.xaml                       # Trang chủ / Dashboard
+    │   ├── LinhKienView.xaml                       # Quản lý linh kiện
+    │   ├── LoaiLinhKienView.xaml                   # Quản lý loại linh kiện
+    │   ├── HoaDonView.xaml                         # Quản lý hóa đơn
+    │   ├── KhachHangView.xaml                      # Quản lý khách hàng
+    │   ├── NhanVienView.xaml                       # Quản lý nhân viên
+    │   ├── MomoPaymentView.xaml                    # Màn hình thanh toán MoMo QR
+    │   ├── ThongBaoTonKhoWindow.xaml               # Cửa sổ cảnh báo tồn kho
+    │   │
+    │   └── 📂 Dialogs/                             # Hộp thoại thêm / sửa
+    │       ├── ChonPhuongThucDialog.xaml           # Chọn phương thức thanh toán
+    │       ├── ThemHoaDonDialog.xaml
+    │       ├── SuaHoaDonDialog.xaml
+    │       ├── ThemSuaLinhKienDialog.xaml
+    │       ├── ThemSuaLoaiLinhKienDialog.xaml
+    │       ├── ThemSuaKhachHangDialog.xaml
+    │       └── ThemSuaNhanVienDialog.xaml
+    │
+    ├── 📄 App.xaml
+    ├── 📄 App.xaml.cs
+    └── 📄 Project_Nhom8_DotNET.csproj
+```
 
 ---
 
-## 🚀 Cài đặt
+## 📸 Giao diện ứng dụng
+
+> ![image.png](attachment:image.png)
+
+| Màn hình | Mô tả |
+|---|---|
+| ![Login](https://placehold.co/600x340/3f51b5/ffffff?text=Đăng+Nhập) | **Đăng nhập** — Xác thực tài khoản & phân quyền |
+| ![Dashboard](https://placehold.co/600x340/3f51b5/ffffff?text=Trang+Chủ) | **Trang chủ** — Tổng quan thống kê, cảnh báo tồn kho |
+| ![Product](https://placehold.co/600x340/3f51b5/ffffff?text=Linh+Kiện) | **Quản lý Linh kiện** — CRUD, tìm kiếm, lọc danh mục |
+| ![Invoice](https://placehold.co/600x340/3f51b5/ffffff?text=Hóa+Đơn) | **Hóa đơn** — Tạo, xuất file, in & thanh toán MoMo QR |
+| ![Dark Mode](https://placehold.co/600x340/1a1a2e/3f51b5?text=Dark+Mode) | **Dark Mode** — Chuyển đổi giao diện sáng/tối |
+
+---
+
+## ⚙️ Hướng dẫn cài đặt
+
+### ▶️ Cách 1 — Chạy file `.exe` (khuyến nghị)
+
+1. Vào mục **[Releases](https://github.com/quoczai22/Project_Nhom8_DotNET/releases/latest)** của repo
+2. Tải file `QuanLyLinhKien-Setup.exe` về máy
+3. Chạy file và làm theo hướng dẫn cài đặt
+4. Mở ứng dụng và đăng nhập
+
+> **Yêu cầu:** Máy cần cài sẵn [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) và có SQL Server.
+
+---
+
+### 🛠️ Cách 2 — Build từ source code
+
+#### Yêu cầu hệ thống
+
+| Công cụ | Phiên bản tối thiểu |
+|---|---|
+| Visual Studio | 2022 (v17.8+) |2026|
+| .NET SDK | 8.0 |
+| SQL Server | 2022 |2026|
+| SQL Server Management Studio | Tùy chọn |
+
+#### Các bước thực hiện
+
+**1. Clone repository**
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/yourname/pc-parts-manager.git
-cd pc-parts-manager
-
-# 2. Cài đặt dependencies
-npm install
-
-# 3. Cấu hình môi trường
-cp .env.example .env
-
-# 4. Chạy database migration
-npm run migrate
-
-# 5. Khởi động ứng dụng
-npm run dev
-# → http://localhost:3000
+git clone https://github.com/quoczai22/Project_Nhom8_DotNET.git
+cd Project_Nhom8_DotNET
 ```
 
----
+**2. Cấu hình Connection String**
 
-## ⚙️ Cấu hình
+Cài đặt phần dataprovider qua trang web Kteam: https://howkteam.vn/course/lap-trinh-phan-mem-quan-ly-kho-wpf-mvvm/class-dataprovider-trong-phan-mem-quan-ly-kho-wpf-mvvm-2651
 
-Tạo file `.env` từ `.env.example` và điền thông tin:
+```DataProvider (
+    private DataProvider()
+    {
 
-```env
-# Database
-DATABASE_URL=postgresql://user:password@localhost:5432/pcparts
+        _supabaseConnStr = "Server=db.pmkwulshpbpugvphzvwk.supabase.co;Port=5432;Database=postgres;User Id=postgres;Password=Kienquoc@1704;";
 
-# App
-PORT=3000
-JWT_SECRET=your_secret_key
-
-# Email (cảnh báo tồn kho)
-SMTP_HOST=smtp.gmail.com
-SMTP_USER=your@gmail.com
+        _localConnStr = "Data Source=(localdbb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
+    }
+)
 ```
 
----
+**3. Tạo Database và Migration**
 
-## 📖 Hướng dẫn sử dụng
+Mở **Package Manager Console** trong Visual Studio:
 
-<details>
-<summary><b>📦 Thêm linh kiện mới</b></summary>
+```powershell
+Update-Database
+```
 
-1. Vào mục **Quản lý kho** → nhấn **+ Thêm mới**
-2. Điền tên, danh mục, nhà sản xuất, giá nhập, số lượng
-3. Đặt ngưỡng cảnh báo tồn kho tối thiểu
-4. Nhấn **Lưu**
+Hoặc dùng .NET CLI:
 
-</details>
+```bash
+dotnet ef database update
+```
 
-<details>
-<summary><b>📊 Xem báo cáo & xuất file</b></summary>
+**4. Chạy ứng dụng**
 
-1. Vào mục **Báo cáo** → chọn khoảng thời gian
-2. Chọn loại báo cáo: Tồn kho / Doanh thu / Xuất nhập
-3. Nhấn **Xuất Excel** hoặc **Xuất PDF**
+```bash
+dotnet run
+```
 
-</details>
-
----
-
-## 🤝 Đóng góp
-
-Mọi đóng góp đều được chào đón! Vui lòng:
-
-1. Fork repo này
-2. Tạo branch mới (`git checkout -b feature/ten-tinh-nang`)
-3. Commit thay đổi (`git commit -m 'feat: thêm tính năng X'`)
-4. Push lên branch (`git push origin feature/ten-tinh-nang`)
-5. Mở Pull Request
+Hoặc nhấn **F5** trong Visual Studio.
 
 ---
 
-## 📄 License
+## 👨‍💻 Thông tin nhóm
 
-Phân phối theo giấy phép **MIT**. Xem file [LICENSE](LICENSE) để biết thêm.
+**Nhóm 8 — Môn Công nghệ .NET**
+
+| Vai trò | Họ và tên | MSSV |
+|:---:|---|:---:|
+| 👑 Trưởng nhóm | Trịnh Hữu Kiến Quốc | 2001240399 |
+| 👨‍💻 Thành viên | Nguyễn Nhật Minh Quân | 2001240388 |
+| 👨‍💻 Thành viên | Lương Văn Quan | 2001240384 |
+| 👨‍💻 Thành viên | Ngụy Hạo Nhiên | 2001240341 |
 
 ---
-
-<!-- Footer wave -->
-![Footer](https://capsule-render.vercel.app/api?type=waving&color=3f51b5&height=120&section=footer)
 
 <div align="center">
-  <sub>Made with ❤️ by <a href="https://github.com/yourname">yourname</a></sub>
+
+Made with ❤️ by **Nhóm 8** &nbsp;·&nbsp; Môn Công nghệ .NET
+
 </div>
