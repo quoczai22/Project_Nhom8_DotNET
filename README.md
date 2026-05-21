@@ -91,23 +91,44 @@
 ## 🏗️ Kiến trúc hệ thống
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                        VIEW (XAML)                       │
-│   
-└───────────────────────┬─────────────────────────────────┘
-                        │  Data Binding / Command
-┌───────────────────────▼─────────────────────────────────┐
-│                     VIEWMODEL                            │
-└───────────────────────┬─────────────────────────────────┘
-                        │  Repository Pattern
-┌───────────────────────▼─────────────────────────────────┐
-│                       MODEL                              
-└───────────────────────┬─────────────────────────────────┘
-                        │  Entity Framework Core
-┌───────────────────────▼─────────────────────────────────┐
-│                  SQL SERVER DATABASE                     │
-│                           
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                           VIEW (XAML)                                            │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ - LoginView                        - MomoPaymentView             - ThemSuaLinhKienDialog         │
+│ - MainWindow                       - ThongBaotonKhoWindow        - ThemSuaLoaiLinhKienDialog     │
+│ - TrangChuView                     - ChonPhuongThucDialog        - ThemSuaKhachHangDialog        │
+│ - LinhKienView                     - ThemHoaDonDialog            - ThemSuaNhanVienDialog         │
+│ - LoaiLinhKienView                 - SuaHoaDonDialog                                             │
+│ - HoaDonView                       - KhachHangView                                               │
+│ - NhanVienView                                                                                   │
+└───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
+│ Data Binding / Command
+┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
+│                                           VIEWMODEL                                              │
+├────────────────────────────────────────────────────────────────────────────────────────────────专─┤
+│ - BaseViewModel                    - LoginViewModel              - LoaiLinhKienViewModel         │
+│ - RelayCommand                     - MainViewModel               - HoaDonViewModel               │
+│ - ISearchable                      - TrangChuViewModel           - KhachHangViewModel            │
+│                                    - LinhKienViewModel           - NhanVienViewModel             │
+└───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
+│
+┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
+│                                             MODEL                                                │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ - QL_LinhKien_PC_Context           - LinhKien                    - NhanVien                      │
+│ - QL_LinhKien_PC_Context_Functions - LoaiLk                      - TaiKhoan                      │
+│ - QL_LinhKien_PC_ContextProcedures - NhaSanXuat                  - ThongKeBanHang                │
+│ - IQL_LinhKien_PC_ContextProcedures- HoaDon                      - ThongKeHang                   │
+│ - DbContextExtensions              - ChiTietHd                   - sp_BaoCaoTonKhoResult         │
+│ - DataProvider                     - PhieuNhap                   - MomoExecuteResponseModel      │
+│                                    - ChiTietPn                   - MomoResponse                  │
+│                                    - KhachHang                                                   │
+└───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
+│ Entity Framework Core
+┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
+│                                       SQL SERVER DATABASE                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+
 ```
 
 ---
