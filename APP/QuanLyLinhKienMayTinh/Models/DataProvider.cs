@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 namespace QuanLyLinhKienMayTinh.Models
 
+
 {
 
     public class DataProvider
@@ -8,30 +9,34 @@ namespace QuanLyLinhKienMayTinh.Models
         private static DataProvider _ins;
         public static DataProvider Ins => _ins ??= new DataProvider();
 
-        private string _currentConnStr;
+        private string _supabaseConnStr;
+        private string _localConnStr;
 
         private DataProvider()
         {
-            _currentConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
+
+            _supabaseConnStr = "Server=db.pmkwulshpbpugvphzvwk.supabase.co;Port=5432;Database=postgres;User Id=postgres;Password=Kienquoc@1704;";
+
+            _localConnStr = "Data Source=(localdbb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
         }
 
         public QL_LinhKien_PC_Context GetContext()
         {
-            var options = new DbContextOptionsBuilder<QL_LinhKien_PC_Context>()
-                .UseSqlServer(_currentConnStr)
-                .Options;
+            var optionsBuilder = new DbContextOptionsBuilder<QL_LinhKien_PC_Context>();
 
-            return new QL_LinhKien_PC_Context(options);
+            optionsBuilder.UseNpgsql(_supabaseConnStr);
+
+            return new QL_LinhKien_PC_Context(optionsBuilder.Options);
         }
 
         public void ChangeToQuanLyConnection()
         {
-            _currentConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
+            _localConnStr = "Data Source=(localdbb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
         }
 
         public void ChangeToNhanVienConnection()
         {
-            _currentConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
+            _localConnStr = "Data Source=(localdbb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
         }
     }
 }
