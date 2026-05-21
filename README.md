@@ -93,25 +93,20 @@
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                        VIEW (XAML)                       │
-│   MainWindow · LoginView · ProductView · InvoiceView    │
-│   CustomerView · EmployeeView · CategoryView · ...      │
+│   
 └───────────────────────┬─────────────────────────────────┘
                         │  Data Binding / Command
 ┌───────────────────────▼─────────────────────────────────┐
 │                     VIEWMODEL                            │
-│   BaseViewModel · LoginVM · ProductVM · InvoiceVM       │
-│   CustomerVM · EmployeeVM · CategoryVM · ...            │
 └───────────────────────┬─────────────────────────────────┘
                         │  Repository Pattern
 ┌───────────────────────▼─────────────────────────────────┐
-│                       MODEL                              │
-│   Entities: Product · Category · Invoice · Customer     │
-│             Employee · InvoiceDetail · ...              │
+│                       MODEL                              
 └───────────────────────┬─────────────────────────────────┘
                         │  Entity Framework Core
 ┌───────────────────────▼─────────────────────────────────┐
 │                  SQL SERVER DATABASE                     │
-│           (Code First Migration / T-SQL)                │
+│                           
 └─────────────────────────────────────────────────────────┘
 ```
 
