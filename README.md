@@ -105,7 +105,7 @@
 │ Data Binding / Command
 ┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
 │                                           VIEWMODEL                                              │
-├────────────────────────────────────────────────────────────────────────────────────────────────专─┤
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
 │ - BaseViewModel                    - LoginViewModel              - LoaiLinhKienViewModel         │
 │ - RelayCommand                     - MainViewModel               - HoaDonViewModel               │
 │ - ISearchable                      - TrangChuViewModel           - KhachHangViewModel            │
@@ -139,7 +139,7 @@
 📦 Repository Root
 │
 ├── 📂 CSDL/                                        # Script T-SQL thiết kế database
-│   └── *QuanLyLinhKienMayTinh_NET.sql                                       # Tạo bảng, stored procedures, functions
+│   └── *QuanLyLinhKienMayTinh_NET.sql              # Tạo bảng, stored procedures, functions
 │
 └── 📂 Project_Nhom8_DotNET/                        # Source code WPF
     │
@@ -208,14 +208,13 @@
     │   ├── MomoPaymentView.xaml                    # Màn hình thanh toán MoMo QR
     │   ├── ThongBaoTonKhoWindow.xaml               # Cửa sổ cảnh báo tồn kho
     │   │
-    │   └── 📂 Dialogs/                             # Hộp thoại thêm / sửa
-    │       ├── ChonPhuongThucDialog.xaml           # Chọn phương thức thanh toán
-    │       ├── ThemHoaDonDialog.xaml
-    │       ├── SuaHoaDonDialog.xaml
-    │       ├── ThemSuaLinhKienDialog.xaml
-    │       ├── ThemSuaLoaiLinhKienDialog.xaml
-    │       ├── ThemSuaKhachHangDialog.xaml
-    │       └── ThemSuaNhanVienDialog.xaml
+    │   ├── ChonPhuongThucDialog.xaml           # Chọn phương thức thanh toán
+    │   ├── ThemHoaDonDialog.xaml               # Hộp thoại thêm / sửa
+    │   ├── SuaHoaDonDialog.xaml
+    │   ├── ThemSuaLinhKienDialog.xaml
+    │   ├── ThemSuaLoaiLinhKienDialog.xaml
+    │   ├── ThemSuaKhachHangDialog.xaml
+    │   └── ThemSuaNhanVienDialog.xaml
     │
     ├── 📄 App.xaml
     ├── 📄 App.xaml.cs
