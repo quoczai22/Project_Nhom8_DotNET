@@ -99,12 +99,12 @@
 
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Mã hóa đơn" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="TxtMaHd" Style="{StaticResource InputStyle}"/>
+                <TextBox Text="{Binding MaHd, Mode=TwoWay}" IsReadOnly="True" Style="{StaticResource InputStyle}"/>
             </StackPanel>
 
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Khách hàng *" Style="{StaticResource LabelStyle}"/>
-                <ComboBox x:Name="CboKhachHang" Padding="10,8" FontSize="13"
+                <ComboBox ItemsSource="{Binding DanhSachKhachHang}" SelectedItem="{Binding SelectedKhachHang}" Padding="10,8" FontSize="13"
                           Background="{DynamicResource BackgroundColor2}"
                           Foreground="{DynamicResource MainTextColor}"
                           BorderBrush="{DynamicResource BorderColor}"
@@ -113,7 +113,7 @@
 
             <StackPanel Grid.Column="4">
                 <TextBlock Text="Nhân viên *" Style="{StaticResource LabelStyle}"/>
-                <ComboBox x:Name="CboNhanVien" Padding="10,8" FontSize="13"
+                <ComboBox ItemsSource="{Binding DanhSachNhanVien}" SelectedItem="{Binding SelectedNhanVien}" Padding="10,8" FontSize="13"
                           Background="{DynamicResource BackgroundColor2}"
                           Foreground="{DynamicResource MainTextColor}"
                           BorderBrush="{DynamicResource BorderColor}"
@@ -122,12 +122,10 @@
 
             <StackPanel Grid.Column="6">
                 <TextBlock Text="Thanh toán" Style="{StaticResource LabelStyle}"/>
-                <ComboBox x:Name="CboPhuongThuc" Padding="10,8" FontSize="13"
+                <ComboBox ItemsSource="{Binding DanhSachPhuongThuc}" SelectedItem="{Binding SelectedPhuongThuc}" Padding="10,8" FontSize="13"
                           Background="{DynamicResource BackgroundColor2}"
                           Foreground="{DynamicResource MainTextColor}"
                           BorderBrush="{DynamicResource BorderColor}">
-                    <ComboBoxItem Content="Tiền mặt" IsSelected="True"/>
-                    <ComboBoxItem Content="Ví MoMo"/>
                 </ComboBox>
             </StackPanel>
         </Grid>
@@ -153,20 +151,20 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox x:Name="CboLinhKien" Grid.Column="0" Padding="10,8" FontSize="13"
+                <ComboBox ItemsSource="{Binding DanhSachLinhKien}" SelectedItem="{Binding SelectedLinhKien}" Grid.Column="0" Padding="10,8" FontSize="13"
                           Background="{DynamicResource BackgroundColor2}"
                           Foreground="{DynamicResource MainTextColor}"
                           BorderBrush="{DynamicResource BorderColor}"
                           DisplayMemberPath="TenLk"/>
-                <TextBox x:Name="TxtSoLuong" Grid.Column="2" Style="{StaticResource InputStyle}"
-                         Text="1" TextAlignment="Center"/>
-                <Button Grid.Column="4" Content="＋ Thêm" Style="{StaticResource PrimaryBtnStyle}"
-                        Padding="12,8" Click="BtnThemVaoGio_Click"/>
+                <TextBox Text="{Binding SoLuongText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Style="{StaticResource InputStyle}"
+                         TextAlignment="Center"/>
+                <Button Command="{Binding ThemVaoGioCommand}" Grid.Column="4" Content="＋ Thêm" Style="{StaticResource PrimaryBtnStyle}"
+                        Padding="12,8"/>
             </Grid>
 
             <!-- Danh sách sản phẩm trong giỏ -->
             <Border Grid.Row="2" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8">
-                <DataGrid x:Name="DgGioHang"
+                <DataGrid ItemsSource="{Binding GioHang}"
                           AutoGenerateColumns="False" CanUserAddRows="False"
                           IsReadOnly="True" HeadersVisibility="Column"
                           GridLinesVisibility="Horizontal"
@@ -183,9 +181,8 @@
                         <DataGridTemplateColumn Width="50">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="✕" Background="Transparent" BorderThickness="0"
-                                            Foreground="#e53935" FontWeight="Bold" Cursor="Hand"
-                                            Click="BtnXoaKhoiGio_Click"/>
+                                    <Button Command="{Binding DataContext.XoaKhoiGioCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Content="✕" Background="Transparent" BorderThickness="0"
+                                            Foreground="#e53935" FontWeight="Bold" Cursor="Hand"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -200,7 +197,7 @@
             <Grid>
                 <TextBlock Text="TỔNG TIỀN:" FontSize="14" FontWeight="Bold"
                            Foreground="{DynamicResource MainTextColor}"/>
-                <TextBlock x:Name="TxtTongTien" Text="0 ₫" HorizontalAlignment="Right"
+                <TextBlock Text="{Binding TongTienText}" HorizontalAlignment="Right"
                            FontSize="16" FontWeight="Bold" Foreground="{DynamicResource ButtonColor}"/>
             </Grid>
         </Border>
@@ -208,9 +205,9 @@
         <!-- Buttons -->
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Hủy" Style="{StaticResource CancelBtnStyle}"
-                    Margin="0,0,10,0" Click="BtnHuy_Click"/>
+                      Margin="0,0,10,0" Command="{Binding HuyCommand}"/>
             <Button Content="💾 Lưu hóa đơn" Style="{StaticResource PrimaryBtnStyle}"
-                    Click="BtnLuu_Click"/>
+                    Command="{Binding LuuCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

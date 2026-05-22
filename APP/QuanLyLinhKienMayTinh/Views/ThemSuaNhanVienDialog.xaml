@@ -69,14 +69,18 @@
     </Window.Resources>
 
     <StackPanel Margin="24">
-        <TextBlock x:Name="TitleText" Text="Thêm Nhân Viên" FontSize="18" FontWeight="Bold"
+        <TextBlock Text="{Binding TitleText}" FontSize="18" FontWeight="Bold"
                    Foreground="{DynamicResource MainTextColor}" Margin="0,0,0,20"/>
 
         <TextBlock Text="Mã nhân viên" Style="{StaticResource LabelStyle}"/>
-        <TextBox x:Name="TxtMaNv" Style="{StaticResource InputStyle}" Margin="0,0,0,14"/>
+        <TextBox Style="{StaticResource InputStyle}" Margin="0,0,0,14"
+                 Text="{Binding MaNv, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding IsMaNvReadOnly}"
+                 Opacity="{Binding MaNvOpacity}"/>
 
         <TextBlock Text="Họ tên *" Style="{StaticResource LabelStyle}"/>
-        <TextBox x:Name="TxtHoTen" Style="{StaticResource InputStyle}" Margin="0,0,0,14"/>
+        <TextBox Style="{StaticResource InputStyle}" Margin="0,0,0,14"
+                 Text="{Binding HoTen, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Grid Margin="0,0,0,14">
             <Grid.ColumnDefinitions>
@@ -86,21 +90,22 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Chức vụ" Style="{StaticResource LabelStyle}"/>
-                <ComboBox x:Name="CboChucVu" Padding="10,8" FontSize="13"
+                <ComboBox Padding="10,8" FontSize="13"
                           Background="{DynamicResource BackgroundColor2}"
                           Foreground="{DynamicResource MainTextColor}"
                           BorderBrush="{DynamicResource BorderColor}"
+                          ItemsSource="{Binding DanhSachChucVu}"
+                          SelectedItem="{Binding SelectedChucVu}"
                           DisplayMemberPath="TenChucVu"/>
             </StackPanel>
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Giới tính" Style="{StaticResource LabelStyle}"/>
-                <ComboBox x:Name="CboGioiTinh" Padding="10,8" FontSize="13"
+                <ComboBox Padding="10,8" FontSize="13"
                           Background="{DynamicResource BackgroundColor2}"
                           Foreground="{DynamicResource MainTextColor}"
-                          BorderBrush="{DynamicResource BorderColor}">
-                    <ComboBoxItem Content="Nam"/>
-                    <ComboBoxItem Content="Nữ"/>
-                </ComboBox>
+                          BorderBrush="{DynamicResource BorderColor}"
+                          ItemsSource="{Binding DanhSachGioiTinh}"
+                          SelectedItem="{Binding SelectedGioiTinh}"/>
             </StackPanel>
         </Grid>
 
@@ -112,11 +117,13 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Số điện thoại" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="TxtSdt" Style="{StaticResource InputStyle}"/>
+                <TextBox Style="{StaticResource InputStyle}"
+                         Text="{Binding Sdt, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Email" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="TxtEmail" Style="{StaticResource InputStyle}"/>
+                <TextBox Style="{StaticResource InputStyle}"
+                         Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
         </Grid>
 
@@ -128,25 +135,27 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Ngày sinh" Style="{StaticResource LabelStyle}"/>
-                <DatePicker x:Name="DpNgaySinh" FontSize="13"
+                <DatePicker FontSize="13"
                             Background="{DynamicResource BackgroundColor2}"
                             Foreground="{DynamicResource MainTextColor}"
-                            BorderBrush="{DynamicResource BorderColor}"/>
+                            BorderBrush="{DynamicResource BorderColor}"
+                            SelectedDate="{Binding NgaySinh}"/>
             </StackPanel>
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Ngày vào làm" Style="{StaticResource LabelStyle}"/>
-                <DatePicker x:Name="DpNgayVaoLam" FontSize="13"
+                <DatePicker FontSize="13"
                             Background="{DynamicResource BackgroundColor2}"
                             Foreground="{DynamicResource MainTextColor}"
-                            BorderBrush="{DynamicResource BorderColor}"/>
+                            BorderBrush="{DynamicResource BorderColor}"
+                            SelectedDate="{Binding NgayVaoLam}"/>
             </StackPanel>
         </Grid>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Hủy" Style="{StaticResource CancelBtnStyle}"
-                    Margin="0,0,10,0" Click="BtnHuy_Click"/>
-            <Button x:Name="BtnLuu" Content="Lưu" Style="{StaticResource PrimaryBtnStyle}"
-                    Click="BtnLuu_Click"/>
+                    Margin="0,0,10,0" Command="{Binding HuyCommand}"/>
+            <Button Content="{Binding ButtonContent}" Style="{StaticResource PrimaryBtnStyle}"
+                    Command="{Binding LuuCommand}"/>
         </StackPanel>
     </StackPanel>
 </Window>

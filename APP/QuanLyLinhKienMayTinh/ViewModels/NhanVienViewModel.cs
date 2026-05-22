@@ -217,31 +217,33 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 }
                 if (dialog.ShowDialog() == true)
                 {
-                    string quyen = LayQuyenTuChucVu(dialog.ChucVu);
+                    var vm = dialog.ViewModel;
+                    string chucVu = vm.SelectedChucVu?.TenChucVu;
+                    string quyen = LayQuyenTuChucVu(chucVu);
 
                     var nvMoi = new NhanVien
                     {
-                        MaNv = dialog.MaNv,
-                        TenNv = dialog.HoTen,
-                        ChucVu = dialog.ChucVu,
+                        MaNv = vm.MaNv,
+                        TenNv = vm.HoTen,
+                        ChucVu = chucVu,
                         Quyen = quyen,
-                        GioiTinh = dialog.GioiTinh,
-                        Sdt = dialog.Sdt,
-                        Email = dialog.Email,
-                        NgaySinh = dialog.NgaySinh,
-                        NgayVaoLam = dialog.NgayVaoLam,
+                        GioiTinh = vm.SelectedGioiTinh,
+                        Sdt = vm.Sdt,
+                        Email = vm.Email,
+                        NgaySinh = vm.NgaySinh.HasValue ? DateOnly.FromDateTime(vm.NgaySinh.Value) : null,
+                        NgayVaoLam = vm.NgayVaoLam.HasValue ? DateOnly.FromDateTime(vm.NgayVaoLam.Value) : null,
                         DaNghiViec = false
                     };
 
                     // Tạo mặc định tài khoản đăng nhập cho nhân viên mới
-                    var tkMoi = new TaiKhoan { TenDn = dialog.MaNv, MatKhau = "123", MaNv = dialog.MaNv };
+                    var tkMoi = new TaiKhoan { TenDn = vm.MaNv, MatKhau = "123", MaNv = vm.MaNv };
 
                     db.NhanViens.Add(nvMoi);
                     db.TaiKhoans.Add(tkMoi);
                     db.SaveChanges();
 
                     TaiDuLieu();
-                    MessageBox.Show($"Thêm nhân viên thành công!\nTài khoản mặc định: {dialog.MaNv} / 123",
+                    MessageBox.Show($"Thêm nhân viên thành công!\nTài khoản mặc định: {vm.MaNv} / 123",
                         "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
@@ -271,18 +273,21 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 }
                 if (dialog.ShowDialog() == true)
                 {
+                    var vm = dialog.ViewModel;
+                    string chucVu = vm.SelectedChucVu?.TenChucVu;
+
                     using var db = DataProvider.Ins.GetContext();
-                    var entity = db.NhanViens.Find(dialog.MaNv);
+                    var entity = db.NhanViens.Find(vm.MaNv);
                     if (entity != null)
                     {
-                        entity.TenNv = dialog.HoTen;
-                        entity.ChucVu = dialog.ChucVu;
-                        entity.Quyen = LayQuyenTuChucVu(dialog.ChucVu);
-                        entity.GioiTinh = dialog.GioiTinh;
-                        entity.Sdt = dialog.Sdt;
-                        entity.Email = dialog.Email;
-                        entity.NgaySinh = dialog.NgaySinh;
-                        entity.NgayVaoLam = dialog.NgayVaoLam;
+                        entity.TenNv = vm.HoTen;
+                        entity.ChucVu = chucVu;
+                        entity.Quyen = LayQuyenTuChucVu(chucVu);
+                        entity.GioiTinh = vm.SelectedGioiTinh;
+                        entity.Sdt = vm.Sdt;
+                        entity.Email = vm.Email;
+                        entity.NgaySinh = vm.NgaySinh.HasValue ? DateOnly.FromDateTime(vm.NgaySinh.Value) : null;
+                        entity.NgayVaoLam = vm.NgayVaoLam.HasValue ? DateOnly.FromDateTime(vm.NgayVaoLam.Value) : null;
 
                         db.SaveChanges();
                         TaiDuLieu();

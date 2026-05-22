@@ -1,34 +1,11 @@
-﻿-- trước khi chạy phải tạo folder SQLData trong ổ C nếu ko có sẽ lỗi
+-- trước khi chạy phải tạo folder SQLData trong ổ C nếu ko có sẽ lỗi
 use master;
 go
 
 drop database if exists QL_LinhKien_PC_NET;
 go
 
-create database QL_LinhKien_PC_NET
-on primary
-(
-    name = QL_LinhKien_Primary_NET,
-    filename = 'C:\SQLData\QL_LinhKien_NET_Main.mdf',
-    size = 15MB,
-    maxsize = 100MB,
-    filegrowth = 5MB
-),
-(
-    name = QL_LinhKien_Secondary_NET,
-    filename = 'C:\SQLData\QL_LinhKien_NET_Sub.ndf', 
-    size = 5MB,
-    maxsize = 50MB,
-    filegrowth = 1MB
-)
-log on
-(
-    name = QL_LinhKien_Log_NET,
-    filename = 'C:\SQLData\QL_LinhKien_NET_Log.ldf',
-    size = 5MB,
-    maxsize = 20MB,
-    filegrowth = 1MB
-);
+create database QL_LinhKien_PC_NET;
 go
 
 use QL_LinhKien_PC_NET;

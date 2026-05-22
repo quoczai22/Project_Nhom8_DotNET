@@ -69,19 +69,20 @@
     </Window.Resources>
 
     <StackPanel Margin="24">
-        <TextBlock x:Name="TitleText" Text="Thêm Linh Kiện" FontSize="18" FontWeight="Bold"
+        <TextBlock Text="{Binding TitleText}" FontSize="18" FontWeight="Bold"
                    Foreground="{DynamicResource MainTextColor}" Margin="0,0,0,20"/>
 
         <!-- Row 1: Mã LK -->
         <TextBlock Text="Mã linh kiện *" Style="{StaticResource LabelStyle}"/>
-        <TextBox x:Name="TxtMaLk" Style="{StaticResource InputStyle}" Margin="0,0,0,4"
-                 MaxLength="6"/>
-        <TextBlock x:Name="TxtMaLkHint" Text="Nhập mã tối đa 6 ký tự, ví dụ: MOU001, RAM001, CPU001..."
+        <TextBox Text="{Binding MaLk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 IsReadOnly="{Binding IsMaLkReadOnly}" Opacity="{Binding MaLkOpacity}" 
+                 Style="{StaticResource InputStyle}" Margin="0,0,0,4" MaxLength="6"/>
+        <TextBlock Visibility="{Binding MaLkHintVisibility}" Text="Nhập mã tối đa 6 ký tự, ví dụ: MOU001, RAM001, CPU001..."
                    FontSize="11" Foreground="{DynamicResource SubTextColor}" Margin="0,0,0,14"/>
 
         <!-- Row 2: Tên LK -->
         <TextBlock Text="Tên linh kiện *" Style="{StaticResource LabelStyle}"/>
-        <TextBox x:Name="TxtTenLk" Style="{StaticResource InputStyle}" Margin="0,0,0,14"/>
+        <TextBox Text="{Binding TenLk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}" Margin="0,0,0,14"/>
 
         <!-- Row 3: Loại và NSX trên cùng dòng -->
         <Grid Margin="0,0,0,14">
@@ -92,7 +93,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Loại linh kiện *" Style="{StaticResource LabelStyle}"/>
-                <ComboBox x:Name="CboLoai" Padding="10,8" FontSize="13"
+                <ComboBox ItemsSource="{Binding DanhSachLoai}" SelectedItem="{Binding SelectedLoai}" Padding="10,8" FontSize="13"
                           Background="{DynamicResource BackgroundColor2}"
                           Foreground="{DynamicResource MainTextColor}"
                           BorderBrush="{DynamicResource BorderColor}"
@@ -100,7 +101,7 @@
             </StackPanel>
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Nhà sản xuất *" Style="{StaticResource LabelStyle}"/>
-                <ComboBox x:Name="CboNsx" Padding="10,8" FontSize="13"
+                <ComboBox ItemsSource="{Binding DanhSachNsx}" SelectedItem="{Binding SelectedNsx}" Padding="10,8" FontSize="13"
                           Background="{DynamicResource BackgroundColor2}"
                           Foreground="{DynamicResource MainTextColor}"
                           BorderBrush="{DynamicResource BorderColor}"
@@ -117,11 +118,11 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Đơn vị tính" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="TxtDvt" Style="{StaticResource InputStyle}"/>
+                <TextBox Text="{Binding Dvt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
             </StackPanel>
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Bảo hành (tháng)" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="TxtTgbh" Style="{StaticResource InputStyle}"/>
+                <TextBox Text="{Binding TgbhText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
             </StackPanel>
         </Grid>
 
@@ -134,26 +135,26 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0">
                 <TextBlock Text="Đơn giá bán" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="TxtDonGia" Style="{StaticResource InputStyle}"/>
+                <TextBox Text="{Binding DonGiaText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
             </StackPanel>
             <StackPanel Grid.Column="2">
                 <TextBlock Text="Số lượng tồn" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="TxtSoLuong" Style="{StaticResource InputStyle}"/>
+                <TextBox Text="{Binding SoLuongText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputStyle}"/>
             </StackPanel>
         </Grid>
 
         <!-- Row 6: Ngày nhập -->
         <TextBlock Text="Ngày nhập" Style="{StaticResource LabelStyle}"/>
-        <DatePicker x:Name="DpNgayNhap" Margin="0,0,0,24" FontSize="13"
+        <DatePicker SelectedDate="{Binding NgayNhap, Mode=TwoWay}" Margin="0,0,0,24" FontSize="13"
                     Background="{DynamicResource BackgroundColor2}"
                     Foreground="{DynamicResource MainTextColor}"
                     BorderBrush="{DynamicResource BorderColor}"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Hủy" Style="{StaticResource CancelBtnStyle}"
-                    Margin="0,0,10,0" Click="BtnHuy_Click"/>
-            <Button x:Name="BtnLuu" Content="Lưu" Style="{StaticResource PrimaryBtnStyle}"
-                    Click="BtnLuu_Click"/>
+                    Margin="0,0,10,0" Command="{Binding HuyCommand}"/>
+            <Button Content="{Binding ButtonContent}" Style="{StaticResource PrimaryBtnStyle}"
+                    Command="{Binding LuuCommand}"/>
         </StackPanel>
     </StackPanel>
 </Window>
