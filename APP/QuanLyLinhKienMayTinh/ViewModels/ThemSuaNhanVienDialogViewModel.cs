@@ -180,8 +180,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 {
                     "Quản lý",
                     "Nhân viên thu ngân",
-                    "Nhân viên bán hàng",
-                    "Nhân viên kỹ thuật",
+                    "Nhân viên chăm sóc khách hàng",
                     "Nhân viên kho"
                 };
 

@@ -85,7 +85,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 var db = DataProvider.Ins.GetContext();
                 DanhSachKhachHang = db.KhachHangs.AsNoTracking().OrderBy(kh => kh.TenKh).ToList();
-                DanhSachNhanVien = db.NhanViens.AsNoTracking().Where(nv => nv.DaNghiViec == false).OrderBy(nv => nv.TenNv).ToList();
+                DanhSachNhanVien = db.NhanViens.AsNoTracking().Where(nv => nv.DaNghiViec == false && (nv.ChucVu == "Nhân viên thu ngân" || nv.ChucVu == "Quản lý")).OrderBy(nv => nv.TenNv).ToList();
                 DanhSachLinhKien = db.LinhKiens.AsNoTracking().Where(lk => lk.NgungKinhDoanh == false && lk.SoLuongTon > 0).OrderBy(lk => lk.TenLk).ToList();
             }
             catch (Exception ex)
