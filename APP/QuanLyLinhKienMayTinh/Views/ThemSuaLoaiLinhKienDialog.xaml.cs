@@ -19,7 +19,6 @@ namespace QuanLyLinhKienMayTinh.Views
             TitleText.Text = "Thêm Loại Linh Kiện";
             // Để trống, người dùng tự nhập mã loại có nghĩa
             TxtMaLoai.Text = string.Empty;
-            TxtMaLoaiHint.Visibility = Visibility.Visible;
         }
 
         /// <summary>Mở ở chế độ SỬA</summary>
@@ -32,7 +31,6 @@ namespace QuanLyLinhKienMayTinh.Views
             TxtMaLoai.Text = loai.MaLoai;
             TxtMaLoai.IsReadOnly = true;
             TxtMaLoai.Opacity = 0.6;
-            TxtMaLoaiHint.Visibility = Visibility.Collapsed;
             TxtTenLoai.Text = loai.TenLoai;
             TxtMoTa.Text = loai.MoTa;
         }

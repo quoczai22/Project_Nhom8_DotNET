@@ -27,9 +27,22 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="6">
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="2"/>
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost" Margin="2"/>
+                                <TextBlock x:Name="PlaceholderText"
+                                           Text="{TemplateBinding Tag}"
+                                           Foreground="{DynamicResource SubTextColor}"
+                                           Margin="{TemplateBinding Padding}"
+                                           FontSize="{TemplateBinding FontSize}"
+                                           VerticalAlignment="Center"
+                                           IsHitTestVisible="False"
+                                           Visibility="Collapsed" />
+                            </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Self}}" Value="">
+                                <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
                             <Trigger Property="IsFocused" Value="True">
                                 <Setter Property="BorderBrush" Value="{DynamicResource ButtonColor}"/>
                             </Trigger>
@@ -76,9 +89,8 @@
         <TextBlock Text="Mã linh kiện *" Style="{StaticResource LabelStyle}"/>
         <TextBox Text="{Binding MaLk, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                  IsReadOnly="{Binding IsMaLkReadOnly}" Opacity="{Binding MaLkOpacity}" 
-                 Style="{StaticResource InputStyle}" Margin="0,0,0,4" MaxLength="6"/>
-        <TextBlock Visibility="{Binding MaLkHintVisibility}" Text="Nhập mã tối đa 6 ký tự, ví dụ: MOU001, RAM001, CPU001..."
-                   FontSize="11" Foreground="{DynamicResource SubTextColor}" Margin="0,0,0,14"/>
+                 Style="{StaticResource InputStyle}" Margin="0,0,0,14" MaxLength="6"
+                 Tag="Ví dụ: MOU001, RAM001, CPU001..."/>
 
         <!-- Row 2: Tên LK -->
         <TextBlock Text="Tên linh kiện *" Style="{StaticResource LabelStyle}"/>
