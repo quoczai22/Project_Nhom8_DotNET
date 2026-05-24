@@ -300,7 +300,6 @@ insert into ChiTietHD (MaHD, MaLK, SoLuong, DonGia) values
 ('HD019', 'MOU003', 3, 250000),
 ('HD020', 'RAM004', 1, 4800000);
 go
-
 update HoaDon
 set TongTien = isnull((
     select sum(SoLuong * DonGia)
@@ -308,7 +307,6 @@ set TongTien = isnull((
     where cthd.MaHD = HoaDon.MaHD
 ), 0);
 go
-
 -- tạo hàm và thủ tục
 
 create function fn_DoanhThuTheoThang (@Thang int, @Nam int)
@@ -355,6 +353,14 @@ grant insert on ChiTietHD to NhanVienBanHangUser;
 deny update, delete on NhanVien to NhanVienBanHangUser;
 go
 
+alter table TaiKhoan drop constraint FK_TaiKhoan_NhanVien;
+go
+
+alter table TaiKhoan 
+add constraint FK_TaiKhoan_NhanVien 
+foreign key (MaNV) references NhanVien(MaNV) 
+on delete cascade;
+go 
 alter table HoaDon add PhuongThucThanhToan nvarchar(50) default N'Tiền mặt';
 alter table HoaDon add NgayThanhToan date null;
 go

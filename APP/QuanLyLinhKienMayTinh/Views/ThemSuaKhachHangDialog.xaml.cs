@@ -6,9 +6,7 @@ namespace QuanLyLinhKienMayTinh.Views
     {
         private readonly ThemSuaKhachHangDialogViewModel _vm;
         public KhachHangDisplay KetQua => _vm.KetQua;
-        /// <summary>
         /// Mở dialog ở chế độ THÊM
-        /// </summary>
         public ThemSuaKhachHangDialog(string maKhMoi)
         {
             InitializeComponent();
@@ -20,9 +18,7 @@ namespace QuanLyLinhKienMayTinh.Views
                 Close();
             };
         }
-        /// <summary>
         /// Mở dialog ở chế độ SỬA
-        /// </summary>
         public ThemSuaKhachHangDialog(KhachHangDisplay kh)
         {
             InitializeComponent();

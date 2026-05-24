@@ -26,6 +26,9 @@
     <Compile Update="Views\NhanVienView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\TaiKhoanView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\ThongBaoTonKhoWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -6,10 +6,8 @@ namespace QuanLyLinhKienMayTinh.Services
 {
     public static class AutoIDService
     {
-        /// <summary>
         /// Tạo ID tiếp theo với prefix cố định.
         /// Ví dụ: GetNextID("KH", "KH010") → "KH011"
-        /// </summary>
         public static string GetNextID(string prefix, string lastID)
         {
             if (string.IsNullOrEmpty(lastID)) return prefix + "001";
@@ -21,11 +19,9 @@ namespace QuanLyLinhKienMayTinh.Services
             return prefix + number.ToString("D" + padLen);
         }
 
-        /// <summary>
         /// Tạo ID tiếp theo cho LoaiLK (dạng 3 chữ cái: MOU, RAM...).
         /// Dựa vào danh sách hiện có, không sinh ID tự động theo số.
         /// Trả về prefix dạng số thứ tự: L001, L002...
-        /// </summary>
         public static string GetNextLoaiID(string lastID)
         {
             if (string.IsNullOrEmpty(lastID)) return "L001";

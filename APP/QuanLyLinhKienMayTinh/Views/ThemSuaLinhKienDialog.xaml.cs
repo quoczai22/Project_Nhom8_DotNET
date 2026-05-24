@@ -15,7 +15,7 @@ namespace QuanLyLinhKienMayTinh.Views
         public int? DonGiaBan => _vm.ResultDonGiaBan;
         public int? SoLuongTon => _vm.ResultSoLuongTon;
         public DateOnly? NgayNhap => _vm.ResultNgayNhap;
-        /// <summary>Mở ở chế độ THÊM</summary>
+        /// Mở ở chế độ THÊM
         public ThemSuaLinhKienDialog(string maLkGoiY)
         {
             InitializeComponent();
@@ -27,7 +27,7 @@ namespace QuanLyLinhKienMayTinh.Views
                 Close();
             };
         }
-        /// <summary>Mở ở chế độ SỬA</summary>
+        ///Mở ở chế độ SỬA
         public ThemSuaLinhKienDialog(LinhKienDisplay lk)
         {
             InitializeComponent();

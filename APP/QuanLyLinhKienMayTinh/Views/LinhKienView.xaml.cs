@@ -16,9 +16,6 @@ using QuanLyLinhKienMayTinh.ViewModels;
 
 namespace QuanLyLinhKienMayTinh.Views
 {
-    /// <summary>
-    /// Interaction logic for LinhKienView.xaml
-    /// </summary>
     public partial class LinhKienView : Page
     {
         public LinhKienView()

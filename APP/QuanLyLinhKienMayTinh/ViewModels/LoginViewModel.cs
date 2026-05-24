@@ -90,10 +90,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         bool _isDark = false; // cờ để theo dõi trạng thái theme hiện tại, mặc định là light
 
         public RelayCommand<object> ToggleThemeCommand { get; set; }
-        public RelayCommand<object> ShowLoginCommand { get; set; }
-        public RelayCommand<object> ShowSignUpCommand { get; set; }
         public RelayCommand<object> LoginCommand { get; set; }
-        public RelayCommand<object> SignUpCommand { get; set; }
 
         public RelayCommand<object> ToggleLiPasswordCommand { get; set; }
         public RelayCommand<object> ToggleSuPasswordCommand { get; set; }
@@ -102,10 +99,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         public LoginViewModel()
         {
             ToggleThemeCommand = new RelayCommand<object>(CanToggleTheme, ExecuteToggleTheme);
-            ShowSignUpCommand = new RelayCommand<object>(CanShowSignUp, ThucHienShowSignUp);
-            ShowLoginCommand = new RelayCommand<object>(CanShowLogin, ThucHienShowLogin);
             LoginCommand = new RelayCommand<object>(CanLogin, ThucHienLogin);
-            SignUpCommand = new RelayCommand<object>(CanSignUp, ThucHienSignUp);
 
             ToggleLiPasswordCommand = new RelayCommand<object>(CanExecuteAlways, ToggleLiPasswordExecute);
             ToggleSuPasswordCommand = new RelayCommand<object>(CanExecuteAlways, ToggleSuPasswordExecute);
@@ -191,30 +185,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             return true;
         }
 
-        private bool CanShowSignUp(object p)
-        {
-            return true;
-        }
-
-        private void ThucHienShowSignUp(object p)
-        {
-            LoginVisibility = Visibility.Collapsed;
-            SignUpVisibility = Visibility.Visible;
-            Message = "Vui lòng điền thông tin để đăng ký tài khoản mới";
-        }
-
-        private bool CanShowLogin(object p)
-        {
-            return true;
-        }
-
-        private void ThucHienShowLogin(object p)
-        {
-            SignUpVisibility = Visibility.Collapsed;
-            LoginVisibility = Visibility.Visible;
-            Message = "Vui lòng đăng nhập để tiếp tục";
-        }
-
         private bool CanLogin(object p)
         {
             return true;
@@ -238,29 +208,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         private bool CanSignUp(object p)
         {
             return true;
-        }
-
-        private void ThucHienSignUp(object p)
-        {
-            object[] boxes = p as object[]; // Nhận vào một mảng object chứa PasswordBox và TextBox tương ứng
-            if (boxes != null && boxes.Length == 2)
-            {
-                PasswordBox pwdBox = boxes[0] as PasswordBox; // chuyển đổi thành PasswordBox
-                PasswordBox confirmBox = boxes[1] as PasswordBox; // chuyển đổi thành PasswordBox
-
-                // Đồng bộ dữ liệu từ PasswordBox nếu các ô nhập đang ở chế độ ẩn (dấu chấm)
-                if (!SuPassVisible && pwdBox != null)
-                {
-                    SignUpPassword = pwdBox.Password;
-                }
-
-                if (!SuConfirmVisible && confirmBox != null)
-                {
-                    ConfirmPassword = confirmBox.Password;
-                }
-            }
-
-            ThucHienDangKy();
         }
 
         // Xử lý xác thực tài khoản đăng nhập, cấp quyền tương ứng và mở giao diện chính
@@ -320,66 +267,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 // Ghi log lỗi nội bộ, không hiển thị thông tin kỹ thuật ra cho người dùng
                 System.Diagnostics.Debug.WriteLine(string.Format("[LoginError] {0}", ex));
                 MessageBox.Show("Đã xảy ra lỗi khi đăng nhập. Vui lòng thử lại sau.");
-            }
-        }
-
-        // Kiểm tra thông tin đăng ký hợp lệ và lưu tài khoản mới vào cơ sở dữ liệu
-        public void ThucHienDangKy()
-        {
-            if (string.IsNullOrEmpty(SignUpUsername))
-            {
-                MessageBox.Show("Chưa nhập tên đăng nhập");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(SignUpPassword))
-            {
-                MessageBox.Show("Chưa nhập mật khẩu");
-                return;
-            }
-
-            if (SignUpPassword != ConfirmPassword)
-            {
-                MessageBox.Show("Mật khẩu xác nhận không đúng");
-                return;
-            }
-
-            try
-            {
-                // Dùng using để đảm bảo DbContext được giải phóng sau khi sử dụng
-                using var db = DataProvider.Ins.GetContext();
-
-                var checkQuery = from t in db.TaiKhoans
-                                 where t.TenDn == SignUpUsername
-                                 select t;
-
-                if (checkQuery.Any())
-                {
-                    MessageBox.Show("Tài khoản đã tồn tại");
-                    return;
-                }
-
-                db.TaiKhoans.Add(new TaiKhoan
-                {
-                    TenDn = SignUpUsername,
-                    MatKhau = SignUpPassword
-                });
-
-                db.SaveChanges();
-
-                MessageBox.Show("Đăng ký thành công");
-
-                SignUpUsername = "";
-                SignUpPassword = "";
-                ConfirmPassword = "";
-
-                ShowLoginCommand.Execute(null);
-            }
-            catch (Exception ex)
-            {
-                // Ghi log lỗi nội bộ, không hiển thị thông tin kỹ thuật ra cho người dùng
-                System.Diagnostics.Debug.WriteLine(string.Format("[SignUpError] {0}", ex));
-                MessageBox.Show("Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại sau.");
             }
         }
 

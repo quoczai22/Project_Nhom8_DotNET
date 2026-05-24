@@ -9,7 +9,7 @@ namespace QuanLyLinhKienMayTinh.Views
         // Cung cấp ViewModel ra ngoài để NhanVienViewModel có thể đọc dữ liệu sau khi dialog đóng
         public ThemSuaNhanVienDialogViewModel ViewModel { get; private set; }
 
-        /// <summary>Mở ở chế độ THÊM nhân viên mới</summary>
+        /// Mở ở chế độ THÊM nhân viên mới
         public ThemSuaNhanVienDialog(string maNvMoi)
         {
             InitializeComponent();
@@ -26,7 +26,7 @@ namespace QuanLyLinhKienMayTinh.Views
             DataContext = ViewModel;
         }
 
-        /// <summary>Mở ở chế độ SỬA thông tin nhân viên</summary>
+        /// Mở ở chế độ SỬA thông tin nhân viên
         public ThemSuaNhanVienDialog(NhanVienDisplay nv)
         {
             InitializeComponent();

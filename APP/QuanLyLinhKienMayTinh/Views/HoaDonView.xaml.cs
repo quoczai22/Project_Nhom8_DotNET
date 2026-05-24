@@ -18,9 +18,6 @@ using System.Windows.Shapes;
 
 namespace QuanLyLinhKienMayTinh.Views
 {
-    /// <summary>
-    /// Interaction logic for HoaDonView.xaml
-    /// </summary>
     public partial class HoaDonView : Page
     {
         public HoaDonView()

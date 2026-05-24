@@ -204,6 +204,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
                 // Tạo mã gợi ý tự động
                 var lastID = db.NhanViens
+                    .IgnoreQueryFilters()
                     .OrderByDescending(x => x.MaNv)
                     .Select(x => x.MaNv).FirstOrDefault();
                 string newID = Services.AutoIDService.GetNextID("NV", lastID);
@@ -235,17 +236,14 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                         DaNghiViec = false
                     };
 
-                    // Tạo mặc định tài khoản đăng nhập cho nhân viên mới
-                    var tkMoi = new TaiKhoan { TenDn = vm.MaNv, MatKhau = "123", MaNv = vm.MaNv };
 
                     db.NhanViens.Add(nvMoi);
-                    db.TaiKhoans.Add(tkMoi);
                     db.SaveChanges();
 
                     TaiDuLieu();
-                    MessageBox.Show($"Thêm nhân viên thành công!\nTài khoản mặc định: {vm.MaNv} / 123",
+                    MessageBox.Show($"Thêm nhân viên thành công!",
                         "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
+                }   
             }
             catch (Exception ex)
             {
@@ -311,24 +309,28 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 return;
             }
 
-            var res = MessageBox.Show(
-                $"Bạn có chắc chắn muốn xóa nhân viên [{nv.HoTen}] không?",
-                "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            var res = MessageBox.Show($"Bạn có chắc chắn muốn xóa nhân viên [{nv.HoTen}] không? \nTài khoản đăng nhập của nhân viên này cũng sẽ bị xóa!", "Xác nhận xóa", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
             if (res != MessageBoxResult.Yes) return;
 
             try
             {
                 using var db = DataProvider.Ins.GetContext();
+                var taiKhoan = db.TaiKhoans.FirstOrDefault(t => t.MaNv == nv.MaNv);
+                if (taiKhoan != null)
+                {
+                    db.TaiKhoans.Remove(taiKhoan);
+                }
                 var entity = db.NhanViens.Find(nv.MaNv);
                 if (entity == null) return;
 
-                entity.DaNghiViec = true; // Soft-delete (nghỉ việc)
+                entity.DaNghiViec = true;
+
                 db.SaveChanges();
 
                 _all.Remove(nv);
 
-                MessageBox.Show("Xóa nhân viên thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Xóa nhân viên và tài khoản liên quan thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
@@ -336,7 +338,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        /// <summary>Xác định quyền dựa trên chức vụ</summary>
+        /// Xác định quyền dựa trên chức vụ
         private string LayQuyenTuChucVu(string chucVu)
         {
             return chucVu switch

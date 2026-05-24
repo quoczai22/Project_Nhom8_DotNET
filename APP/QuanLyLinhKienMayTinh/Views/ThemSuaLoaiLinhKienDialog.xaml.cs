@@ -11,7 +11,7 @@ namespace QuanLyLinhKienMayTinh.Views
         public LoaiLkDisplay KetQua { get; private set; }
         private readonly bool _laMoiThem;
 
-        /// <summary>Mở ở chế độ THÊM</summary>
+        /// Mở ở chế độ THÊM
         public ThemSuaLoaiLinhKienDialog(string maLoaiGoi)
         {
             InitializeComponent();
@@ -21,7 +21,7 @@ namespace QuanLyLinhKienMayTinh.Views
             TxtMaLoai.Text = string.Empty;
         }
 
-        /// <summary>Mở ở chế độ SỬA</summary>
+        /// Mở ở chế độ SỬA
         public ThemSuaLoaiLinhKienDialog(LoaiLkDisplay loai)
         {
             InitializeComponent();

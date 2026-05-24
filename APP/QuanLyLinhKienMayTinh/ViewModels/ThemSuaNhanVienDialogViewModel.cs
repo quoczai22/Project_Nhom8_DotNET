@@ -106,7 +106,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // Hành động đóng cửa sổ dialog, được gán từ View để ViewModel có thể yêu cầu đóng
         public Action<bool?> CloseAction { get; set; }
 
-        /// <summary>Khởi tạo ở chế độ THÊM nhân viên mới</summary>
         public ThemSuaNhanVienDialogViewModel(string maNvMoi)
         {
             TitleText = "Thêm Nhân Viên";
@@ -120,7 +119,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             KhoiTaoCommands();
         }
 
-        /// <summary>Khởi tạo ở chế độ SỬA thông tin nhân viên đã có</summary>
         public ThemSuaNhanVienDialogViewModel(NhanVienDisplay nv)
         {
             TitleText = "Sửa Nhân Viên";

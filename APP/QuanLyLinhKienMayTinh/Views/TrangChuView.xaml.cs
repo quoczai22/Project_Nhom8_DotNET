@@ -16,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace QuanLyLinhKienMayTinh.Views
 {
-    /// <summary>
-    /// Interaction logic for TrangChuView.xaml
-    /// </summary>
     public partial class TrangChuView : Page
     {
 

@@ -50,5 +50,10 @@ namespace QuanLyLinhKienMayTinh
         {
             MainFrame.Navigate(new NhanVienView());
         }
+
+        private void btnTaiKhoan_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new TaiKhoanView());
+        }
     }
 }

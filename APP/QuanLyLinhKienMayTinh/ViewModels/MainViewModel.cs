@@ -60,6 +60,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             get => _menuHoaDonVisibility;
             set { _menuHoaDonVisibility = value; OnPropertyChanged(); }
         }
+        private Visibility _menuTaiKhoanVisibility = Visibility.Collapsed;
+        public Visibility MenuTaiKhoanVisibility
+        {
+            get => _menuTaiKhoanVisibility;
+            set { _menuTaiKhoanVisibility = value; OnPropertyChanged(); }
+        }
 
         bool _isDark = false; // cờ để theo dõi trạng thái theme hiện tại, mặc định là light
 
@@ -119,6 +125,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuNhanVienVisibility = Visibility.Visible;
                 MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Visible;
+                MenuTaiKhoanVisibility = Visibility.Visible;
             }    
             else if(quyen == "Thu ngân")
             {
@@ -128,6 +135,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuNhanVienVisibility = Visibility.Collapsed;
                 MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Visible;
+                MenuTaiKhoanVisibility = Visibility.Collapsed;
             }
             else if (quyen == "Chăm sóc khách hàng")
             {
@@ -137,6 +145,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuNhanVienVisibility = Visibility.Collapsed;
                 MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Collapsed;
+                MenuTaiKhoanVisibility = Visibility.Collapsed;
             }
             else
             {
@@ -146,6 +155,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuNhanVienVisibility = Visibility.Collapsed;
                 MenuKhachHangVisibility = Visibility.Collapsed;
                 MenuHoaDonVisibility = Visibility.Collapsed;
+                MenuTaiKhoanVisibility = Visibility.Collapsed;
             }
         }
         // Lấy số lượng dữ liệu hiện tại (nhân viên, linh kiện, hóa đơn) để làm cơ sở tính toán thông báo
