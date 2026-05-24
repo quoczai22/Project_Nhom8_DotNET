@@ -126,7 +126,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuLinhKienVisibility = Visibility.Collapsed;
                 MenuLoaiLKVisibility = Visibility.Collapsed;
                 MenuNhanVienVisibility = Visibility.Collapsed;
-                MenuKhachHangVisibility = Visibility.Collapsed;
+                MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Visible;
             }
             else if (quyen == "Chăm sóc khách hàng")
