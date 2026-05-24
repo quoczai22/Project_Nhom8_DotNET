@@ -1,10 +1,12 @@
-using QuanLyLinhKienMayTinh.Models;
-using QuanLyLinhKienMayTinh;
-using System;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using QuanLyLinhKienMayTinh;
+using QuanLyLinhKienMayTinh.Models;
+using System;
+using System.Data.Entity.Core.Common.CommandTrees;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace QuanLyLinhKienMayTinh.ViewModels
 {
@@ -89,12 +91,11 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
         bool _isDark = false; // cờ để theo dõi trạng thái theme hiện tại, mặc định là light
 
-        public RelayCommand<object> ToggleThemeCommand { get; set; }
-        public RelayCommand<object> LoginCommand { get; set; }
+        public ICommand ToggleThemeCommand { get; set; }
+        public ICommand LoginCommand { get; set; }
 
-        public RelayCommand<object> ToggleLiPasswordCommand { get; set; }
-        public RelayCommand<object> ToggleSuPasswordCommand { get; set; }
-        public RelayCommand<object> ToggleSuConfirmCommand { get; set; }
+        public ICommand ToggleLiPasswordCommand { get; set; }
+        public ICommand ToggleSuConfirmCommand { get; set; }
 
         public LoginViewModel()
         {
@@ -102,7 +103,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             LoginCommand = new RelayCommand<object>(CanLogin, ThucHienLogin);
 
             ToggleLiPasswordCommand = new RelayCommand<object>(CanExecuteAlways, ToggleLiPasswordExecute);
-            ToggleSuPasswordCommand = new RelayCommand<object>(CanExecuteAlways, ToggleSuPasswordExecute);
             ToggleSuConfirmCommand = new RelayCommand<object>(CanExecuteAlways, ToggleSuConfirmExecute);
         }
 
@@ -132,29 +132,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 }
             }
             LiPassVisible = !LiPassVisible;
-        }
-
-        private void ToggleSuPasswordExecute(object p)
-        {
-            object[] boxes = p as object[];// Nhận vào một mảng object chứa PasswordBox và TextBox tương ứng
-            if (boxes != null && boxes.Length == 2)
-            {
-                PasswordBox pwdBox = boxes[0] as PasswordBox;// chuyển đổi thành PasswordBox
-                TextBox txtBox = boxes[1] as TextBox;// chuyển đổi thành TextBox
-
-                if (pwdBox != null && txtBox != null)
-                {
-                    if (!SuPassVisible)
-                    {
-                        SignUpPassword = pwdBox.Password;
-                    }
-                    else
-                    {
-                        pwdBox.Password = SignUpPassword;
-                    }
-                }
-            }
-            SuPassVisible = !SuPassVisible;
         }
 
         private void ToggleSuConfirmExecute(object p)
@@ -202,16 +179,10 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 }
             }
 
-            ThucHienDangNhap();
+            ThucHienDangNhap(p);
         }
-
-        private bool CanSignUp(object p)
-        {
-            return true;
-        }
-
         // Xử lý xác thực tài khoản đăng nhập, cấp quyền tương ứng và mở giao diện chính
-        public void ThucHienDangNhap()
+        public void ThucHienDangNhap(object p)
         {
             if (string.IsNullOrEmpty(LoginUsername) || string.IsNullOrEmpty(LoginPassword))
             {
