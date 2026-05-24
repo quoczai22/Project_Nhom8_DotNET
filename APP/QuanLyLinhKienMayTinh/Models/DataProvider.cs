@@ -10,10 +10,10 @@ namespace QuanLyLinhKienMayTinh.Models
         public static DataProvider Ins => _ins ??= new DataProvider();
 
         private string _localConnStr;
-
+        // phải đổi chỗ data source thành tên server của máy, nếu máy dùng sql server express thì sẽ là .\SQLEXPRESS
         private DataProvider()
         {
-            _localConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
+            _localConnStr = "Data Source=localhost;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
         }
 
         public QL_LinhKien_PC_Context GetContext()
@@ -26,12 +26,12 @@ namespace QuanLyLinhKienMayTinh.Models
 
         public void ChangeToQuanLyConnection()
         {
-            _localConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
+            _localConnStr = "Data Source=localhost;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
         }
 
         public void ChangeToNhanVienConnection()
         {
-            _localConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
+            _localConnStr = "Data Source=localhost;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
         }
     }
 }
