@@ -230,7 +230,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 TenNhanVien = pn.MaNvNavigation?.TenNv ?? pn.MaNv,
                 NgayNhap = ngayNhap,
                 TongTien = tongTien,
-                TongSoLuong = tongSoLuong
+                TongSoLuong = tongSoLuong,
+                TenNhaCungCap=b
             };
         }
 

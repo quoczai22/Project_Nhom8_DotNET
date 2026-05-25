@@ -8,15 +8,8 @@ namespace QuanLyLinhKienMayTinh.Models;
 
 public partial class QL_LinhKien_PC_Context : DbContext
 {
-    public QL_LinhKien_PC_Context()
-    {
-    }
-
     public QL_LinhKien_PC_Context(DbContextOptions<QL_LinhKien_PC_Context> options)
-        : base(options)
-    {
-    }
-
+    
     public virtual DbSet<ChiTietHd> ChiTietHds { get; set; }
 
     public virtual DbSet<ChiTietPn> ChiTietPns { get; set; }
@@ -36,14 +29,6 @@ public partial class QL_LinhKien_PC_Context : DbContext
     public virtual DbSet<PhieuNhap> PhieuNhaps { get; set; }
 
     public virtual DbSet<TaiKhoan> TaiKhoans { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;Encrypt=False;TrustServerCertificate=True");
-        }
-    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -247,6 +232,11 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .IsFixedLength()
                 .HasColumnName("MaNSX");
             entity.Property(e => e.QuocGia).HasMaxLength(50);
+            entity.Property(e => e.Sdt)
+                .HasMaxLength(10)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("SDT");
             entity.Property(e => e.TenNsx)
                 .HasMaxLength(50)
                 .HasColumnName("TenNSX");
@@ -328,7 +318,6 @@ public partial class QL_LinhKien_PC_Context : DbContext
 
             entity.HasOne(d => d.MaNvNavigation).WithOne(p => p.TaiKhoan)
                 .HasForeignKey<TaiKhoan>(d => d.MaNv)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_TaiKhoan_NhanVien");
         });
 
