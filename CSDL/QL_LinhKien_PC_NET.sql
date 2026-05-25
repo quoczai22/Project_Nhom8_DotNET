@@ -62,7 +62,7 @@ create table NhanVien (
     TenNV nvarchar(40),
     GioiTinh nvarchar(5),
     NgaySinh date,
-    SDT varchar(10), -- Đã đồng bộ thành varchar(10)
+    SDT varchar(10), 
     ChucVu nvarchar(30),
     Quyen nvarchar(20),
     Email varchar(50) null,      
