@@ -61,6 +61,16 @@
 - Xuất hóa đơn ra file & in trực tiếp
 - Thanh toán **MoMo** qua quét mã QR *(demo)*
 
+### 📥 Phiếu Nhập Kho
+- Tạo phiếu nhập linh kiện từ nhà cung cấp
+- Chọn nhân viên thực hiện & ngày nhập
+- Thêm nhiều linh kiện với số lượng và đơn giá nhập tùy chỉnh
+- Tự động **cộng số lượng tồn kho** khi lưu phiếu
+- Tự động **trừ số lượng tồn kho** khi xóa phiếu
+- Lọc phiếu nhập theo khoảng thời gian & từ khóa
+- Thống kê: tổng phiếu, tổng chi phí, số lượng linh kiện nhập, phiếu trong tháng
+- Xuất phiếu nhập ra file `.txt`
+
 ### 👥 Quản lý nhân sự & Khách hàng
 - CRUD Nhân viên, Khách hàng
 - Tra cứu lịch sử giao dịch
@@ -98,9 +108,9 @@
 │ - MainWindow                       - ThongBaotonKhoWindow        - ThemSuaLoaiLinhKienDialog     │
 │ - TrangChuView                     - ChonPhuongThucDialog        - ThemSuaKhachHangDialog        │
 │ - LinhKienView                     - ThemHoaDonDialog            - ThemSuaNhanVienDialog         │
-│ - LoaiLinhKienView                 - SuaHoaDonDialog                                             │
+│ - LoaiLinhKienView                 - SuaHoaDonDialog             - ThemPhieuNhapDialog           │
 │ - HoaDonView                       - KhachHangView                                               │
-│ - NhanVienView                                                                                   │
+│ - PhieuNhapView                    - NhanVienView                                                │
 └───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
 │ Data Binding / Command
 ┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
@@ -110,6 +120,7 @@
 │ - RelayCommand                     - MainViewModel               - HoaDonViewModel               │
 │ - ISearchable                      - TrangChuViewModel           - KhachHangViewModel            │
 │                                    - LinhKienViewModel           - NhanVienViewModel             │
+│                                    - PhieuNhapViewModel          - ThemPhieuNhapDialogViewModel  │
 └───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
 │
 ┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
@@ -193,6 +204,8 @@
     │   ├── LinhKienViewModel.cs
     │   ├── LoaiLinhKienViewModel.cs
     │   ├── HoaDonViewModel.cs
+    │   ├── PhieuNhapViewModel.cs                   # ViewModel quản lý phiếu nhập
+    │   ├── ThemPhieuNhapDialogViewModel.cs         # ViewModel dialog tạo phiếu nhập
     │   ├── KhachHangViewModel.cs
     │   └── NhanVienViewModel.cs
     │
@@ -203,14 +216,16 @@
     │   ├── LinhKienView.xaml                       # Quản lý linh kiện
     │   ├── LoaiLinhKienView.xaml                   # Quản lý loại linh kiện
     │   ├── HoaDonView.xaml                         # Quản lý hóa đơn
+    │   ├── PhieuNhapView.xaml                      # Quản lý phiếu nhập kho
     │   ├── KhachHangView.xaml                      # Quản lý khách hàng
     │   ├── NhanVienView.xaml                       # Quản lý nhân viên
     │   ├── MomoPaymentView.xaml                    # Màn hình thanh toán MoMo QR
     │   ├── ThongBaoTonKhoWindow.xaml               # Cửa sổ cảnh báo tồn kho
     │   │
-    │   ├── ChonPhuongThucDialog.xaml           # Chọn phương thức thanh toán
-    │   ├── ThemHoaDonDialog.xaml               # Hộp thoại thêm / sửa
-    │   ├── SuaHoaDonDialog.xaml
+    │   ├── ChonPhuongThucDialog.xaml               # Chọn phương thức thanh toán
+    │   ├── ThemHoaDonDialog.xaml                   # Hộp thoại thêm hóa đơn
+    │   ├── SuaHoaDonDialog.xaml                    # Hộp thoại sửa hóa đơn
+    │   ├── ThemPhieuNhapDialog.xaml                # Hộp thoại tạo phiếu nhập kho
     │   ├── ThemSuaLinhKienDialog.xaml
     │   ├── ThemSuaLoaiLinhKienDialog.xaml
     │   ├── ThemSuaKhachHangDialog.xaml
@@ -242,9 +257,9 @@
 
 | Công cụ | Phiên bản tối thiểu |
 |---|---|
-| Visual Studio | 2022 (v17.8+) |2026|
+| Visual Studio | 2022 (v17.8+) |
 | .NET SDK | 8.0 |
-| SQL Server | 2022 |2026|
+| SQL Server | 2022 |
 | SQL Server Management Studio | Tùy chọn |
 
 #### Các bước thực hiện
@@ -260,12 +275,11 @@ cd Project_Nhom8_DotNET
 
 Cài đặt phần dataprovider qua trang web Kteam: https://howkteam.vn/course/lap-trinh-phan-mem-quan-ly-kho-wpf-mvvm/class-dataprovider-trong-phan-mem-quan-ly-kho-wpf-mvvm-2651
 
-```DataProvider (
+```
+DataProvider (
     private DataProvider()
     {
-
         _supabaseConnStr = "Server=db.pmkwulshpbpugvphzvwk.supabase.co;Port=5432;Database=postgres;User Id=postgres;Password=Kienquoc@1704;";
-
         _localConnStr = "Data Source=(localdbb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
     }
 )
