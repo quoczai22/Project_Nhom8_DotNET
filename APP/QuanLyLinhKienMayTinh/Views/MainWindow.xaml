@@ -209,6 +209,13 @@
                         </StackPanel>
                     </Button>
 
+                    <Button Style="{StaticResource menuButton}" Click="btnPhieuNhap_Click" Visibility="{Binding MenuPhieuNhapVisibility}">
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="PackageVariantClosed" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Phiếu Nhập" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
                     <Button Style="{StaticResource menuButton}" Click="btnHoaDon_Click" Visibility="{Binding MenuHoaDonVisibility}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="ReceiptOutline" Style="{StaticResource menuButtonIcon}"/>

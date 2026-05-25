@@ -66,6 +66,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             get => _menuTaiKhoanVisibility;
             set { _menuTaiKhoanVisibility = value; OnPropertyChanged(); }
         }
+        private Visibility _menuPhieuNhapVisibility = Visibility.Collapsed;
+        public Visibility MenuPhieuNhapVisibility
+        {
+            get => _menuPhieuNhapVisibility;
+            set { _menuPhieuNhapVisibility = value; OnPropertyChanged(); }
+        }
 
         bool _isDark = false; // cờ để theo dõi trạng thái theme hiện tại, mặc định là light
 
@@ -126,7 +132,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Visible;
                 MenuTaiKhoanVisibility = Visibility.Visible;
-            }    
+                MenuPhieuNhapVisibility = Visibility.Visible;
+            }
             else if(quyen == "Thu ngân")
             {
                 MenuDashboardVisibility = Visibility.Visible;
@@ -136,6 +143,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Visible;
                 MenuTaiKhoanVisibility = Visibility.Collapsed;
+                MenuPhieuNhapVisibility = Visibility.Collapsed;
             }
             else if (quyen == "Chăm sóc khách hàng")
             {
@@ -146,6 +154,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Collapsed;
                 MenuTaiKhoanVisibility = Visibility.Collapsed;
+                MenuPhieuNhapVisibility = Visibility.Collapsed;
             }
             else
             {
@@ -156,6 +165,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuKhachHangVisibility = Visibility.Collapsed;
                 MenuHoaDonVisibility = Visibility.Collapsed;
                 MenuTaiKhoanVisibility = Visibility.Collapsed;
+                MenuPhieuNhapVisibility = Visibility.Visible;
             }
         }
         // Lấy số lượng dữ liệu hiện tại (nhân viên, linh kiện, hóa đơn) để làm cơ sở tính toán thông báo

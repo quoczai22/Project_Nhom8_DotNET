@@ -1,0 +1,261 @@
+<Window x:Class="QuanLyLinhKienMayTinh.Views.ThemPhieuNhapDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Tạo Phiếu Nhập Kho"
+        Width="700" Height="560"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="{DynamicResource BackgroundColor}">
+    <Window.Resources>
+        <Style x:Key="LabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+        <Style x:Key="InputStyle" TargetType="TextBox">
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Background" Value="{DynamicResource BackgroundColor2}"/>
+            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="2"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#e53935"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="PrimaryBtnStyle" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource ButtonColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,9"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CancelBtnStyle" TargetType="Button" BasedOn="{StaticResource PrimaryBtnStyle}">
+            <Setter Property="Background" Value="{DynamicResource SecondaryBgColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
+        </Style>
+        <Style x:Key="DangerBtnStyle" TargetType="Button" BasedOn="{StaticResource PrimaryBtnStyle}">
+            <Setter Property="Background" Value="#e53935"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0" Text="Tạo Phiếu Nhập Kho" FontSize="20" FontWeight="Bold"
+                   Foreground="{DynamicResource MainTextColor}" Margin="0,0,0,20"/>
+
+        <!-- Thông tin cơ bản -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="12"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Mã phiếu nhập" Style="{StaticResource LabelStyle}"/>
+                <TextBox Text="{Binding MaPn, Mode=TwoWay}" IsReadOnly="True"
+                         Style="{StaticResource InputStyle}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="Nhân viên *" Style="{StaticResource LabelStyle}"/>
+                <ComboBox ItemsSource="{Binding DanhSachNhanVien}"
+                          SelectedItem="{Binding SelectedNhanVien}"
+                          Padding="10,8" FontSize="13"
+                          Background="{DynamicResource BackgroundColor2}"
+                          Foreground="{DynamicResource MainTextColor}"
+                          BorderBrush="{DynamicResource BorderColor}"
+                          DisplayMemberPath="TenNv"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="4">
+                <TextBlock Text="Ngày nhập" Style="{StaticResource LabelStyle}"/>
+                <DatePicker SelectedDate="{Binding NgayNhap}"
+                            FontSize="13"
+                            Background="{DynamicResource BackgroundColor2}"
+                            Foreground="{DynamicResource MainTextColor}"
+                            BorderBrush="{DynamicResource BorderColor}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Danh sách linh kiện nhập -->
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="THÊM LINH KIỆN" FontSize="11" FontWeight="Bold"
+                       Foreground="{DynamicResource SubTextColor}" Margin="0,0,0,8"/>
+
+            <!-- Dòng thêm linh kiện -->
+            <Grid Grid.Row="1" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ComboBox Grid.Column="0"
+                          ItemsSource="{Binding DanhSachLinhKien}"
+                          SelectedItem="{Binding SelectedLinhKien}"
+                          Padding="10,8" FontSize="13"
+                          Background="{DynamicResource BackgroundColor2}"
+                          Foreground="{DynamicResource MainTextColor}"
+                          BorderBrush="{DynamicResource BorderColor}"
+                          DisplayMemberPath="TenLk"/>
+
+                <TextBox Grid.Column="2"
+                         Text="{Binding SoLuongText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource InputStyle}"
+                         TextAlignment="Center"/>
+
+                <TextBox Grid.Column="4"
+                         Text="{Binding DonGiaNhapText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource InputStyle}"
+                         TextAlignment="Right"/>
+
+                <Button Grid.Column="6" Content="＋ Thêm"
+                        Style="{StaticResource PrimaryBtnStyle}"
+                        Command="{Binding ThemVaoPhieuCommand}"
+                        Padding="12,8"/>
+            </Grid>
+
+            <!-- Header gợi ý -->
+            <Grid Grid.Row="1" IsHitTestVisible="False" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="2" Text="Số lượng" FontSize="10"
+                           Foreground="{DynamicResource SubTextColor}"
+                           HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-14,0,0"/>
+                <TextBlock Grid.Column="4" Text="Đơn giá nhập (₫)" FontSize="10"
+                           Foreground="{DynamicResource SubTextColor}"
+                           HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-14,0,0"/>
+            </Grid>
+
+            <!-- Bảng linh kiện đã thêm -->
+            <Border Grid.Row="2" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8">
+                <DataGrid ItemsSource="{Binding DanhSachNhap}"
+                          AutoGenerateColumns="False" CanUserAddRows="False"
+                          IsReadOnly="True" HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="{DynamicResource BorderColor}"
+                          FontSize="13" BorderThickness="0"
+                          RowBackground="{DynamicResource BackgroundColor2}"
+                          AlternatingRowBackground="{DynamicResource BackgroundColor}"
+                          Foreground="{DynamicResource MainTextColor}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Tên linh kiện" Binding="{Binding TenLk}" Width="*"/>
+                        <DataGridTextColumn Header="SL" Binding="{Binding SoLuong}" Width="50"/>
+                        <DataGridTextColumn Header="Đơn giá nhập" Binding="{Binding DonGiaNhap, StringFormat={}{0:N0}}" Width="120">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    <Setter Property="Padding" Value="0,0,8,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Thành tiền" Binding="{Binding ThanhTien, StringFormat={}{0:N0}}" Width="120">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                                    <Setter Property="Foreground" Value="#e53935"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                    <Setter Property="Padding" Value="0,0,8,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTemplateColumn Width="44">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Command="{Binding DataContext.XoaKhoiPhieuCommand,
+                                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}"
+                                            Content="✕"
+                                            Background="Transparent" BorderThickness="0"
+                                            Foreground="#e53935" FontWeight="Bold" Cursor="Hand"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+
+        <!-- Tổng chi phí -->
+        <Border Grid.Row="3" Background="{DynamicResource SecondaryBgColor}" CornerRadius="8"
+                Padding="14,10" Margin="0,12,0,12">
+            <Grid>
+                <TextBlock Text="TỔNG CHI PHÍ NHẬP:" FontSize="14" FontWeight="Bold"
+                           Foreground="{DynamicResource MainTextColor}"/>
+                <TextBlock Text="{Binding TongChiPhiText}"
+                           HorizontalAlignment="Right" FontSize="16"
+                           FontWeight="Bold" Foreground="#e53935"/>
+            </Grid>
+        </Border>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Hủy" Style="{StaticResource CancelBtnStyle}"
+                    Margin="0,0,10,0" Command="{Binding HuyCommand}"/>
+            <Button Content="💾 Lưu phiếu nhập" Style="{StaticResource PrimaryBtnStyle}"
+                    Command="{Binding LuuCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>
