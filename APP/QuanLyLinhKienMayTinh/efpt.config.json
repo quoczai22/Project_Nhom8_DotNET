@@ -3,7 +3,7 @@
    "ContextClassName": "QL_LinhKien_PC_Context",
    "ContextNamespace": null,
    "FilterSchemas": false,
-   "IncludeConnectionString": true,
+   "IncludeConnectionString": false,
    "IrregularWords": null,
    "MinimumProductVersion": "2.6.1465",
    "ModelNamespace": null,

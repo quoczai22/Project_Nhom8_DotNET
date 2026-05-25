@@ -13,11 +13,12 @@ go
 set dateformat dmy; 
 go
 
--- tạo bảng
+-- TẠO BẢNG
 create table NhaSanXuat (
     MaNSX char(5) not null,
     TenNSX nvarchar(50),
     QuocGia nvarchar(50),
+    SDT varchar(10),
     constraint PK_NhaSanXuat primary key (MaNSX)
 );
 go
@@ -50,7 +51,7 @@ create table KhachHang (
     MaKH char(6) not null,
     TenKH nvarchar(30),
     DChi nvarchar(50),
-    SDT char(10),
+    SDT varchar(10), -- Đã đồng bộ thành varchar(10)
     Email varchar(50) null,
     constraint PK_KhachHang primary key (MaKH)
 );
@@ -61,7 +62,7 @@ create table NhanVien (
     TenNV nvarchar(40),
     GioiTinh nvarchar(5),
     NgaySinh date,
-    SDT char(10),
+    SDT varchar(10), -- Đã đồng bộ thành varchar(10)
     ChucVu nvarchar(30),
     Quyen nvarchar(20),
     Email varchar(50) null,      
@@ -98,8 +99,10 @@ create table PhieuNhap (
     MaPN char(5) not null,
     NgayNhap date,
     MaNV char(6) not null,
+    MaNSX char(5) not null, -- Đã sửa lỗi thiếu dấu phẩy tại đây
     constraint PK_PhieuNhap primary key (MaPN),
-    constraint FK_PhieuNhap_NhanVien foreign key (MaNV) references NhanVien(MaNV)
+    constraint FK_PhieuNhap_NhanVien foreign key (MaNV) references NhanVien(MaNV),
+    constraint FK_PhieuNhap_NhaSanXuat foreign key (MaNSX) references NhaSanXuat(MaNSX)
 );
 go
 
@@ -124,18 +127,18 @@ create table TaiKhoan (
 );
 go
 
--- thêm dữ liệu
-insert into NhaSanXuat values
-('NSX01', 'Genius', 'Taiwan'), 
-('NSX02', 'Logitech', 'Switzerland'),
-('NSX03', 'Kingston', 'USA'), 
-('NSX04', 'Intel', 'USA'),
-('NSX05', 'AMD', 'USA'), 
-('NSX06', 'ASUS', 'Taiwan'),
-('NSX07', 'Samsung', 'South Korea'), 
-('NSX08', 'Gigabyte', 'Taiwan'),
-('NSX09', 'Keychron', 'China'), 
-('NSX10', 'H hành', 'Vietnam');
+-- THÊM DỮ LIỆU
+insert into NhaSanXuat (MaNSX, TenNSX, QuocGia, SDT) values
+('NSX01', N'Genius', N'Taiwan', '0283925101'), 
+('NSX02', N'Logitech', N'Switzerland', '0218635401'),
+('NSX03', N'Kingston', N'USA', '1800555581'), 
+('NSX04', N'Intel', N'USA', '0283825201'),
+('NSX05', N'AMD', N'USA', '0283910122'), 
+('NSX06', N'ASUS', N'Taiwan', '18006588  '),
+('NSX07', N'Samsung', N'South Korea', '1800588881'), 
+('NSX08', N'Gigabyte', N'Taiwan', '0283911881'),
+('NSX09', N'Keychron', N'China', '0207321556'), 
+('NSX10', N'H hành', N'Vietnam', '0901234567');
 go
 
 insert into LoaiLK values
@@ -249,17 +252,17 @@ insert into ChiTietHD values
 ('HD010', 'MOU001', 5, 140000);
 go
 
-insert into PhieuNhap (MaPN, NgayNhap, MaNV) values 
-('PN001', '10-01-2023', 'NV008'), 
-('PN002', '15-02-2023', 'NV009'),
-('PN003', '20-03-2023', 'NV008'), 
-('PN004', '05-04-2023', 'NV009'),
-('PN005', '12-05-2023', 'NV008'), 
-('PN006', '18-06-2023', 'NV009'),
-('PN007', '22-07-2023', 'NV008'), 
-('PN008', '08-08-2023', 'NV009'),
-('PN009', '30-09-2023', 'NV008'), 
-('PN010', '14-10-2023', 'NV009');
+insert into PhieuNhap (MaPN, NgayNhap, MaNV, MaNSX) values 
+('PN001', '10-01-2023', 'NV008', 'NSX01'), 
+('PN002', '15-02-2023', 'NV009', 'NSX02'),
+('PN003', '20-03-2023', 'NV008', 'NSX03'), 
+('PN004', '05-04-2023', 'NV009', 'NSX04'),
+('PN005', '12-05-2023', 'NV008', 'NSX05'), 
+('PN006', '18-06-2023', 'NV009', 'NSX06'),
+('PN007', '22-07-2023', 'NV008', 'NSX07'), 
+('PN008', '08-08-2023', 'NV009', 'NSX08'),
+('PN009', '30-09-2023', 'NV008', 'NSX09'), 
+('PN010', '14-10-2023', 'NV009', 'NSX10');
 go
 
 insert into ChiTietPN (MaPN, MaLK, SoLuongNhap, DonGiaNhap) values 
@@ -300,6 +303,7 @@ insert into ChiTietHD (MaHD, MaLK, SoLuong, DonGia) values
 ('HD019', 'MOU003', 3, 250000),
 ('HD020', 'RAM004', 1, 4800000);
 go
+
 update HoaDon
 set TongTien = isnull((
     select sum(SoLuong * DonGia)
@@ -307,8 +311,8 @@ set TongTien = isnull((
     where cthd.MaHD = HoaDon.MaHD
 ), 0);
 go
--- tạo hàm và thủ tục
 
+-- TẠO HÀM VÀ THỦ TỤC
 create function fn_DoanhThuTheoThang (@Thang int, @Nam int)
 returns int as
 begin
@@ -332,8 +336,7 @@ begin
 end;
 go
 
--- quản trị người dùng
-
+-- QUẢN TRỊ NGƯỜI DÙNG
 if exists (select * from sys.server_principals where name = 'QuanLyLogin') drop login QuanLyLogin;
 if exists (select * from sys.server_principals where name = 'NhanVienBanHangLogin') drop login NhanVienBanHangLogin;
 go
@@ -361,6 +364,7 @@ add constraint FK_TaiKhoan_NhanVien
 foreign key (MaNV) references NhanVien(MaNV) 
 on delete cascade;
 go 
+
 alter table HoaDon add PhuongThucThanhToan nvarchar(50) default N'Tiền mặt';
 alter table HoaDon add NgayThanhToan date null;
 go

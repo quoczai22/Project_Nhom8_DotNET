@@ -21,10 +21,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         public DateTime? NgayNhap { get; set; }
         public int? TongTien { get; set; }
         public int? TongSoLuong { get; set; }
-
-        // Nhà cung cấp (nếu model có sau này, hiện để trống)
-        public string TenNhaCungCap { get; set; } = "—";
-        public string SoDienThoaiNCC { get; set; } = "—";
+        public string TenNhaCungCap { get; set; } 
+        public string SoDienThoaiNCC { get; set; } 
     }
 
     // Display class cho chi tiết linh kiện trong phiếu nhập (DataGrid panel phải)
@@ -160,6 +158,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 var list = db.PhieuNhaps
                     .AsNoTracking()
                     .Include(pn => pn.MaNvNavigation)
+                    .Include(pn => pn.MaNsxNavigation)
                     .Include(pn => pn.ChiTietPns)
                         .ThenInclude(ct => ct.MaLkNavigation)
                     .OrderByDescending(pn => pn.NgayNhap)
@@ -223,7 +222,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             DateTime? ngayNhap = pn.NgayNhap.HasValue
                 ? pn.NgayNhap.Value.ToDateTime(TimeOnly.MinValue)
                 : (DateTime?)null;
-
             return new PhieuNhapDisplay
             {
                 MaPN = pn.MaPn,
@@ -231,7 +229,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 NgayNhap = ngayNhap,
                 TongTien = tongTien,
                 TongSoLuong = tongSoLuong,
-                TenNhaCungCap=b
+                TenNhaCungCap = pn.MaNsxNavigation?.TenNsx ?? pn.MaNsx,
+                SoDienThoaiNCC = pn.MaNsxNavigation?.Sdt ?? string.Empty
             };
         }
 

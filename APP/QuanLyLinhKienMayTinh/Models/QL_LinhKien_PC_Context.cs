@@ -9,7 +9,10 @@ namespace QuanLyLinhKienMayTinh.Models;
 public partial class QL_LinhKien_PC_Context : DbContext
 {
     public QL_LinhKien_PC_Context(DbContextOptions<QL_LinhKien_PC_Context> options)
-    
+        : base(options)
+    {
+    }
+
     public virtual DbSet<ChiTietHd> ChiTietHds { get; set; }
 
     public virtual DbSet<ChiTietPn> ChiTietPns { get; set; }
@@ -155,7 +158,6 @@ public partial class QL_LinhKien_PC_Context : DbContext
             entity.Property(e => e.Sdt)
                 .HasMaxLength(10)
                 .IsUnicode(false)
-                .IsFixedLength()
                 .HasColumnName("SDT");
             entity.Property(e => e.TenKh)
                 .HasMaxLength(30)
@@ -235,7 +237,6 @@ public partial class QL_LinhKien_PC_Context : DbContext
             entity.Property(e => e.Sdt)
                 .HasMaxLength(10)
                 .IsUnicode(false)
-                .IsFixedLength()
                 .HasColumnName("SDT");
             entity.Property(e => e.TenNsx)
                 .HasMaxLength(50)
@@ -262,7 +263,6 @@ public partial class QL_LinhKien_PC_Context : DbContext
             entity.Property(e => e.Sdt)
                 .HasMaxLength(10)
                 .IsUnicode(false)
-                .IsFixedLength()
                 .HasColumnName("SDT");
             entity.Property(e => e.TenNv)
                 .HasMaxLength(40)
@@ -280,12 +280,23 @@ public partial class QL_LinhKien_PC_Context : DbContext
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("MaPN");
+            entity.Property(e => e.MaNsx)
+                .IsRequired()
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("MaNSX");
             entity.Property(e => e.MaNv)
                 .IsRequired()
                 .HasMaxLength(6)
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("MaNV");
+
+            entity.HasOne(d => d.MaNsxNavigation).WithMany(p => p.PhieuNhaps)
+                .HasForeignKey(d => d.MaNsx)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhieuNhap_NhaSanXuat");
 
             entity.HasOne(d => d.MaNvNavigation).WithMany(p => p.PhieuNhaps)
                 .HasForeignKey(d => d.MaNv)
@@ -318,6 +329,7 @@ public partial class QL_LinhKien_PC_Context : DbContext
 
             entity.HasOne(d => d.MaNvNavigation).WithOne(p => p.TaiKhoan)
                 .HasForeignKey<TaiKhoan>(d => d.MaNv)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_TaiKhoan_NhanVien");
         });
 
