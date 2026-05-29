@@ -384,7 +384,19 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     {
                         var linhKien = db.LinhKiens.Find(chiTiet.MaLk);
                         if (linhKien != null)
+                        {
+                            int soLuongTon = linhKien.SoLuongTon ?? 0;
+                            int soLuongCanTru = chiTiet.SoLuongNhap ?? 0;
+
+                            if (soLuongTon < soLuongCanTru)
+                            {
+                                throw new Exception(
+                                    $"Không thể xóa phiếu nhập vì linh kiện '{linhKien.TenLk}' đã được xuất bán bớt. " +
+                                    $"Tồn kho hiện tại ({soLuongTon}) không đủ để trừ số lượng đã nhập ({soLuongCanTru}).");
+                            }
+
                             linhKien.SoLuongTon -= chiTiet.SoLuongNhap; // Trừ lại kho
+                        }
                     }
 
                     db.ChiTietPns.RemoveRange(entity.ChiTietPns);
