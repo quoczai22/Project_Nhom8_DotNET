@@ -136,9 +136,6 @@
                 <Style TargetType="Border" BasedOn="{StaticResource SidebarAnimationStyle}">
                     <Setter Property="Tag" Value="Close"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsMouseOver, ElementName=btnHoverMenu}" Value="True">
-                            <Setter Property="Tag" Value="Open"/>
-                        </DataTrigger>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Tag" Value="Open"/>
                         </Trigger>
@@ -281,7 +278,7 @@
                 </Border.Effect>
                 <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
             </Border>
-            
+
         </Grid>
     </Grid>
 </Window>

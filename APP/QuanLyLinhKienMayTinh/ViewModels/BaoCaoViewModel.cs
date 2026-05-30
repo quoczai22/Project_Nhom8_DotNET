@@ -222,6 +222,111 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             return document;
         }
 
+        public FlowDocument TaoBaoCaoPhieuNhap(PhieuNhapDisplay pn, IEnumerable<ChiTietLinhKienNhapDisplay> chiTiet)
+        {
+            var document = TaoTaiLieuMacDinh();
+
+            var header = new Paragraph
+            {
+                TextAlignment = TextAlignment.Center,
+                LineHeight = 24
+            };
+            header.Inlines.Add(new Run("CỬA HÀNG LINH KIỆN MÁY TÍNH NHÓM 8")
+            {
+                FontWeight = FontWeights.Bold,
+                FontSize = 18
+            });
+            header.Inlines.Add(new LineBreak());
+            header.Inlines.Add(new Run("Địa chỉ: Trường Đại học Công Thương TP.HCM"));
+            header.Inlines.Add(new LineBreak());
+            header.Inlines.Add(new Run("Điện thoại: 0901 234 567"));
+            document.Blocks.Add(header);
+
+            var title = new Paragraph(new Run("PHIẾU NHẬP KHO"))
+            {
+                TextAlignment = TextAlignment.Center,
+                FontWeight = FontWeights.Bold,
+                FontSize = 22,
+                Margin = new Thickness(0, 18, 0, 14)
+            };
+            document.Blocks.Add(title);
+
+            var info = new Table
+            {
+                CellSpacing = 0,
+                Margin = new Thickness(0, 0, 0, 14)
+            };
+            info.Columns.Add(new TableColumn { Width = new GridLength(190) });
+            info.Columns.Add(new TableColumn { Width = new GridLength(230) });
+            info.Columns.Add(new TableColumn { Width = new GridLength(150) });
+            info.Columns.Add(new TableColumn { Width = new GridLength(180) });
+            var infoGroup = new TableRowGroup();
+            info.RowGroups.Add(infoGroup);
+            ThemDongThongTin(infoGroup, "Mã phiếu nhập:", pn.MaPN, "Ngày nhập:", $"{pn.NgayNhap:dd/MM/yyyy}");
+            ThemDongThongTin(infoGroup, "Nhân viên:", pn.TenNhanVien, "Nhà cung cấp:", pn.TenNhaCungCap);
+            ThemDongThongTin(infoGroup, "SĐT NCC:", pn.SoDienThoaiNCC, "Tổng số lượng:", $"{pn.TongSoLuong ?? 0}");
+            document.Blocks.Add(info);
+
+            var table = new Table
+            {
+                CellSpacing = 0,
+                BorderBrush = Brushes.Black,
+                BorderThickness = new Thickness(1)
+            };
+            table.Columns.Add(new TableColumn { Width = new GridLength(45) });
+            table.Columns.Add(new TableColumn { Width = new GridLength(335) });
+            table.Columns.Add(new TableColumn { Width = new GridLength(85) });
+            table.Columns.Add(new TableColumn { Width = new GridLength(130) });
+            table.Columns.Add(new TableColumn { Width = new GridLength(130) });
+
+            var group = new TableRowGroup();
+            table.RowGroups.Add(group);
+            var headerRow = new TableRow();
+            group.Rows.Add(headerRow);
+            ThemCell(headerRow, "STT", true, TextAlignment.Center);
+            ThemCell(headerRow, "Tên linh kiện", true, TextAlignment.Center);
+            ThemCell(headerRow, "SL nhập", true, TextAlignment.Center);
+            ThemCell(headerRow, "Đơn giá nhập", true, TextAlignment.Center);
+            ThemCell(headerRow, "Thành tiền", true, TextAlignment.Center);
+
+            int stt = 1;
+            long tongTien = 0;
+            foreach (var item in chiTiet)
+            {
+                int soLuong = item.SoLuongNhap ?? 0;
+                int donGia = item.DonGiaNhap ?? 0;
+                long thanhTien = soLuong * donGia;
+                tongTien += thanhTien;
+
+                var row = new TableRow();
+                group.Rows.Add(row);
+                ThemCell(row, stt.ToString(), false, TextAlignment.Center);
+                ThemCell(row, item.TenLinhKien, false, TextAlignment.Left);
+                ThemCell(row, soLuong.ToString(), false, TextAlignment.Center);
+                ThemCell(row, $"{donGia:N0}", false, TextAlignment.Right);
+                ThemCell(row, $"{thanhTien:N0}", false, TextAlignment.Right);
+                stt++;
+            }
+
+            var totalRow = new TableRow();
+            group.Rows.Add(totalRow);
+            var totalLabel = TaoCell("TỔNG CHI PHÍ", true, TextAlignment.Right);
+            totalLabel.ColumnSpan = 4;
+            totalRow.Cells.Add(totalLabel);
+            totalRow.Cells.Add(TaoCell($"{(pn.TongTien ?? (int)tongTien):N0} VNĐ", true, TextAlignment.Right));
+            document.Blocks.Add(table);
+
+            var note = new Paragraph(new Run("Ghi chú: Phiếu nhập được tạo từ phần mềm Quản lý Linh Kiện Máy Tính."))
+            {
+                FontStyle = FontStyles.Italic,
+                Margin = new Thickness(0, 12, 0, 18)
+            };
+            document.Blocks.Add(note);
+
+            ThemBangChuKy(document, "Người lập phiếu", "Thủ kho", 16);
+            return document;
+        }
+
         private FlowDocument TaoTaiLieuMacDinh() // hàm tạo một đối tượng FlowDocument với các thiết lập mặc định về kích thước trang, lề, font chữ và cỡ chữ để đảm bảo tính nhất quán
         {
             return new FlowDocument

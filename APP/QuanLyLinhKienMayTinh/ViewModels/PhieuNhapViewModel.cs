@@ -35,6 +35,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
     public class PhieuNhapViewModel : BaseViewModel, ISearchable
     {
+        private readonly BaoCaoViewModel _baoCaoViewModel = new BaoCaoViewModel();
+
         // ── Backing data ──────────────────────────────────────────────────────
         private ObservableCollection<PhieuNhapDisplay> _all;
 
@@ -326,30 +328,15 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             var pn = PhieuNhapChon;
             var chiTiet = ChiTietLinhKienNhap;
 
-            string content = $"PHIẾU NHẬP KHO\n" +
-                                $"Mã PN: {pn.MaPN}\n" +
-                                $"Ngày nhập: {pn.NgayNhap:dd/MM/yyyy}\n" +
-                                $"Nhân viên: {pn.TenNhanVien}\n" +
-                                "------------------------------------------\n" +
-                                "Linh kiện\t\tSL\tĐơn giá nhập\n";
-
-            foreach (var item in chiTiet)
-                content += $"{item.TenLinhKien}\t{item.SoLuongNhap}\t{item.DonGiaNhap:N0}\n";
-
-            content += "------------------------------------------\n" +
-                        $"TỔNG CHI PHÍ: {pn.TongTien:N0} VNĐ";
-
-            var sfd = new Microsoft.Win32.SaveFileDialog
+            var document = _baoCaoViewModel.TaoBaoCaoPhieuNhap(pn, chiTiet);
+            var window = new BaoCaoPreviewWindow(document);
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow != null && mainWindow.IsVisible && mainWindow.IsLoaded)
             {
-                FileName = $"PhieuNhap_{pn.MaPN}.txt",
-                Filter = "Text File (*.txt)|*.txt"
-            };
-
-            if (sfd.ShowDialog() == true)
-            {
-                System.IO.File.WriteAllText(sfd.FileName, content);
-                MessageBox.Show("Đã xuất phiếu nhập thành công!", "In phiếu nhập");
+                window.Owner = mainWindow;
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
+            window.ShowDialog();
         }
 
         // ── Xóa phiếu nhập ───────────────────────────────────────────────────
