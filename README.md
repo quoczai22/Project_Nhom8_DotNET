@@ -25,13 +25,13 @@
 
 ## 📋 Mục lục
 
-- [Giới thiệu](#-giới-thiệu)
-- [Tính năng nổi bật](#-tính-năng-nổi-bật)
-- [Công nghệ sử dụng](#-công-nghệ-sử-dụng)
-- [Kiến trúc hệ thống](#-kiến-trúc-hệ-thống)
-- [Cấu trúc thư mục](#-cấu-trúc-thư-mục)
-- [Hướng dẫn cài đặt & Cấu hình](#-hướng-dẫn-cài-đặt--cấu-hình)
-- [Thông tin nhóm](#-thông-tin-nhóm)
+- [Giới thiệu](#giới-thiệu)
+- [Tính năng nổi bật](#tính-năng-nổi-bật)
+- [Công nghệ sử dụng](#công-nghệ-sử-dụng)
+- [Kiến trúc hệ thống](#kiến-trúc-hệ-thống)
+- [Cấu trúc thư mục](#cấu-trúc-thư-mục)
+- [Hướng dẫn cài đặt & Cấu hình](#hướng-dẫn-cài-đặt-cấu-hình)
+- [Thông tin nhóm](#thông-tin-nhóm)
 
 ---
 
