@@ -32,6 +32,7 @@
 - [Cấu trúc thư mục](#cấu-trúc-thư-mục)
 - [Hướng dẫn cài đặt & Cấu hình](#hướng-dẫn-cài-đặt--cấu-hình)
 - [Thông tin nhóm](#thông-tin-nhóm)
+- [Tài liệu tham khảo](#tài-liệu-tham-khảo)
 
 ---
 
@@ -266,6 +267,17 @@ Hoặc nhấn **F5** trực tiếp trong Microsoft Visual Studio.
 | 👨‍💻 Thành viên | Nguyễn Nhật Minh Quân | 2001240388 | Thiết kế & Lập trình Cơ sở dữ liệu nâng cao |
 | 👨‍💻 Thành viên | Lương Văn Quan | 2001240384 | Xây dựng Giao diện UI/UX & Style Resource |
 | 👨‍💻 Thành viên | Ngụy Hạo Nhiên | 2001240341 | Phát triển Logic Nghiệp vụ & Ràng buộc ViewModel |
+
+---
+
+## Tài liệu tham khảo
+
+1. Microsoft Learn. *Windows Presentation Foundation Overview*. https://learn.microsoft.com/en-us/dotnet/desktop/wpf/overview/
+2. Microsoft Learn. *Entity Framework Core*. https://learn.microsoft.com/en-us/ef/core/
+3. Microsoft Learn. *SQL Server documentation*. https://learn.microsoft.com/en-us/sql/sql-server/
+4. MoMo Developers. *One-Time Payments API*. https://developers.momo.vn/v3/docs/payment/api/credit/onetime/
+5. How Kteam. *Lập trình phần mềm quản lý kho WPF - MVVM*. https://howkteam.vn/course/lap-trinh-phan-mem-quan-ly-kho-wpf--mvvm-42
+6. KTeam YouTube. *Lập trình WPF cơ bản*. https://www.youtube.com/playlist?list=PL33lvabfss1ywgHcDF2aB8YBxwtj1_Rjk
 
 ---
 
