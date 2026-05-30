@@ -30,5 +30,14 @@ namespace QuanLyLinhKienMayTinh.Services
             int number = int.Parse(match.Value) + 1;
             return "L" + number.ToString("D3");
         }
+
+        public static string GetNextNhaSanXuatID(string lastID)
+        {
+            if (string.IsNullOrEmpty(lastID)) return "NSX01";
+            var match = Regex.Match(lastID, @"\d+$");
+            if (!match.Success) return "NSX01";
+            int number = int.Parse(match.Value) + 1;
+            return "NSX" + number.ToString("D2");
+        }
     }
 }

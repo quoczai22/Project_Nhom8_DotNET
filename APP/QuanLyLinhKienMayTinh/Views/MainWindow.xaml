@@ -195,6 +195,13 @@
                         </StackPanel>
                     </Button>
 
+                    <Button Style="{StaticResource menuButton}" Click="btnNhaCungCap_Click" Visibility="{Binding MenuNhaCungCapVisibility}">
+                        <StackPanel Orientation="Horizontal">
+                            <Icon:PackIconMaterial Kind="Factory" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Nhà Cung Cấp" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
                     <Button Style="{StaticResource menuButton}" Click="btnKhachHang_Click" Visibility="{Binding MenuKhachHangVisibility}">
                         <StackPanel Orientation="Horizontal">
                             <Icon:PackIconMaterial Kind="AccountGroupOutline" Style="{StaticResource menuButtonIcon}"/>

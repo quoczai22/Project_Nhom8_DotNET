@@ -40,6 +40,12 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             get => _menuLoaiLKVisibility;
             set { _menuLoaiLKVisibility = value; OnPropertyChanged(); }
         }
+        private Visibility _menuNhaCungCapVisibility = Visibility.Collapsed;
+        public Visibility MenuNhaCungCapVisibility
+        {
+            get => _menuNhaCungCapVisibility;
+            set { _menuNhaCungCapVisibility = value; OnPropertyChanged(); }
+        }
         private Visibility _menuNhanVienVisibility = Visibility.Collapsed;
         public Visibility MenuNhanVienVisibility
         {
@@ -128,6 +134,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuDashboardVisibility = Visibility.Visible;
                 MenuLinhKienVisibility = Visibility.Visible;
                 MenuLoaiLKVisibility = Visibility.Visible;
+                MenuNhaCungCapVisibility = Visibility.Visible;
                 MenuNhanVienVisibility = Visibility.Visible;
                 MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Visible;
@@ -139,6 +146,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuDashboardVisibility = Visibility.Visible;
                 MenuLinhKienVisibility = Visibility.Collapsed;
                 MenuLoaiLKVisibility = Visibility.Collapsed;
+                MenuNhaCungCapVisibility = Visibility.Collapsed;
                 MenuNhanVienVisibility = Visibility.Collapsed;
                 MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Visible;
@@ -150,6 +158,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuDashboardVisibility = Visibility.Visible;
                 MenuLinhKienVisibility = Visibility.Collapsed;
                 MenuLoaiLKVisibility = Visibility.Collapsed;
+                MenuNhaCungCapVisibility = Visibility.Collapsed;
                 MenuNhanVienVisibility = Visibility.Collapsed;
                 MenuKhachHangVisibility = Visibility.Visible;
                 MenuHoaDonVisibility = Visibility.Collapsed;
@@ -161,6 +170,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MenuDashboardVisibility = Visibility.Visible;
                 MenuLinhKienVisibility = Visibility.Visible;
                 MenuLoaiLKVisibility = Visibility.Visible;
+                MenuNhaCungCapVisibility = Visibility.Visible;
                 MenuNhanVienVisibility = Visibility.Collapsed;
                 MenuKhachHangVisibility = Visibility.Collapsed;
                 MenuHoaDonVisibility = Visibility.Collapsed;

@@ -36,6 +36,11 @@ namespace QuanLyLinhKienMayTinh
             MainFrame.Navigate(new LoaiLinhKienView());
         }
 
+        private void btnNhaCungCap_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new NhaCungCapView());
+        }
+
         private void btnKhachHang_Click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new KhachHangView());
