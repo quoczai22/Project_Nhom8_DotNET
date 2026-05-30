@@ -9,9 +9,11 @@
 
 # 🖥️ Ứng Dụng Quản Lý Linh Kiện Máy Tính
 
-> Đồ án cuối kỳ học phần Công nghệ .NET — Lớp: HUIT_dotNET-WPF.HK2.2526
-> Khoa Công nghệ Thông tin — Trường Đại học Công Thương Thành phố Hồ Chí Minh (HUIT)
+> Ứng dụng desktop quản lý linh kiện máy tính toàn diện, xây dựng bằng **WPF .NET 8.0** theo kiến trúc **MVVM**, kết nối **SQL Server** qua **Entity Framework Core**.
 
+
+
+**Đồ án cuối kỳ — Môn Công nghệ .NET Chiều T3 T7-T12**
 <br/>
 
 [![Download Setup](https://img.shields.io/github/v/release/quoczai22/Project_Nhom8_DotNET?style=flat-square&label=⬇️%20Tải%20Bộ%20Cài%20Đặt&color=3f51b5)](https://github.com/quoczai22/Project_Nhom8_DotNET/releases/latest)
@@ -100,3 +102,163 @@ Thay vì sử dụng các công cụ bên thứ ba kém ổn định trên môi 
 ---
 
 ## 🏗️ Kiến trúc hệ thống
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                           VIEW (XAML)                                            │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ - LoginView                        - MomoPaymentView             - ThemSuaLinhKienDialog         │
+│ - MainWindow                       - ThongBaotonKhoWindow        - ThemSuaLoaiLinhKienDialog     │
+│ - TrangChuView                     - ChonPhuongThucDialog        - ThemSuaKhachHangDialog        │
+│ - LinhKienView                     - ThemHoaDonDialog            - ThemSuaNhanVienDialog         │
+│ - LoaiLinhKienView                 - SuaHoaDonDialog             - ThemPhieuNhapDialog           │
+│ - HoaDonView                       - KhachHangView                                               │
+│ - PhieuNhapView                    - NhanVienView                                                │
+└───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
+                                                │ Data Binding / Command (RelayCommand)
+┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
+│                                           VIEWMODEL                                              │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ - BaseViewModel (INotifyPropertyChanged)    - LoginViewModel              - LoaiLinhKienViewModel│
+│ - RelayCommand                              - MainViewModel               - HoaDonViewModel      │
+│ - ISearchable (Interface tìm kiếm RAM)      - TrangChuViewModel           - KhachHangViewModel   │
+│                                             - LinhKienViewModel           - NhanVienViewModel    │
+│                                             - PhieuNhapViewModel          - BaoCaoViewModel      │
+└───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
+                                                │ Entity Framework Core 8 (AsNoTracking / Include)
+┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
+│                                       MODEL (SCHEMA: DBO)                                        │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ - QL_LinhKien_PC_Context                    - LinhKien                    - NhanVien             │
+│ - QL_LinhKien_PC_Context.Functions          - LoaiLk                      - TaiKhoan             │
+│ - QL_LinhKien_PC_ContextProcedures          - NhaSanXuat                  - ThongKeBanHang       │
+│ - DataProvider (Kết nối dữ liệu)            - HoaDon / ChiTietHd          - ThongKeHang          │
+│                                             - PhieuNhap / ChiTietPn       - sp_BaoCaoTonKhoResult│
+└───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
+                                                │ T-SQL Driver Connection
+┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
+│                                      MICROSOFT SQL SERVER                                        │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+📦 Repository Root
+│
+├── 📂 CSDL/                                        # Phân hệ lưu trữ script dữ liệu
+│   └── QuanLyLinhKienMayTinh_NET.sql               # Script khởi tạo Database, bảng hệ thống, SP và Function
+│
+└── 📂 Project_Nhom8_DotNET/                        # Mã nguồn ứng dụng WPF chính
+    │
+    ├── 📂 Helpers/
+    │   └── Multipasswordconverter.cs               # Hỗ trợ chuyển đổi giá trị password mã hóa cho PasswordBox
+    │
+    ├── 📂 Images/
+    │   ├── avatar.png                              # Ảnh giao diện người dùng đại diện
+    │   └── logo_momo.png                           # Biểu tượng phục vụ phân hệ MoMo API
+    │
+    ├── 📂 Models/                                  # Tầng định nghĩa thực thể và ngữ cảnh CSDL
+    │   ├── QL_LinhKien_PC_Context.cs               # Lớp DbContext chính quản lý thực thể dữ liệu
+    │   ├── QL_LinhKien_PC_Context.Functions.cs     # Khai báo cấu trúc ánh xạ Function hệ thống (fn_DoanhThuTheoThang)
+    │   ├── QL_LinhKien_PC_ContextProcedures.cs     # Khai báo cấu trúc ánh xạ Stored Procedure (sp_BaoCaoTonKho)
+    │   ├── DataProvider.cs                         # Khởi tạo Singleton quản lý chuỗi kết nối
+    │   └── [Cơ số các file C# Entity tương ứng với các bảng: LinhKien, HoaDon, NhanVien...]
+    │
+    ├── 📂 Services/
+    │   ├── IMomoService.cs                         # Định nghĩa cổng giao tiếp dịch vụ thanh toán trực tuyến
+    │   ├── MomoService.cs                          # Xử lý chi tiết thuật toán băm chuỗi SHA256 và điều hướng API
+    │   └── AutoIDServices.cs                       # Thuật toán tự sinh các mã ID tăng dần (HD, PN...)
+    │
+    ├── 📂 Themes/                                  # Hệ thống quản lý tài nguyên giao diện
+    │   ├── ThemeLight.xaml                         # Khai báo màu sắc, kiểu dáng nền sáng
+    │   └── ThemeDark.xaml                          # Khai báo màu sắc, kiểu dáng nền tối (Dark mode)
+    │
+    ├── 📂 ViewModels/                              # Tầng trung gian điều hướng và xử lý logic nghiệp vụ
+    │   ├── BaseViewModel.cs                        # Triển khai gốc cho cơ chế thông báo đổi thuộc tính interface
+    │   ├── RelayCommand.cs                         # Thiết lập các hành vi đóng gói Command
+    │   ├── ISearchable.cs                          # Giao diện hỗ trợ bộ lọc RAM đồng nhất cho các danh mục
+    │   └── [Các ViewModel tương ứng cho từng màn hình chức năng phụ trách]
+    │
+    ├── 📂 Views/                                   # Tầng hiển thị giao diện người dùng (gồm các XAML và Dialog)
+    │   ├── LoginView.xaml                          # Màn hình thực hiện đăng nhập hệ thống
+    │   ├── MainWindow.xaml                         # Khung ứng dụng chính tích hợp Sidebar điều hướng
+    │   └── [Các phân hệ hiển thị: HoaDonView, PhieuNhapView, LinhKienView, KhachHangView...]
+    │
+    ├── 📄 App.xaml                                 # Điểm khởi tạo tài nguyên và nạp Theme mặc định của ứng dụng
+    ├── 📄 App.xaml.cs                              # Điểm kích hoạt khởi chạy đầu tiên của toàn bộ chương trình WPF
+    └── 📄 Project_Nhom8_DotNET.csproj              # File quản lý cấu hình project và các gói thư viện NuGet đi kèm
+    ⚙️ Hướng dẫn cài đặt & Cấu hình
+Cách 1: Sử dụng bộ cài đặt đóng gói (.exe)
+Truy cập vào phân mục Releases của kho lưu trữ.
+
+Tải tệp tin bộ cài đặt dạng thực thi có tên QuanLyLinhKien-Setup.exe về máy tính cục bộ.
+
+Chạy tệp tin cài đặt và thực hiện theo luồng chỉ dẫn trên màn hình.
+
+Yêu cầu hệ thống: Máy trạm cần nạp sẵn môi trường nền tảng .NET 8.0 Desktop Runtime và trỏ kết nối được đến máy chủ SQL Server.
+
+Cách 2: Biên dịch trực tiếp từ mã nguồn hệ thống
+1. Clone mã nguồn về máy tính
+
+Bash
+git clone [https://github.com/quoczai22/Project_Nhom8_DotNET.git](https://github.com/quoczai22/Project_Nhom8_DotNET.git)
+cd Project_Nhom8_DotNET
+2. Khởi tạo Cơ sở dữ liệu bằng T-SQL (Khuyên dùng)
+Dự án sử dụng cơ sở dữ liệu Microsoft SQL Server chạy trực tiếp trên máy cục bộ (Local).
+
+Mở SQL Server Management Studio (SSMS).
+
+Mở file script CSDL/QuanLyLinhKienMayTinh_NET.sql.
+
+Nhấn Execute (F5) để tự động khởi tạo CSDL, bảng, dữ liệu mẫu, Stored Procedures và Functions.
+
+3. Cấu hình Chuỗi kết nối (Connection String)
+Mở file Models/DataProvider.cs trong Visual Studio và điều chỉnh biến chứa chuỗi kết nối (ConnectionString) khớp với tên Server của máy tính bạn:
+
+C#
+private DataProvider()
+{
+    // Chuỗi kết nối SQL Server cục bộ (Sửa lại Data Source theo tên Server của máy bạn nếu cần)
+    _localConnStr = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=QL_LinhKien_PC_NET;Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
+}
+4. Thực thi chạy ứng dụng
+Mở Package Manager Console trong Visual Studio và cập nhật cấu trúc cơ sở dữ liệu:
+
+PowerShell
+Update-Database
+Sau đó khởi chạy chương trình bằng dòng lệnh:
+
+Bash
+dotnet run
+Hoặc nhấn tổ hợp phím F5 trực tiếp trong môi trường Microsoft Visual Studio.
+## 👨‍💻 Thông tin nhóm
+
+
+
+**Nhóm 8 — Môn Công nghệ .NET**
+
+
+
+| Vai trò | Họ và tên | MSSV |
+
+|:---:|---|:---:|
+
+| 👑 Trưởng nhóm | Trịnh Hữu Kiến Quốc | 2001240399 |
+
+| 👨‍💻 Thành viên | Nguyễn Nhật Minh Quân | 2001240388 |
+
+| 👨‍💻 Thành viên | Lương Văn Quan | 2001240384 |
+
+| 👨‍💻 Thành viên | Ngụy Hạo Nhiên | 2001240341 |
+
+
+
+---
+👨‍💻 Thông tin nhóm thực hiện
+Ứng dụng được thiết kế, phát triển và hoàn thiện bởi tập thể thành viên Nhóm 8 — Lớp học phần Công nghệ .NET (Năm học 2025 - 2026):
+
+👑 Trịnh Hữu Kiến Quốc (MSSV: 2001240399) — Nhóm trưởng phụ trách Kiến trúc, Bảo mật & Tích hợp API.
+
+👨‍💻 Nguyễn Nhật Minh Quân (MSSV: 2001240388) — Thành viên phụ trách Thiết kế & Lập trình Cơ sở dữ liệu nâng cao.
+
+👨‍💻 Lương Văn Quan (MSSV: 2001240384) — Thành viên phụ trách Xây dựng Giao diện UI/UX & Style Resource.
+
+👨‍💻 Ngụy Hạo Nhiên (MSSV: 2001240341) — Thành viên phụ trách Phát triển Logic Nghiệp vụ & Ràng buộc ViewModel.
+
+Made with ❤️ by Nhóm 8 — Khoa CNTT Toàn bộ nội dung tài liệu báo cáo phản ánh đúng kết quả thực hiện đồ án chính thức (Năm học 2025-2026).
