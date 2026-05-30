@@ -218,15 +218,24 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
-                        <Border Width="4" CornerRadius="2" Background="#4caf50" Margin="0,2,10,2"/>
-                        <StackPanel>
-                            <TextBlock Text="Thống kê bán hàng theo Hãng" FontSize="14"
-                                       FontWeight="SemiBold" Foreground="{DynamicResource MainTextColor}"/>
-                            <TextBlock Text="Tổng hợp số lượng và doanh thu theo nhà sản xuất"
-                                       FontSize="11" Foreground="{DynamicResource SubTextColor}"/>
+                    <Grid Grid.Row="0" Margin="0,0,0,12">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="4" CornerRadius="2" Background="#4caf50" Margin="0,2,10,2"/>
+                            <StackPanel>
+                                <TextBlock Text="Thống kê bán hàng theo Hãng" FontSize="14"
+                                           FontWeight="SemiBold" Foreground="{DynamicResource MainTextColor}"/>
+                                <TextBlock Text="Tổng hợp số lượng và doanh thu theo nhà sản xuất"
+                                           FontSize="11" Foreground="{DynamicResource SubTextColor}"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
+
+                        <Button Content="🖨️  In báo cáo" HorizontalAlignment="Right"
+                                Background="{DynamicResource ButtonColor}"
+                                Foreground="{DynamicResource ButtonTextColor}"
+                                FontSize="13" FontWeight="SemiBold"
+                                Padding="14,8" BorderThickness="0" Cursor="Hand"
+                                Command="{Binding InBaoCaoDoanhThuCommand}"/>
+                    </Grid>
 
                     <DataGrid Grid.Row="1"
                               ItemsSource="{Binding DanhSachThongKeBanHang}"

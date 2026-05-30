@@ -3,6 +3,7 @@ using LiveCharts.Wpf;
 using LiveCharts.Wpf.Charts.Base;
 using Microsoft.EntityFrameworkCore;
 using QuanLyLinhKienMayTinh.Models;
+using QuanLyLinhKienMayTinh.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,12 +12,15 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace QuanLyLinhKienMayTinh.ViewModels
 {
     public class TrangChuViewModel : BaseViewModel
     {
+        private readonly BaoCaoViewModel _baoCaoViewModel = new BaoCaoViewModel();
+
         private SeriesCollection _doanhThu;
         public SeriesCollection DoanhThu
         {
@@ -117,6 +121,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public ICommand InBaoCaoDoanhThuCommand { get; private set; }
         
         public TrangChuViewModel()
         {
@@ -124,6 +130,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             Labels = new List<string>();
             ChucVu = new SeriesCollection();
             DanhSachThongKeBanHang = new List<ThongKeBanHang>();
+            InBaoCaoDoanhThuCommand = new RelayCommand<object>(CanInBaoCaoDoanhThu, ThucHienInBaoCaoDoanhThu);
 
             TaiDuLieu();
             LoadPieChart();
@@ -225,5 +232,24 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private bool CanInBaoCaoDoanhThu(object p)
+        {
+            return DanhSachThongKeBanHang != null && DanhSachThongKeBanHang.Count > 0;
+        }
+
+        private void ThucHienInBaoCaoDoanhThu(object p)
+        {
+            var document = _baoCaoViewModel.TaoBaoCaoDoanhThuTheoHang(DanhSachThongKeBanHang); // tạo báo cáo doanh thu theo hãng sản xuất dựa trên danh sách thống kê bán hàng hiện tại
+            var window = new BaoCaoPreviewWindow(document);
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow != null && mainWindow.IsVisible && mainWindow.IsLoaded)
+            {
+                window.Owner = mainWindow;
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+            window.ShowDialog();
+        }
+
     }
 }

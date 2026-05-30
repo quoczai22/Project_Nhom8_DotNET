@@ -38,6 +38,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
     }
     public class HoaDonViewModel : BaseViewModel, ISearchable
     {
+        private readonly BaoCaoViewModel _baoCaoViewModel = new BaoCaoViewModel();
         // ── Backing data ─────────────────────────────────────────────────────
         private ObservableCollection<HoaDonDisplay> _all;
 
@@ -456,33 +457,18 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             var hd = HoaDonChon;
             var chiTiet = ChiTietSanPham;
-            string content = $"HÓA ĐƠN BÁN HÀNG\n" +
-                             $"Mã HD: {hd.MaHoaDon}\n" +
-                             $"Ngày: {hd.NgayTao:dd/MM/yyyy}\n" +
-                             $"Khách hàng: {hd.TenKhachHang}\n" +
-                             $"SĐT: {hd.SoDienThoai}\n" +
-                             "------------------------------------------\n" +
-                             "Sản phẩm\tSL\tĐơn giá\n";
 
-            foreach (var item in chiTiet)
+            var document = _baoCaoViewModel.TaoBaoCaoHoaDon(hd, chiTiet); // Tạo FlowDocument chứa nội dung hóa đơn để hiển thị trong cửa sổ xem trước
+            var window = new BaoCaoPreviewWindow(document);
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow != null && mainWindow.IsVisible && mainWindow.IsLoaded)
             {
-                content += $"{item.TenSanPham}\t{item.SoLuong}\t{item.DonGia:N0}\n";
+                window.Owner = mainWindow;
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
-
-            content += "------------------------------------------\n" +
-                       $"TỔNG TIỀN: {hd.TongTien:N0} VNĐ";
-            var sfd = new Microsoft.Win32.SaveFileDialog
-            {
-                FileName = $"HoaDon_{hd.MaHoaDon}.txt",
-                Filter = "Text File (*.txt)|*.txt"
-            };
-
-            if (sfd.ShowDialog() == true)
-            {
-                System.IO.File.WriteAllText(sfd.FileName, content);
-                MessageBox.Show("Đã xuất hóa đơn thành công!", "In hóa đơn");
-            }
+            window.ShowDialog();
         }
+
         // Kiểm tra điều kiện: Chỉ cho phép xóa khi người dùng đã chọn một hóa đơn
         private bool CanXoaHoaDon(object parameter)
         {
