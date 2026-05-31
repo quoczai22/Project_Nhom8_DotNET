@@ -272,8 +272,6 @@ Hoặc nhấn **F5** trực tiếp trong Microsoft Visual Studio.
 
 # Tài liệu tham khảo
 
-# Tài liệu tham khảo
-
 1. Microsoft Learn. *Windows Presentation Foundation Overview*.  
    https://learn.microsoft.com/en-us/dotnet/desktop/wpf/overview/
 
