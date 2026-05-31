@@ -270,15 +270,15 @@ Hoặc nhấn **F5** trực tiếp trong Microsoft Visual Studio.
 
 ---
 
-## Tài liệu tham khảo
+# Tài liệu tham khảo
 
-1. Microsoft Learn. *Windows Presentation Foundation Overview*. https://learn.microsoft.com/en-us/dotnet/desktop/wpf/overview/
-2. Microsoft Learn. *Entity Framework Core*. https://learn.microsoft.com/en-us/ef/core/
-3. Microsoft Learn. *SQL Server documentation*. https://learn.microsoft.com/en-us/sql/sql-server/
-4. MoMo Developers. *One-Time Payments API*. https://developers.momo.vn/v3/docs/payment/api/credit/onetime/
-5. How Kteam. *Lập trình phần mềm quản lý kho WPF - MVVM*. https://howkteam.vn/course/lap-trinh-phan-mem-quan-ly-kho-wpf--mvvm-42
-6. KTeam YouTube. *Lập trình WPF cơ bản*. https://www.youtube.com/playlist?list=PL33lvabfss1ywgHcDF2aB8YBxwtj1_Rjk
-
+1. [Microsoft Learn - Windows Presentation Foundation Overview](https://learn.microsoft.com/en-us/dotnet/desktop/wpf/overview/)
+2. [Microsoft Learn - Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/)
+3. [Microsoft Learn - SQL Server Documentation](https://learn.microsoft.com/en-us/sql/sql-server/)
+4. [MoMo Developers - One-Time Payments API](https://developers.momo.vn/v3/docs/payment/api/credit/onetime/)
+5. [How Kteam - Lập trình phần mềm quản lý kho WPF - MVVM](https://howkteam.vn/course/lap-trinh-phan-mem-quan-ly-kho-wpf--mvvm-42)
+6. [KTeam YouTube - Lập trình WPF cơ bản](https://www.youtube.com/playlist?list=PL33lvabfss1ywgHcDF2aB8YBxwtj1_Rjk)
+7. [WPF Tutorial - Creating a FlowDocument from Code-behind](https://wpf-tutorial.com/vi/59/cac-di%E1%BB%81u-khi%E1%BB%83n-rich-text/creating-a-flowdocument-from-code-behind/)
 ---
 
 <div align="center">
