@@ -135,7 +135,6 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 // Dùng using để đảm bảo DbContext được giải phóng sau khi sử dụng
                 using var db = DataProvider.Ins.GetContext();
 
-                // Sử dụng chuỗi string định danh thay vì Lambda Expression để đúng yêu cầu kỹ thuật
                 var query = from t in db.TaiKhoans.Include("MaNvNavigation")
                             where t.TenDn == LoginUsername && t.MatKhau == LoginPassword
                             select t;

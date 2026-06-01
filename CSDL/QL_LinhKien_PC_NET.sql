@@ -449,6 +449,9 @@ grant select
 on LinhKien
 to role_thuNgan
 grant execute
+on sp_baocaotonkho  
+to role_thuNgan
+grant execute
 on fn_DoanhThuTheoThang
 to role_thuNgan
 
@@ -480,6 +483,9 @@ on LinhKien
 to role_Cskh
 grant select
 on HoaDon
+to role_Cskh
+grant execute
+on sp_baocaotonkho  
 to role_Cskh
 grant execute
 on fn_DoanhThuTheoThang
