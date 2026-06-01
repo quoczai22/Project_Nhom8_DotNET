@@ -37,10 +37,10 @@ namespace QuanLyLinhKienMayTinh.ViewModels
     {
         private readonly BaoCaoViewModel _baoCaoViewModel = new BaoCaoViewModel();
 
-        // ── Backing data ──────────────────────────────────────────────────────
+        //Backing data 
         private ObservableCollection<PhieuNhapDisplay> _all;
 
-        // ── Danh sách phiếu nhập (DataGrid) ──────────────────────────────────
+        //Danh sách phiếu nhập (DataGrid)
         private ObservableCollection<PhieuNhapDisplay> _danhSachPhieuNhap;
         public ObservableCollection<PhieuNhapDisplay> DanhSachPhieuNhap
         {
@@ -48,7 +48,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _danhSachPhieuNhap = value; OnPropertyChanged(); }
         }
 
-        // ── Phiếu nhập đang chọn ──────────────────────────────────────────────
+        //Phiếu nhập đang chọn
         private PhieuNhapDisplay _phieuNhapChon;
         public PhieuNhapDisplay PhieuNhapChon
         {
@@ -63,7 +63,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Chi tiết linh kiện trong phiếu nhập ──────────────────────────────
+        //Chi tiết linh kiện trong phiếu nhập
         private ObservableCollection<ChiTietLinhKienNhapDisplay> _chiTietLinhKienNhap;
         public ObservableCollection<ChiTietLinhKienNhapDisplay> ChiTietLinhKienNhap
         {
@@ -71,7 +71,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _chiTietLinhKienNhap = value; OnPropertyChanged(); }
         }
 
-        // ── Visibility panel chi tiết ─────────────────────────────────────────
+        //Visibility panel chi tiết
         private Visibility _chiTietVisibility = Visibility.Collapsed;
         public Visibility ChiTietVisibility
         {
@@ -86,7 +86,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _chuaChonPhieuVisibility = value; OnPropertyChanged(); }
         }
 
-        // ── Toolbar: search, lọc ngày ─────────────────────────────────────────
+        //Toolbar: search, lọc ngày
         private string _tuKhoanTimKiem = string.Empty;
         public string TuKhoanTimKiem
         {
@@ -108,7 +108,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _denNgay = value; OnPropertyChanged(); }
         }
 
-        // ── Footer thống kê ───────────────────────────────────────────────────
+        //Footer thống kê
         private int _tongSoPhieuNhap;
         public int TongSoPhieuNhap
         {
@@ -137,20 +137,20 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _soPhieuNhapThangNay = value; OnPropertyChanged(); }
         }
 
-        // ── Commands ──────────────────────────────────────────────────────────
+        //Commands
         public ICommand TaoPhieuNhapMoiCommand { get; private set; }
         public ICommand InPhieuNhapCommand { get; private set; }
         public ICommand XoaPhieuNhapCommand { get; private set; }
         public ICommand LocPhieuNhapCommand { get; private set; }
 
-        // ── Constructor ───────────────────────────────────────────────────────
+        //Constructor
         public PhieuNhapViewModel()
         {
             TaiDuLieu();
             KhoiTaoCommands();
         }
 
-        // ── Tải dữ liệu ──────────────────────────────────────────────────────
+        //Tải dữ liệu
         public void TaiDuLieu()
         {
             try
@@ -180,7 +180,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Tải chi tiết linh kiện ────────────────────────────────────────────
+        //Tải chi tiết linh kiện
         private void TaiChiTietLinhKien(string maPn)
         {
             if (string.IsNullOrEmpty(maPn))
@@ -215,7 +215,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Map model → display ───────────────────────────────────────────────
+        //Chuyển đổi từ PhieuNhap sang PhieuNhapDisplay để dễ dàng hiển thị trên DataGrid
         private static PhieuNhapDisplay MapToDisplay(PhieuNhap pn)
         {
             int tongTien = pn.ChiTietPns.Sum(ct => (ct.SoLuongNhap ?? 0) * (ct.DonGiaNhap ?? 0));
@@ -236,7 +236,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             };
         }
 
-        // ── Lọc dữ liệu ──────────────────────────────────────────────────────
+        //Lọc dữ liệu
         private void LocPhieuNhap()
         {
             var filtered = _all.AsEnumerable();
@@ -260,7 +260,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             PhieuNhapChon = null;
         }
 
-        // ── Thống kê footer ───────────────────────────────────────────────────
+        //Thống kê footer
         private void CapNhatThongKe(IEnumerable<PhieuNhapDisplay> ds)
         {
             var list = ds.ToList();
@@ -275,14 +275,14 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 pn.NgayNhap.Value.Year == now.Year);
         }
 
-        // ── ISearchable ───────────────────────────────────────────────────────
+        //ISearchable
         public void ApplySearch(string keyword)
         {
             TuKhoanTimKiem = keyword?.Trim() ?? string.Empty;
             LocPhieuNhap();
         }
 
-        // ── Khởi tạo commands ─────────────────────────────────────────────────
+        //Khởi tạo commands
         private void KhoiTaoCommands()
         {
             TaoPhieuNhapMoiCommand = new RelayCommand<object>(_ => true, ThucHienTaoPhieuNhap);
@@ -291,7 +291,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             LocPhieuNhapCommand = new RelayCommand<object>(_ => true, _ => LocPhieuNhap());
         }
 
-        // ── Tạo phiếu nhập mới ────────────────────────────────────────────────
+        //Tạo phiếu nhập mới
         private void ThucHienTaoPhieuNhap(object parameter)
         {
             try
@@ -322,7 +322,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── In phiếu nhập ─────────────────────────────────────────────────────
+        //In phiếu nhập
         private void ThucHienInPhieuNhap(object parameter)
         {
             var pn = PhieuNhapChon;
@@ -339,7 +339,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             window.ShowDialog();
         }
 
-        // ── Xóa phiếu nhập ───────────────────────────────────────────────────
+        //Xóa phiếu nhập
         private void ThucHienXoaPhieuNhap(object parameter)
         {
             if (PhieuNhapChon == null) return;
@@ -411,7 +411,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Lưu phiếu nhập an toàn (Transaction) ─────────────────────────────
+        //Lưu phiếu nhập an toàn (Transaction)
         public async Task LuuPhieuNhapAnToan(PhieuNhap pnMoi, List<ChiTietPn> danhSachChiTiet)
         {
             var db = DataProvider.Ins.GetContext();

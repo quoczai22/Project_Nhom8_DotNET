@@ -132,7 +132,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
             try
             {
-                // Dùng using để đảm bảo DbContext được giải phóng sau khi sử dụng
+                DataProvider.Ins.ResetToDefaultConnection();
+
                 using var db = DataProvider.Ins.GetContext();
 
                 var query = from t in db.TaiKhoans.Include("MaNvNavigation")

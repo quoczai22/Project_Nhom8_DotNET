@@ -39,10 +39,10 @@ namespace QuanLyLinhKienMayTinh.ViewModels
     public class HoaDonViewModel : BaseViewModel, ISearchable
     {
         private readonly BaoCaoViewModel _baoCaoViewModel = new BaoCaoViewModel();
-        // ── Backing data ─────────────────────────────────────────────────────
+        //Backing data
         private ObservableCollection<HoaDonDisplay> _all;
 
-        // ── Danh sách hóa đơn (DataGrid) ────────────────────────────────────
+        //Danh sách hóa đơn (DataGrid)
         private ObservableCollection<HoaDonDisplay> _danhSachHoaDon;
         public ObservableCollection<HoaDonDisplay> DanhSachHoaDon
         {
@@ -53,7 +53,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // Dịch vụ MoMo
         IMomoService _momoService;
 
-        // ── Hóa đơn đang chọn ───────────────────────────────────────────────
+        //Hóa đơn đang chọn
         private HoaDonDisplay _hoaDonChon;
         public HoaDonDisplay HoaDonChon
         {
@@ -72,7 +72,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Chi tiết sản phẩm trong hóa đơn ─────────────────────────────────
+        //Chi tiết sản phẩm trong hóa đơn
         private ObservableCollection<ChiTietSanPhamDisplay> _chiTietSanPham;
         public ObservableCollection<ChiTietSanPhamDisplay> ChiTietSanPham
         {
@@ -80,7 +80,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _chiTietSanPham = value; OnPropertyChanged(); }
         }
 
-        // ── Visibility panel chi tiết ────────────────────────────────────────
+        //Visibility panel chi tiết
         private Visibility _chiTietVisibility = Visibility.Collapsed;
         public Visibility ChiTietVisibility
         {
@@ -95,7 +95,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _chuaChonHoaDonVisibility = value; OnPropertyChanged(); }
         }
 
-        // ── Toolbar: search, filter trạng thái, lọc ngày ────────────────────
+        //Toolbar: search, filter trạng thái, lọc ngày
         private string _tuKhoanTimKiem = string.Empty;
         public string TuKhoanTimKiem
         {

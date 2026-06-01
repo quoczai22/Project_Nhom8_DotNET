@@ -263,10 +263,17 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             MessageBoxResult result = MessageBox.Show("Bạn có muốn đăng xuất không?", "Thông báo",
                                                       MessageBoxButton.YesNo, MessageBoxImage.Question);
+
             if (result == MessageBoxResult.Yes)
             {
+                DataProvider.Ins.ResetToDefaultConnection();
+
+                LuuTrangThai.MaNVDangNhap = "";
+                LuuTrangThai.QuyenDangNhap = "";
+
                 LoginView login = new LoginView();
                 login.Show();
+
                 Application.Current.Windows.OfType<MainWindow>().FirstOrDefault()?.Close();
             }
         }

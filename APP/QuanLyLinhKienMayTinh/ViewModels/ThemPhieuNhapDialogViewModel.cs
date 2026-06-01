@@ -22,7 +22,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
     public class ThemPhieuNhapDialogViewModel : BaseViewModel
     {
-        // ── Thông tin phiếu ───────────────────────────────────────────────────
+        //Thông tin phiếu
         private string _maPn;
         public string MaPn
         {
@@ -44,7 +44,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _ngayNhap = value; OnPropertyChanged(); }
         }
 
-        // ── Thêm linh kiện ────────────────────────────────────────────────────
+        //Thêm linh kiện
         private LinhKien _selectedLinhKien;
         public LinhKien SelectedLinhKien
         {
@@ -73,16 +73,16 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             set { _tongChiPhiText = value; OnPropertyChanged(); }
         }
 
-        // ── Dữ liệu nguồn ────────────────────────────────────────────────────
+        //Dữ liệu nguồn
         public List<NhanVien> DanhSachNhanVien { get; set; }
         public List<LinhKien> DanhSachLinhKien { get; set; }
         public ObservableCollection<PhieuNhapItem> DanhSachNhap { get; set; } = new();
 
-        // ── Kết quả trả về cho ViewModel cha ─────────────────────────────────
+        //Kết quả trả về cho ViewModel cha
         public PhieuNhap PhieuNhapMoi { get; private set; }
         public List<ChiTietPn> ChiTietPns { get; private set; }
 
-        // ── Commands ──────────────────────────────────────────────────────────
+        //Commands
         public ICommand ThemVaoPhieuCommand { get; private set; }
         public ICommand XoaKhoiPhieuCommand { get; private set; }
         public ICommand LuuCommand { get; private set; }
@@ -91,7 +91,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         // Hành động đóng dialog, được gán từ code-behind
         public Action<bool?> CloseAction { get; set; }
 
-        // ── Constructor ───────────────────────────────────────────────────────
+        //Constructor
         public ThemPhieuNhapDialogViewModel(string maPnMoi)
         {
             MaPn = maPnMoi;
@@ -99,7 +99,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             KhoiTaoCommands();
         }
 
-        // ── Tải dữ liệu ──────────────────────────────────────────────────────
+        //Tải dữ liệu
         private void TaiDuLieu()
         {
             try
@@ -128,7 +128,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Khởi tạo commands ─────────────────────────────────────────────────
+        //Khởi tạo commands
         private void KhoiTaoCommands()
         {
             ThemVaoPhieuCommand = new RelayCommand<object>(_ => true, ThucHienThemVaoPhieu);
@@ -137,7 +137,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             HuyCommand = new RelayCommand<object>(_ => true, _ => CloseAction?.Invoke(false));
         }
 
-        // ── Thêm linh kiện vào phiếu ─────────────────────────────────────────
+        //Thêm linh kiện vào phiếu
         private void ThucHienThemVaoPhieu(object parameter)
         {
             if (SelectedLinhKien == null)
@@ -187,7 +187,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             CapNhatTongChiPhi();
         }
 
-        // ── Xóa linh kiện khỏi phiếu ─────────────────────────────────────────
+        //Xóa linh kiện khỏi phiếu
         private void ThucHienXoaKhoiPhieu(PhieuNhapItem item)
         {
             if (item != null)
@@ -197,14 +197,14 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             }
         }
 
-        // ── Tính tổng chi phí ─────────────────────────────────────────────────
+        //Tính tổng chi phí
         private void CapNhatTongChiPhi()
         {
             long tong = DanhSachNhap.Sum(x => (long)x.ThanhTien);
             TongChiPhiText = $"{tong:N0} ₫";
         }
 
-        // ── Lưu phiếu nhập ───────────────────────────────────────────────────
+        //Lưu phiếu nhập
         private void ThucHienLuu(object parameter)
         {
             if (SelectedNhanVien == null)

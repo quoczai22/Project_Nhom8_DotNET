@@ -9,10 +9,15 @@ namespace QuanLyLinhKienMayTinh.Models
 
         private string _localConnStr;
 
-        private const string ServerName = "localhost"; //đổi tên thành tên server của máy trước khi chạy
+        private const string ServerName = "localhost"; // đổi thành tên server của máy trước khi chạy
         private const string DatabaseName = "QL_LinhKien_PC_NET";
 
         private DataProvider()
+        {
+            ResetToDefaultConnection();
+        }
+
+        public void ResetToDefaultConnection()
         {
             _localConnStr = $"Data Source={ServerName};Initial Catalog={DatabaseName};Integrated Security=True;TrustServerCertificate=True;Encrypt=False";
         }
@@ -36,15 +41,19 @@ namespace QuanLyLinhKienMayTinh.Models
                 case "Quản lý toàn bộ":
                     dbUser = "quanLyLogin";
                     break;
+
                 case "Thu ngân":
                     dbUser = "nhanVienThuNganLogin";
                     break;
+
                 case "Chăm sóc khách hàng":
                     dbUser = "nhanVienCskhLogin";
                     break;
+
                 case "Kho":
                     dbUser = "nhanVienKhoLogin";
                     break;
+
                 default:
                     dbUser = "nhanVienCskhLogin";
                     break;
