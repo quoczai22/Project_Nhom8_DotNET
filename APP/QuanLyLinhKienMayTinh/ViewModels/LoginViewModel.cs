@@ -142,26 +142,19 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
                 var acc = query.FirstOrDefault(); // lấy thông tin tài khoản cùng với thông tin nhân viên
 
-                if (acc != null) // nếu tìm thấy tài khoản hợp lệ
+                if (acc != null)
                 {
                     LuuTrangThai.MaNVDangNhap = acc.MaNv;
                     LuuTrangThai.QuyenDangNhap = acc.MaNvNavigation.Quyen;
 
-                    if (LuuTrangThai.QuyenDangNhap == "Quản lý toàn bộ")
-                    {
-                        DataProvider.Ins.ChangeToQuanLyConnection();
-                    }
-                    else
-                    {
-                        DataProvider.Ins.ChangeToNhanVienConnection();
-                    }
+                    DataProvider.Ins.ChangeConnectionByRole(LuuTrangThai.QuyenDangNhap);
 
                     MainWindow main = new MainWindow(LoginUsername);
                     main.Show();
 
                     foreach (Window item in Application.Current.Windows)
                     {
-                        if (item.DataContext == this)
+                        if (item is Views.LoginView)
                         {
                             item.Close();
                             break;

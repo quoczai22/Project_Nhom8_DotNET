@@ -336,26 +336,6 @@ begin
 end;
 go
 
--- QUẢN TRỊ NGƯỜI DÙNG
-if exists (select * from sys.server_principals where name = 'QuanLyLogin') drop login QuanLyLogin;
-if exists (select * from sys.server_principals where name = 'NhanVienBanHangLogin') drop login NhanVienBanHangLogin;
-go
-
-create login QuanLyLogin with password = '123';
-create login NhanVienBanHangLogin with password = '123';
-go
-
-create user QuanLyUser for login QuanLyLogin;
-create user NhanVienBanHangUser for login NhanVienBanHangLogin;
-go
-
-alter role db_owner add member QuanLyUser;
-grant select on schema::dbo to NhanVienBanHangUser;
-grant insert on HoaDon to NhanVienBanHangUser;
-grant insert on ChiTietHD to NhanVienBanHangUser;
-deny update, delete on NhanVien to NhanVienBanHangUser;
-go
-
 alter table TaiKhoan drop constraint FK_TaiKhoan_NhanVien;
 go
 
@@ -388,6 +368,187 @@ alter table NhanVien add DaNghiViec bit default 0 not null;
 
 alter table LinhKien add NgungKinhDoanh bit default 0 not null;
 go
+
+--QUẢN TRỊ NGƯỜI DÙNG
+--dọn dẹp trước khi tạo để ko bị lỗi
+begin try exec sp_droprolemember 'role_quanLy', 'quanLyUser'; end try begin catch end catch;
+begin try exec sp_droprolemember 'role_thuNgan', 'nhanVienThuNganUser'; end try begin catch end catch;
+begin try exec sp_droprolemember 'role_Cskh', 'nhanVienCskhUser'; end try begin catch end catch;
+begin try exec sp_droprolemember 'role_kho', 'nhanVienKhoUser'; end try begin catch end catch;
+
+if exists (select * from sys.database_principals where name = 'quanLyUser') exec sp_dropuser 'quanLyUser';
+if exists (select * from sys.database_principals where name = 'nhanVienThuNganUser') exec sp_dropuser 'nhanVienThuNganUser';
+if exists (select * from sys.database_principals where name = 'nhanVienCskhUser') exec sp_dropuser 'nhanVienCskhUser';
+if exists (select * from sys.database_principals where name = 'nhanVienKhoUser') exec sp_dropuser 'nhanVienKhoUser';
+go
+
+if exists (select * from sys.database_principals where name = 'role_quanLy') exec sp_droprole 'role_quanLy';
+if exists (select * from sys.database_principals where name = 'role_thuNgan') exec sp_droprole 'role_thuNgan';
+if exists (select * from sys.database_principals where name = 'role_Cskh') exec sp_droprole 'role_Cskh';
+if exists (select * from sys.database_principals where name = 'role_kho') exec sp_droprole 'role_kho';
+go
+
+use master;
+go
+if exists (select * from sys.server_principals where name = 'quanLyLogin') exec sp_droplogin 'quanLyLogin';
+if exists (select * from sys.server_principals where name = 'nhanVienThuNganLogin') exec sp_droplogin 'nhanVienThuNganLogin';
+if exists (select * from sys.server_principals where name = 'nhanVienCskhLogin') exec sp_droplogin 'nhanVienCskhLogin';
+if exists (select * from sys.server_principals where name = 'nhanVienKhoLogin') exec sp_droplogin 'nhanVienKhoLogin';
+go
+--tạo login
+use master
+go
+
+exec sp_addlogin 'quanLyLogin', '123';
+exec sp_addlogin 'nhanVienThuNganLogin', '123';
+exec sp_addlogin 'nhanVienCskhLogin', '123';
+exec sp_addlogin 'nhanVienKhoLogin', '123';
+go
+--tạo user
+use QL_LinhKien_PC_NET
+go
+
+exec sp_adduser 'quanLyLogin', 'quanLyUser';
+exec sp_adduser 'nhanVienThuNganLogin', 'nhanVienThuNganUser';
+exec sp_adduser 'nhanVienCskhLogin', 'nhanVienCskhUser';
+exec sp_adduser 'nhanVienKhoLogin', 'nhanVienKhoUser';
+go
+--tạo nhóm quyền
+exec sp_addrole 'role_quanLy';
+exec sp_addrole 'role_thuNgan';
+exec sp_addrole 'role_Cskh';
+exec sp_addrole 'role_kho';
+go
+--thêm user vào nhóm quyền
+exec sp_addrolemember 'role_quanLy', 'quanLyUser';
+exec sp_addrolemember 'role_thuNgan', 'nhanVienThuNganUser';
+exec sp_addrolemember 'role_Cskh', 'nhanVienCskhUser';
+exec sp_addrolemember 'role_kho', 'nhanVienKhoUser';
+go
+--phân quyền cho quản lý 
+grant control
+to role_quanLy
+go
+--phân quyền cho nhân viên thu ngân
+grant select, insert, update, delete
+on KhachHang
+to role_thuNgan
+grant select, insert, update, delete
+on HoaDon
+to role_thuNgan
+grant select, insert, update, delete
+on ChiTietHD
+to role_thuNgan
+grant select 
+on NhanVien
+to role_thuNgan
+grant select
+on LoaiLK
+to role_thuNgan
+grant select
+on LinhKien
+to role_thuNgan
+grant execute
+on fn_DoanhThuTheoThang
+to role_thuNgan
+
+grant select
+on TaiKhoan
+to role_thungan
+grant select 
+on NhanVien 
+to role_thungan
+grant select
+on NhaSanXuat
+to role_thungan
+deny insert, update, delete 
+on TaiKhoan
+to role_thungan
+deny insert, update, delete 
+on NhanVien
+to role_thungan
+go
+--phân quyền cho nhân viên cskh
+grant select, insert, update, delete
+on KhachHang
+to role_Cskh
+grant select 
+on LoaiLK
+to role_Cskh
+grant select 
+on LinhKien 
+to role_Cskh
+grant select
+on HoaDon
+to role_Cskh
+grant execute
+on fn_DoanhThuTheoThang
+to role_Cskh
+
+grant select
+on TaiKhoan
+to role_Cskh
+grant select 
+on NhanVien 
+to role_Cskh
+grant select
+on NhaSanXuat
+to role_Cskh
+grant select
+on ChiTietHD
+to role_Cskh
+deny insert, update, delete 
+on TaiKhoan
+to role_Cskh
+deny insert, update, delete 
+on NhanVien
+to role_Cskh
+go
+--phân quyên cho nhân viên kho 
+grant select, insert, update, delete 
+on LoaiLK
+to role_kho
+grant select, insert, update, delete
+on LinhKien
+to role_kho
+grant select, insert, update, delete 
+on PhieuNhap
+to role_kho
+grant select, insert, update, delete
+on ChiTietPN
+to role_kho
+grant select
+on HoaDon
+to role_kho
+grant select
+on KhachHang
+to role_kho
+grant select, insert, update, delete
+on NhaSanXuat
+to role_kho
+grant execute
+on sp_baocaotonkho  
+to role_kho
+grant execute
+on fn_DoanhThuTheoThang
+to role_kho
+
+grant select
+on TaiKhoan
+to role_kho
+grant select 
+on NhanVien 
+to role_kho
+grant select
+on ChiTietHD
+to role_kho
+deny insert, update, delete 
+on TaiKhoan
+to role_kho
+deny insert, update, delete 
+on NhanVien
+to role_kho
+go 
 
 -- sao lưu và backup khi cần và khi chạy phải comment backup với restore
 
