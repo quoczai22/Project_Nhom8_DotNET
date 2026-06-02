@@ -7,15 +7,17 @@ namespace QuanLyLinhKienMayTinh.Views
         string _maHd;
         long _soTien;
         Action _onThanhToanThanhCong; // khai báo biến để lưu callback khi thanh toán thành công
+        Action _onThanhToanThatBai;
         IMomoService _momoService; // khai báo biến để lưu service MoMo, sẽ được truyền vào từ bên ngoài
 
-        public ChonPhuongThucDialog(string maHd, long soTien, IMomoService momoService, Action onThanhToanThanhCong = null )
+        public ChonPhuongThucDialog(string maHd, long soTien, IMomoService momoService, Action onThanhToanThanhCong = null, Action onThanhToanThatBai = null)
         {
             InitializeComponent(); // truyền callcak vào hàm khởi tạo 
             _maHd = maHd;
             _soTien = soTien;
             _momoService = momoService;
             _onThanhToanThanhCong = onThanhToanThanhCong; 
+            _onThanhToanThatBai = onThanhToanThatBai;
             txtSoTien.Text = $"{soTien:N0} ₫";
         }
 
@@ -23,7 +25,7 @@ namespace QuanLyLinhKienMayTinh.Views
         {
             if (rdMomo.IsChecked == true)
             {
-                var momoPage = new MomoPaymentWindow(_maHd, _soTien, _momoService, _onThanhToanThanhCong);// truyền thông tin đơn hàng
+                var momoPage = new MomoPaymentWindow(_maHd, _soTien, _momoService, _onThanhToanThanhCong, _onThanhToanThatBai);// truyền thông tin đơn hàng
 
                 var window = System.Windows.Application.Current.MainWindow;
                 if(window != null && window.IsVisible && window.IsLoaded) {

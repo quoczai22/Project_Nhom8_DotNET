@@ -506,11 +506,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
         {
             if (HoaDonChon == null) return;
 
+            string maHoaDonDangThanhToan = HoaDonChon.MaHoaDon;
             var dialog = new ChonPhuongThucDialog(
-                HoaDonChon.MaHoaDon,
+                maHoaDonDangThanhToan,
                 (long)(HoaDonChon.TongTien ?? 0),
                 _momoService, 
-                () => TaiDuLieu()
+                () => CapNhatTrangThaiThanhToan(maHoaDonDangThanhToan, "Đã thanh toán", "Ví MoMo"),
+                () => CapNhatTrangThaiThanhToan(maHoaDonDangThanhToan, "Chưa thanh toán", "Ví MoMo")
             );
 
             var window = Application.Current.MainWindow;
@@ -522,6 +524,35 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             dialog.ShowDialog();
 
         }
+
+        private void CapNhatTrangThaiThanhToan(string maHoaDon, string trangThai, string phuongThuc)
+        {
+            if (string.IsNullOrWhiteSpace(maHoaDon)) return;
+
+            try
+            {
+                var db = DataProvider.Ins.GetContext();
+                var entity = db.HoaDons.FirstOrDefault(hd => hd.MaHd == maHoaDon);
+                if (entity == null) return;
+
+                entity.TrangThai = trangThai;
+                entity.PhuongThucThanhToan = phuongThuc;
+                entity.NgayThanhToan = trangThai == "Đã thanh toán"
+                    ? DateOnly.FromDateTime(DateTime.Now)
+                    : null;
+
+                db.SaveChanges();
+
+                TaiDuLieu();
+                HoaDonChon = DanhSachHoaDon?.FirstOrDefault(hd => hd.MaHoaDon == maHoaDon);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi cập nhật trạng thái thanh toán: " + ex.Message,
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         // Lưu hóa đơn vào cơ sở dữ liệu một cách an toàn (Sử dụng Transaction để trừ số lượng linh kiện trong kho)
         public async Task LuuHoaDonAnToan(HoaDon hdMoi, List<ChiTietHd> danhSachMonHang)
         {

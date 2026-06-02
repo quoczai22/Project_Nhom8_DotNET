@@ -12,6 +12,7 @@ namespace QuanLyLinhKienMayTinh.Services
     {
         MomoExecuteResponseModel PaymentExecuteAsync(Dictionary<string, string> collection); // Phương thức thực hiện thanh toán
         Task<MomoResponse> CreatePaymentAsync(HoaDon hd); // Phương thức tạo đơn thanh toán và lấy mã QR
+        Task<MomoResponse> QueryPaymentStatusAsync(string orderId); // Phương thức kiểm tra trạng thái giao dịch MoMo
 
     }
 }

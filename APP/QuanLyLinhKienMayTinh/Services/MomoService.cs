@@ -15,6 +15,7 @@ namespace QuanLyLinhKienMayTinh.Services
         static readonly HttpClient _client = new HttpClient(); // Tạo 1 hằng số HttpClient để tái sử dụng trong suốt vòng đời của ứng dụng, tránh việc tạo nhiều instance HttpClient
 
         string MomoApiUrl = "https://test-payment.momo.vn/v2/gateway/api/create"; // điểm đến API của MoMo để tạo đơn thanh toán
+        string MomoQueryApiUrl = "https://test-payment.momo.vn/v2/gateway/api/query"; // điểm đến API của MoMo để kiểm tra trạng thái giao dịch
         string PartnerCode = "MOMO";
         string AccessKey = "F8BBA842ECF85";
         string SecretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
@@ -82,6 +83,36 @@ namespace QuanLyLinhKienMayTinh.Services
 
                 return JsonConvert.DeserializeObject<MomoResponse>(responseContent); // Trả về đối tượng MomoResponse được tạo từ chuỗi JSON response của MoM 
             }
+        }
+
+        public async Task<MomoResponse> QueryPaymentStatusAsync(string orderId)
+        {
+            string requestId = Guid.NewGuid().ToString();
+
+            var rawData =
+                $"accessKey={AccessKey}" +
+                $"&orderId={orderId}" +
+                $"&partnerCode={PartnerCode}" +
+                $"&requestId={requestId}";
+
+            string signature = CreateSignature(rawData, SecretKey);
+
+            var requestData = new
+            {
+                partnerCode = PartnerCode,
+                requestId,
+                orderId,
+                lang = "vi",
+                signature
+            };
+
+            var json = JsonConvert.SerializeObject(requestData);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _client.PostAsync(MomoQueryApiUrl, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<MomoResponse>(responseContent);
         }
 
         public MomoExecuteResponseModel PaymentExecuteAsync(Dictionary<string, string> collection)
