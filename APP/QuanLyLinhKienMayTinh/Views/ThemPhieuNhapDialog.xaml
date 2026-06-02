@@ -181,12 +181,6 @@
                     <ColumnDefinition Width="12"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="2" Text="Số lượng" FontSize="10"
-                           Foreground="{DynamicResource SubTextColor}"
-                           HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-14,0,0"/>
-                <TextBlock Grid.Column="4" Text="Đơn giá nhập (₫)" FontSize="10"
-                           Foreground="{DynamicResource SubTextColor}"
-                           HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,-14,0,0"/>
             </Grid>
 
             <!-- Bảng linh kiện đã thêm -->
