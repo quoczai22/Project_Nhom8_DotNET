@@ -47,13 +47,10 @@
             <Setter Property="Opacity" Value="0.6"/>
         </Style>
 
-        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource ThemedComboBoxStyle}">
             <Setter Property="Height" Value="38"/>
             <Setter Property="Padding" Value="10,0"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
-            <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Margin" Value="0,0,0,16"/>
         </Style>
     </Page.Resources>

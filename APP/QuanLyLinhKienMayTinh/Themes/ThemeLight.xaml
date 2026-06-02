@@ -10,6 +10,11 @@
     <SolidColorBrush x:Key="ButtonColor" Color="#3f51b5"/>
     <SolidColorBrush x:Key="ButtonTextColor" Color="White"/>
     <SolidColorBrush x:Key="BorderColor" Color="#4a5568"/>
+    <SolidColorBrush x:Key="ComboBoxBackgroundColor" Color="White"/>
+    <SolidColorBrush x:Key="ComboBoxDropDownColor" Color="White"/>
+    <SolidColorBrush x:Key="ComboBoxHoverColor" Color="#E6E7EA"/>
+    <SolidColorBrush x:Key="ComboBoxSelectedColor" Color="#3f51b5"/>
+    <SolidColorBrush x:Key="ComboBoxSelectedTextColor" Color="White"/>
 
     <Style x:Key="PrimaryBtn" TargetType="Button">
         <Setter Property="Background" Value="{DynamicResource ButtonColor}"/>
@@ -27,6 +32,37 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style x:Key="ThemedComboBoxItemStyle" TargetType="ComboBoxItem">
+        <Setter Property="Background" Value="{DynamicResource ComboBoxDropDownColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
+        <Setter Property="Padding" Value="10,6"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ComboBoxHoverColor}"/>
+                <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{DynamicResource ComboBoxSelectedColor}"/>
+                <Setter Property="Foreground" Value="{DynamicResource ComboBoxSelectedTextColor}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ThemedComboBoxItemStyle}"/>
+
+    <Style x:Key="ThemedComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Background" Value="{DynamicResource ComboBoxBackgroundColor}"/>
+        <Setter Property="Foreground" Value="{DynamicResource MainTextColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ThemedComboBoxItemStyle}"/>
+    </Style>
+
+    <Style TargetType="ComboBox" BasedOn="{StaticResource ThemedComboBoxStyle}"/>
 
     <Style x:Key="ThemeToggleButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryBtn}">
         <Setter Property="Content" Value="🌙 Chế độ tối"/>
