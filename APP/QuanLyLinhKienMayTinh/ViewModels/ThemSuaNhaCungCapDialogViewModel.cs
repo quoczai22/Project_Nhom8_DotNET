@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
@@ -111,6 +112,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             if (string.IsNullOrWhiteSpace(TenNsx))
             {
                 MessageBox.Show("Vui lòng nhập tên nhà cung cấp!", "Thiếu thông tin",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(Sdt) && !Regex.IsMatch(Sdt.Trim(), @"^0\d{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại nhà cung cấp phải bắt đầu bằng 0 và có 10-11 chữ số!", "Dữ liệu không hợp lệ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }

@@ -3,6 +3,7 @@ using QuanLyLinhKienMayTinh.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 
@@ -227,6 +228,41 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             if (SelectedChucVu == null)
             {
                 MessageBox.Show("Vui lòng chọn chức vụ!", "Thiếu thông tin",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(Sdt) && !Regex.IsMatch(Sdt.Trim(), @"^0\d{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại nhân viên phải bắt đầu bằng 0 và có 10-11 chữ số!", "Dữ liệu không hợp lệ",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(Email) && !Regex.IsMatch(Email.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                MessageBox.Show("Email nhân viên không đúng định dạng!", "Dữ liệu không hợp lệ",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (NgaySinh.HasValue && NgaySinh.Value.Date > DateTime.Today)
+            {
+                MessageBox.Show("Ngày sinh không được lớn hơn ngày hiện tại!", "Dữ liệu không hợp lệ",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (NgayVaoLam.HasValue && NgayVaoLam.Value.Date > DateTime.Today)
+            {
+                MessageBox.Show("Ngày vào làm không được lớn hơn ngày hiện tại!", "Dữ liệu không hợp lệ",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (NgaySinh.HasValue && NgayVaoLam.HasValue && NgayVaoLam.Value.Date < NgaySinh.Value.Date)
+            {
+                MessageBox.Show("Ngày vào làm không được nhỏ hơn ngày sinh!", "Dữ liệu không hợp lệ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }

@@ -92,15 +92,36 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
         private void TaoTaiKhoanMoi()
         {
-            if (SelectedNhanVien == null || string.IsNullOrEmpty(TenDangNhapMoi) || string.IsNullOrEmpty(MatKhauMoi))
+            string tenDangNhap = TenDangNhapMoi?.Trim();
+            string matKhau = MatKhauMoi?.Trim();
+
+            if (SelectedNhanVien == null || string.IsNullOrWhiteSpace(tenDangNhap) || string.IsNullOrWhiteSpace(matKhau))
             {
                 MessageBox.Show("Vui lòng nhập đầy đủ thông tin: Chọn nhân viên, Tên ĐN, Mật khẩu!");
                 return;
             }
 
+            if (tenDangNhap.Contains(" "))
+            {
+                MessageBox.Show("Tên đăng nhập không được chứa khoảng trắng!");
+                return;
+            }
+
+            if (matKhau.Length < 6)
+            {
+                MessageBox.Show("Mật khẩu phải có ít nhất 6 ký tự!");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(SelectedChucVu))
+            {
+                MessageBox.Show("Vui lòng chọn nhân viên có chức vụ hợp lệ trước khi tạo tài khoản!");
+                return;
+            }
+
             using (var db = DataProvider.Ins.GetContext())
             {
-                if (db.TaiKhoans.Any(t => t.TenDn == TenDangNhapMoi))
+                if (db.TaiKhoans.Any(t => t.TenDn == tenDangNhap))
                 {
                     MessageBox.Show("Tên đăng nhập này đã có người sử dụng. Vui lòng chọn tên khác!");
                     return;
@@ -115,8 +136,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                     }
                     db.TaiKhoans.Add(new TaiKhoan
                     {
-                        TenDn = TenDangNhapMoi,
-                        MatKhau = MatKhauMoi,
+                        TenDn = tenDangNhap,
+                        MatKhau = matKhau,
                         MaNv = SelectedNhanVien.MaNv
                     });
                     db.SaveChanges();

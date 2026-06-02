@@ -219,21 +219,27 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 return;
             }
             // Validate số liệu
-            if (!string.IsNullOrWhiteSpace(DonGiaText) && !int.TryParse(DonGiaText, out _))
+            if (!string.IsNullOrWhiteSpace(DonGiaText) && (!int.TryParse(DonGiaText, out int donGiaKiemTra) || donGiaKiemTra < 0))
             {
-                MessageBox.Show("Đơn giá bán phải là số nguyên!", "Dữ liệu không hợp lệ",
+                MessageBox.Show("Đơn giá bán phải là số nguyên không âm!", "Dữ liệu không hợp lệ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            if (!string.IsNullOrWhiteSpace(SoLuongText) && !int.TryParse(SoLuongText, out _))
+            if (!string.IsNullOrWhiteSpace(SoLuongText) && (!int.TryParse(SoLuongText, out int soLuongKiemTra) || soLuongKiemTra < 0))
             {
-                MessageBox.Show("Số lượng tồn phải là số nguyên!", "Dữ liệu không hợp lệ",
+                MessageBox.Show("Số lượng tồn phải là số nguyên không âm!", "Dữ liệu không hợp lệ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             if (!string.IsNullOrWhiteSpace(TgbhText) && !byte.TryParse(TgbhText, out _))
             {
                 MessageBox.Show("Thời gian bảo hành phải là số nguyên (0-255)!", "Dữ liệu không hợp lệ",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (NgayNhap.HasValue && NgayNhap.Value.Date > DateTime.Today)
+            {
+                MessageBox.Show("Ngày nhập linh kiện không được lớn hơn ngày hiện tại!", "Dữ liệu không hợp lệ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }

@@ -155,9 +155,9 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 return;
             }
 
-            if (!int.TryParse(DonGiaNhapText?.Trim().Replace(",", "").Replace(".", ""), out int donGia) || donGia < 0)
+            if (!int.TryParse(DonGiaNhapText?.Trim().Replace(",", "").Replace(".", ""), out int donGia) || donGia <= 0)
             {
-                MessageBox.Show("Đơn giá nhập không hợp lệ!", "Dữ liệu không hợp lệ",
+                MessageBox.Show("Đơn giá nhập phải là số nguyên dương!", "Dữ liệu không hợp lệ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
@@ -212,6 +212,13 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             if (SelectedNhanVien == null)
             {
                 MessageBox.Show("Vui lòng chọn nhân viên!", "Thiếu thông tin",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (NgayNhap.Date > DateTime.Today)
+            {
+                MessageBox.Show("Ngày nhập không được lớn hơn ngày hiện tại!", "Dữ liệu không hợp lệ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }

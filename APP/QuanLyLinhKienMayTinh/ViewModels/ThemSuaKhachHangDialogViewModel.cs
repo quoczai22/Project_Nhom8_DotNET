@@ -1,5 +1,6 @@
 using QuanLyLinhKienMayTinh.Models;
 using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 namespace QuanLyLinhKienMayTinh.ViewModels
@@ -116,6 +117,18 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             if (string.IsNullOrWhiteSpace(HoTen))
             {
                 MessageBox.Show("Vui lòng nhập họ tên khách hàng!", "Thiếu thông tin",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(Sdt) && !Regex.IsMatch(Sdt.Trim(), @"^0\d{9,10}$"))
+            {
+                MessageBox.Show("Số điện thoại khách hàng phải bắt đầu bằng 0 và có 10-11 chữ số!", "Dữ liệu không hợp lệ",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(Email) && !Regex.IsMatch(Email.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                MessageBox.Show("Email khách hàng không đúng định dạng!", "Dữ liệu không hợp lệ",
                     MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
