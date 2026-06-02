@@ -125,21 +125,21 @@ Thay vì sử dụng các công cụ bên thứ ba kém ổn định trên môi 
 ┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
 │                                           VIEWMODEL                                              │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ - BaseViewModel (INotifyPropertyChanged)    - LoginViewModel              - LoaiLinhKienViewModel │
-│ - RelayCommand                              - MainViewModel               - HoaDonViewModel       │
-│ - ISearchable (Interface tìm kiếm RAM)      - TrangChuViewModel           - KhachHangViewModel    │
-│                                             - LinhKienViewModel           - NhanVienViewModel     │
-│                                             - PhieuNhapViewModel          - BaoCaoViewModel       │
+│ - BaseViewModel (INotifyPropertyChanged)    - LoginViewModel              - LoaiLinhKienViewModel│
+│ - RelayCommand                              - MainViewModel               - HoaDonViewModel      │
+│ - ISearchable (Interface tìm kiếm RAM)      - TrangChuViewModel           - KhachHangViewModel   │
+│                                             - LinhKienViewModel           - NhanVienViewModel    │
+│                                             - PhieuNhapViewModel          - BaoCaoViewModel      │
 └───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
                                                 │ Entity Framework Core 8 (AsNoTracking / Include)
 ┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
 │                                       MODEL (SCHEMA: DBO)                                        │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ - QL_LinhKien_PC_Context                    - LinhKien                    - NhanVien              │
-│ - QL_LinhKien_PC_Context.Functions          - LoaiLk                      - TaiKhoan              │
-│ - QL_LinhKien_PC_ContextProcedures          - NhaSanXuat                  - ThongKeBanHang        │
-│ - DataProvider (Kết nối dữ liệu)            - HoaDon / ChiTietHd          - ThongKeHang           │
-│                                             - PhieuNhap / ChiTietPn       - sp_BaoCaoTonKhoResult │
+│ - QL_LinhKien_PC_Context                    - LinhKien                    - NhanVien             │
+│ - QL_LinhKien_PC_Context.Functions          - LoaiLk                      - TaiKhoan             │
+│ - QL_LinhKien_PC_ContextProcedures          - NhaSanXuat                  - ThongKeBanHang       │
+│ - DataProvider (Kết nối dữ liệu)            - HoaDon / ChiTietHd          - ThongKeHang          │
+│                                             - PhieuNhap / ChiTietPn       - sp_BaoCaoTonKhoResult│
 └───────────────────────────────────────────────┬──────────────────────────────────────────────────┘
                                                 │ T-SQL Driver Connection
 ┌───────────────────────────────────────────────▼──────────────────────────────────────────────────┐
