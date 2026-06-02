@@ -96,13 +96,12 @@
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="34"/>
                                             </Grid.ColumnDefinitions>
-                                            <ContentPresenter Margin="{Binding Padding, RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                                              VerticalAlignment="Center"
-                                                              HorizontalAlignment="Left"
-                                                              Content="{Binding SelectionBoxItem, RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                                              ContentTemplate="{Binding SelectionBoxItemTemplate, RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                                              ContentStringFormat="{Binding SelectionBoxItemStringFormat, RelativeSource={RelativeSource AncestorType=ComboBox}}"
-                                                              TextElement.Foreground="{DynamicResource MainTextColor}"/>
+                                            <TextBlock Margin="{Binding Padding, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left"
+                                                       Text="{Binding Text, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                       Foreground="{DynamicResource MainTextColor}"
+                                                       TextTrimming="CharacterEllipsis"/>
                                             <Path Grid.Column="1"
                                                   Data="M 0 0 L 4 4 L 8 0 Z"
                                                   Fill="{DynamicResource MainTextColor}"

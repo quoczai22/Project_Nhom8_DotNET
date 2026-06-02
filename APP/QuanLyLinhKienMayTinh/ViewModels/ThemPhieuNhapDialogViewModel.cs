@@ -14,6 +14,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
     public class PhieuNhapItem
     {
         public string MaLk { get; set; }
+        public string MaNsx { get; set; }
         public string TenLk { get; set; }
         public int SoLuong { get; set; }
         public int DonGiaNhap { get; set; }
@@ -108,7 +109,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
 
                 DanhSachNhanVien = db.NhanViens
                     .AsNoTracking()
-                    .Where(nv => nv.DaNghiViec == false)
+                    .Where(nv => nv.DaNghiViec == false && (nv.ChucVu == "Nhân viên kho" || nv.Quyen == "Kho"))
                     .OrderBy(nv => nv.TenNv)
                     .ToList();
 
@@ -173,6 +174,7 @@ namespace QuanLyLinhKienMayTinh.ViewModels
                 DanhSachNhap.Add(new PhieuNhapItem
                 {
                     MaLk = SelectedLinhKien.MaLk,
+                    MaNsx = SelectedLinhKien.MaNsx,
                     TenLk = SelectedLinhKien.TenLk,
                     SoLuong = soLuong,
                     DonGiaNhap = donGia
@@ -225,7 +227,8 @@ namespace QuanLyLinhKienMayTinh.ViewModels
             {
                 MaPn = MaPn?.Trim(),
                 NgayNhap = DateOnly.FromDateTime(NgayNhap),
-                MaNv = SelectedNhanVien.MaNv
+                MaNv = SelectedNhanVien.MaNv,
+                MaNsx = DanhSachNhap.First().MaNsx
             };
 
             ChiTietPns = DanhSachNhap.Select(x => new ChiTietPn

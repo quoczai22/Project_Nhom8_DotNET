@@ -9,8 +9,9 @@ namespace QuanLyLinhKienMayTinh.Models
 
         private string _localConnStr;
 
-        private const string ServerName = "localhost"; // đổi thành tên server của máy trước khi chạy
+        private const string ServerName = @"(localdb)\MSSQLLocalDB"; // đổi thành tên server của máy trước khi chạy
         private const string DatabaseName = "QL_LinhKien_PC_NET";
+        private const bool UseDatabaseRoleLogins = false;
 
         private DataProvider()
         {
@@ -33,6 +34,12 @@ namespace QuanLyLinhKienMayTinh.Models
 
         public void ChangeConnectionByRole(string quyen)
         {
+            if (!UseDatabaseRoleLogins)
+            {
+                ResetToDefaultConnection();
+                return;
+            }
+
             string dbUser;
             string dbPass = "123";
 
